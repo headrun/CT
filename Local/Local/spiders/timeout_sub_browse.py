@@ -15,7 +15,7 @@ def get_cursor():
     return conn, cursor
 
 class TimeOut(BaseSpider):
-    name = 'timeout_browse'
+    name = 'timeout_sub_browse'
     start_urls = ['https://www.timeout.com/ahmedabad']
     handle_httpstatus_list = [404]
 
@@ -30,16 +30,7 @@ class TimeOut(BaseSpider):
         for m in cities:
             for l in links:
                 lists = 'https://www.timeout.com/'+m+'/'+ l
-                yield Request(lists, callback = self.details)
-    def details(self, response):
-        sel = Selector(response)
-        kk = 1
-        urls = response.url.split('https://www.timeout.com')[-1]
-        if 'https://www.timeout.com/' in response.url:
-             for j in range(1, 50):
-                kk = kk+24
-                url = URL % (urls, kk)
-                yield Request(url, callback = self.details_next)
+                yield Request(lists, callback = self.details_next)
 
     def details_next(self, response):
         sel = Selector(response)
