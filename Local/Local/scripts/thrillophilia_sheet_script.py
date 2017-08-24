@@ -1,6 +1,6 @@
 import csv
 import MySQLdb
-from scripts.handle_utils import *
+from handle_utils import *
 
 class Thrillophiliacsv(object):
     def __init__(self):
