@@ -67,7 +67,7 @@ class Littlecsv(object):
     def main(self):
         con2_,cur2_ = self.create_cursor('LBB', 'root','', 'localhost')
         cur2_.execute(self.foodqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
 	    values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -77,7 +77,7 @@ class Littlecsv(object):
             self.excel_file_food.writerow(values)
 
         cur2_.execute(self.lifestyleqry) 
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -87,7 +87,7 @@ class Littlecsv(object):
             self.excel_file_lifestyle.writerow(values)
 
         cur2_.execute(self.shoppingqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -97,7 +97,7 @@ class Littlecsv(object):
             self.excel_file_shopping.writerow(values)
 
         cur2_.execute(self.activityqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url  = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -107,7 +107,7 @@ class Littlecsv(object):
             self.excel_file_activity.writerow(values)
 
         cur2_.execute(self.cultureqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -117,7 +117,7 @@ class Littlecsv(object):
             self.excel_file_culture.writerow(values)
 
         cur2_.execute(self.travelqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
@@ -127,7 +127,7 @@ class Littlecsv(object):
             self.excel_file_travel.writerow(values)
 
         cur2_.execute(self.fitnessqry)
-        records = cur2_.fetchmany(5000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url = record
             values = [article_id, city, article_name, posted_by, state, article_description, place_name, category, sub_category, working_hours, delivery_availablity, price, price_notes, contact_number, email, fb_link, web_link, twitter_link, instagram_link, nearest_railway_station, nearest_metro, location, street, address, place_images, place_url, reference_url]
