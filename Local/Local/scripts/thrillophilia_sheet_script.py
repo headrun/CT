@@ -1,6 +1,6 @@
 import csv
 import MySQLdb
-from scripts.handle_utils import *
+from handle_utils import *
 
 class Thrillophiliacsv(object):
     def __init__(self):
@@ -46,7 +46,7 @@ class Thrillophiliacsv(object):
     def main(self):
         con2_,cur2_ = self.create_cursor('THRILLOPHILIA', 'root', '', 'localhost')
         cur2_.execute(self.rental_qry)
-        records = cur2_.fetchmany(6000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             city, rental_id, rental_name, rental_url, location, price, no_of_days_nights, rental_images, overview, rating, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback = record
             values = [city, rental_id, rental_name, rental_url, location, price, no_of_days_nights, rental_images, overview, rating, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback]
@@ -56,7 +56,7 @@ class Thrillophiliacsv(object):
             self.excel_file_rental.writerow(values)
 
         cur2_.execute(self.activity_qry)
-        records = cur2_.fetchmany(6000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             city, activity_id, activity_name, activity_url, location, price, no_of_days_nights, activity_images, overview, rating, itinerary, meal, activities_available, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback = record
             values = [city, activity_id, activity_name, activity_url, location, price, no_of_days_nights, activity_images, overview, rating, itinerary, meal, activities_available, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback]
@@ -66,7 +66,7 @@ class Thrillophiliacsv(object):
             self.excel_file_activity.writerow(values)
         
         cur2_.execute(self.stay_qry)
-        records = cur2_.fetchmany(6000)
+        records = cur2_.fetchall()
         for index, record in enumerate(records):
             city, stay_id, stay_name, stay_url, location, price, no_of_days_nights, stay_images, overview, rating, itinerary, meal, activities_available, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback = record
             values = [city, stay_id, stay_name, stay_url, location, price, no_of_days_nights, stay_images, overview, rating, itinerary, meal, activities_available, other_inclusions, things_to_carry, advisory, tour_type, cancellation_policy, refund_policy, confirmation_policy, reviews_count, review_url, special_offer, cashback]
