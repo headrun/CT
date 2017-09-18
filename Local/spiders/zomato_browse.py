@@ -11,11 +11,11 @@ def get_cursor():
     cursor = conn.cursor()
     return conn, cursor
 
-class Zomato(scrapy.Spider):
+class Zomatos(scrapy.Spider):
     name = 'zomato_browse'
     start_urls = []
     def __init__(self, *args, **kwargs):
-        super(Zomato, self).__init__(*args, **kwargs)
+        super(Zomatos, self).__init__(*args, **kwargs)
         self.conn, self.cursor = get_cursor()
       
     list1 = ['top-restaurants','best-new-restaurants','function-venues','arabian-nights','vegetarian-restaurants','great-breakfast','romantic-restaurants','best-buffet','biryani','bengali-sweets','themed-restaurants','dhabas','hidden-restaurants','pizza-restaurants','south-indian-restaurants','street-food','dessert-places','best-beer-bars','outdoor-dining','fine-dining-restaurants','night-clubs','delivery-only-restaurants','late-night-restaurants','best-thali','bengali-cuisine','legendary-places','student-restaurants','great-chinese-restaurants','hilsa']
@@ -79,3 +79,21 @@ class Zomato(scrapy.Spider):
             (reviews),(votes),(str(latitude)),(str(longitude)),(discount_date),(discount_text),(address),\
             (str(open_hrs)),(highlights),(category),(price),(reference_url))
             self.cursor.execute(query, values)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

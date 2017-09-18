@@ -26,7 +26,7 @@ class NearbuyBrowse(BaseSpider):
 
     def parse(self,response):
         sel = Selector(response)
-        cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
+	cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
 
         for city in cities_list:
             spa_link = 'https://www.nearbuy.com/offers/' + city + '/spa-and-massage?list=LSF_Category%20Icon_Spa'
@@ -114,7 +114,7 @@ class NearbuyBrowse(BaseSpider):
 
     def metadata_parse(self,response):
         sel = Selector(response)
-        table_category = response.meta['category']
+	table_category = response.meta['category']
         city = response.meta['city'].title()
         html_url = response.meta['html_url']
         body = json.loads(response.body)
@@ -259,9 +259,8 @@ class NearbuyBrowse(BaseSpider):
                 query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
                 values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
-
-            import pdb;pdb.set_trace()
-            if table_category and offer_id:
+            
+	    if table_category and offer_id:
                 query = 'insert into Offer(program_id, id, price_original, price_discounted, price_notes, offer_title, offer_description, offer_inclusions, offer_validity, offer_validity_details, created_at, modified_at, last_seen'
                 query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
                 values = ((place_id), (offer_id), (price_original), (price_discount), (valid_for), (offer_title), (offer_description), (offer_inclusion), (offer_validity), (validity_details))
