@@ -54,6 +54,7 @@ class Viator(BaseSpider):
     def details_next(self, response):
         sel = Selector(response)
         highlights = ', '.join(sel.xpath(highlights_b).extract())
+        price_bb = ''
         expect = ','.join(sel.xpath(expect_b).extract())
         description1 = ''.join(sel.xpath(description1_b).extract()) or \
                       ''.join(sel.xpath(description2_b).extract())
