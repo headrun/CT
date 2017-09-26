@@ -18,6 +18,7 @@ def get_cursor():
 class ThrillophiliaBrowse(BaseSpider):
     name = 'thrillophilia_browse'
     start_urls = ['https://www.thrillophilia.com/']
+    handle_httpstatus_list = [302]
 
     def __init__(self, *args, **kwargs):
         super(ThrillophiliaBrowse, self).__init__(*args, **kwargs)
@@ -42,7 +43,7 @@ class ThrillophiliaBrowse(BaseSpider):
         if top_page:
             if 'http' not in top_page:
                 top_page = 'https://www.thrillophilia.com' + top_page
-                yield Request(top_page,callback=self.top_page)
+                yield Request(top_page, callback=self.top_page, dont_filter=True)
         
     def top_page(self,response):
         sel = Selector(response)
@@ -57,11 +58,11 @@ class ThrillophiliaBrowse(BaseSpider):
         for link in activities_links:
             if 'http' not in link:
                 link = 'https://www.thrillophilia.com' + normalize(link)
-                yield Request(link,callback=self.meta_data_parse,meta={'city':city,'program_type':program_type})
+                yield Request(link, callback=self.meta_data_parse, meta={'city':city,'program_type':program_type}, dont_filter=True)
 
         load_more_collection = normalize(data_get(sel,load_more_collection_link_xpath))
         if load_more_collection:
-            yield Request(load_more_collection,callback=self.top_page)
+            yield Request(load_more_collection, callback=self.top_page, dont_filter=True)
 
     def meta_data_parse(self,response):
         sel = Selector(response)

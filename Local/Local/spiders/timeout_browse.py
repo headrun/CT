@@ -39,6 +39,7 @@ class TimeOut(BaseSpider):
              for j in range(1, 50):
                 kk = kk+24
                 url = URL % (urls, kk)
+                print url
                 yield Request(url, callback = self.details_next)
 
     def details_next(self, response):

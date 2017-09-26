@@ -178,13 +178,14 @@ con = MySQLdb.connect(db   =  'TIMEOUT',
                       host              = 'localhost',
                       use_unicode       = True)
 cur = con.cursor()
+try:
+    cur.execute(city_guide_info)
+    cur.execute(food_drinks_info)
+    cur.execute(movie_theatres_info)
+    cur.execute(music_nightlife_info)
+    cur.execute(shopping_style_info)
+    cur.execute(theatre_arts_info)
+    cur.execute(things_to_do)
 
-cur.execute(city_guide_info)
-cur.execute(food_drinks_info)
-cur.execute(movie_theatres_info)
-cur.execute(music_nightlife_info)
-cur.execute(shopping_style_info)
-cur.execute(theatre_arts_info)
-cur.execute(things_to_do)
-
-cur.close()
+except:
+    cur.close()

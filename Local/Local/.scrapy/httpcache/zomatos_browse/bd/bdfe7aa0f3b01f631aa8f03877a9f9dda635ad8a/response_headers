@@ -1,0 +1,17 @@
+X-Xss-Protection: 1; mode=block; report=https://www.zomato.com/cspreport.php
+X-Content-Type-Options: nosniff
+Content-Security-Policy: frame-ancestors 'self'; default-src *; font-src * data:; img-src * data:; media-src * blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudflare.com *.twitter.com *.recruiterbox.com *.zdev.net *.zdev.net:8080 *.zomato.com *.tinymce.com *.gstatic.com *.googleapis.com *.google.com *.facebook.com sdk.accountkit.com *.doubleclick.net *.googlesyndication.com *.nr-data.net *.newrelic.com *.google-analytics.com *.akamaihd.net *.zmtcdn.com *.googletagmanager.com *.facebook.net *.googleadservices.com *.cdninstagram.com *.googlesyndication.com *.inspectlet.com *.spreedly.com *.instagram.com *.twimg.com *.mouseflow.com *.usersnap.com d3mvnvhjmkxpjz.cloudfront.net *.serving-sys.com *.sushissl.com *.pubnub.com tsgw.tataelxsi.co.in *.branch.io app.link *.ravenjs.com cdn.poll-maker.com *.ampproject.org *.smartlook.com *.hotjar.com dashboard.hypertrack.io zba.se *.googletagmanager.com *.eff.org cdn.plot.ly; style-src * 'unsafe-inline';
+Content-Encoding: gzip
+Set-Cookie: PHPSESSID=5159f03900329984d58c0f6b213fbbc605ea6d3c; path=/; domain=.zomato.com; secure; HttpOnly
+Set-Cookie: fbcity=2; expires=Fri, 09-Mar-2018 06:53:49 GMT; Max-Age=15552000; path=/; domain=.zomato.com; secure
+Set-Cookie: zl=en; expires=Fri, 09-Mar-2018 06:53:49 GMT; Max-Age=15552000; path=/; domain=.zomato.com; secure
+Set-Cookie: fbtrack=55aa3383e55547448dddf09ec11179ab; expires=Wed, 05-Sep-2018 06:53:49 GMT; Max-Age=31104000; path=/; domain=.zomato.com; secure
+Set-Cookie: ak_bmsc=662995DBBFB0B8C3C305EA69119F16B93B9070D0562200007DE1B4597882FA64~pldzFotD12R8OxK2bDV3j7mzEW3m9O2LufbVzzrG0Uw9AFpeJmJ1Znsp8P3GgkK2/znlAq+ALtVHDPRotIYeRSgT4nPNoxt4qjL5p7NT9LP+j14zSAoWl6kyaf/LK/GfnN7usnjLjj5a/sK5tDXfWyTcRufjkyFX15b6XbFo5YbwrOnTnuUGqUCP1EOMObME/DUYwdy6ostBbQopeG9OOV9sPzdp3TBKn5ovDCXcZxmaQ=; expires=Sun, 10 Sep 2017 08:53:49 GMT; max-age=7200; path=/; domain=.zomato.com; HttpOnly
+Expires: Sun, 10 Sep 2017 06:53:49 GMT
+Vary: Accept-Encoding, User-Agent
+Server: Zomato
+Pragma: no-cache
+Cache-Control: max-age=0, no-cache, no-store, no-transform
+Date: Sun, 10 Sep 2017 06:53:49 GMT
+Strict-Transport-Security: max-age=31536000
+Content-Type: text/html; charset=UTF-8

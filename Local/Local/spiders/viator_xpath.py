@@ -29,6 +29,6 @@ about_travelb = './/div[@class="unit size1of4"]/p[@class="mas"]/span[@class="str
 travel_code_b = './/div[@class="unit size1of4"]/p[@class="mas"]/span[@class="xsmall hint"]//text()'
 travel_descriptionb = './/div[@class="unit size1of2"]//p[@class="mhs mvs"]//text()'
 price_b = './/div[@class="txtR mas line"]//div[@class="h2 strong"]/span[@class="currency-sign"]/following-sibling::text()'
-pricebb = '//span[@class="price-amount price-amount-l"]//span[@data-price-from]//text()'
+price_bb = '//span[@class="price-amount price-amount-l"]//span[@data-price-from]//text()'
 
 

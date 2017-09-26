@@ -26,7 +26,7 @@ class NearbuyBrowse(BaseSpider):
 
     def parse(self,response):
         sel = Selector(response)
-        cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
+	cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
 
         for city in cities_list:
             spa_link = 'https://www.nearbuy.com/offers/' + city + '/spa-and-massage?list=LSF_Category%20Icon_Spa'
@@ -71,6 +71,7 @@ class NearbuyBrowse(BaseSpider):
 
     def listing(self,response):
         sel = Selector(response)
+        url_key = response.url.split('?')[-1]
         city = response.meta['city']
         start_count = 0
         category = response.meta['category']
@@ -90,28 +91,32 @@ class NearbuyBrowse(BaseSpider):
             payload = {"searchKey": city, "count": 9, "vertical": "TRAVEL", "isFavourite": False, "pushEvent": False, "offset":0}
 
         api_link = 'https://www.nearbuy.com/api/deal/deals-list'
-        yield Request(api_link, self.parse_meta_links, method="POST", body=json.dumps(payload),headers=headers, meta={'city':city, 'category':category})
+        yield Request(api_link, self.parse_meta_links, method="POST", body=json.dumps(payload),headers=headers, meta={'city':city, 'category':category, 'url_key':url_key})
 
         for i in range(100):
             start_count = start_count + 9
             payload.update({'offset':start_count})
-            yield Request(api_link, self.parse_meta_links,  method="POST", body=json.dumps(payload), headers=headers, cookies=cookies, meta={'start_count':start_count, 'city' :city, 'category':category,'payload':payload},dont_filter=True)
+            yield Request(api_link, self.parse_meta_links,  method="POST", body=json.dumps(payload), headers=headers, cookies=cookies, meta={'start_count':start_count, 'city' :city, 'category':category,'payload':payload, 'url_key':url_key},dont_filter=True)
 
     def parse_meta_links(self,response):
         sel = Selector(response)
         city = response.meta['city']
         category = response.meta['category']
+        url_key = response.meta['url_key']
         body = json.loads(response.body)
         main_info = body.get('deals',{})
         for deal in main_info:
             deal_id = deal.get('id',{})
+            url = deal.get('urlParams','')
+            html_url = 'https://www.nearbuy.com' + '/'.join([normalize(str(i)) for i in url])+'?'+url_key
             deal_link = 'https://www.nearbuy.com/api/deal/deal-detail/' + str(deal_id)
-            yield Request(deal_link, callback=self.metadata_parse, meta={'city':city, 'category':category})
+            yield Request(deal_link, callback=self.metadata_parse, meta={'city':city, 'category':category, 'html_url':html_url})
 
     def metadata_parse(self,response):
         sel = Selector(response)
-        table_category = response.meta['category']
+	table_category = response.meta['category']
         city = response.meta['city'].title()
+        html_url = response.meta['html_url']
         body = json.loads(response.body)
         place_id = body.get('id','')
         place_name = normalize(body.get('merchantName',''))
@@ -197,66 +202,67 @@ class NearbuyBrowse(BaseSpider):
 
             if table_category == 'spa-and-massage' and place_name:
                 query = 'insert into Spa(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, things_to_remember, cancelletion_policy, rating, rating_type, image_urls, created_at, modified_at, last_seen' 
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
             
             if table_category == 'food-and-drink' and place_name:
                 query = 'insert into Eatout(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, things_to_remember, cancelletion_policy, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
 
             if table_category == 'movies-and-events' and place_name:
                 query = 'insert into Theatre(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, things_to_remember, cancelletion_policy, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (things_to_rem), (cancelletion_policy), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
                 
             if table_category == 'activities' and place_name:
                 query = 'insert into Activity(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen = now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
 
             if table_category == 'beauty-and-salon' and place_name:
                 query = 'insert into Salon(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
 
             if table_category == 'health' and place_name:
                 query = 'insert into Health(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
            
             if table_category == 'in-store' and place_name:
                 query = 'insert into Shopping(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, terms_conditions, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (terms), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (terms), (place_images), (html_url))
                 self.cursor.execute(query,values)
 
             if table_category == 'hobbies-and-learning' and place_name:
                 query = 'insert into Hobbie(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
 
             if table_category == 'home-and-auto' and place_name:
                 query = 'insert into Homeauto(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
             
             if table_category == 'hotels' and place_name:
                 query = 'insert into Hotel(id, name, reference_url, city, place_category, location, description, addresses, how_to_use_offer, cancelletion_policy, things_to_remember, rating, rating_type, image_urls, created_at, modified_at, last_seen'
-                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
-                values = ((place_id), (place_name), (response.url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images))
+                query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now(), reference_url=%s, last_seen=now()'
+                values = ((place_id), (place_name), (html_url), (city), (place_category), (location), (description), (place_addresses), (how_to_use), (cancelletion_policy), (things_to_rem), (rating), (rating_type), (place_images), (html_url))
                 self.cursor.execute(query,values)
-
-            if table_category and offer_id:
+            
+	    if table_category and offer_id:
                 query = 'insert into Offer(program_id, id, price_original, price_discounted, price_notes, offer_title, offer_description, offer_inclusions, offer_validity, offer_validity_details, created_at, modified_at, last_seen'
                 query+=') values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now(),now()) on duplicate key update modified_at=now()'
                 values = ((place_id), (offer_id), (price_original), (price_discount), (valid_for), (offer_title), (offer_description), (offer_inclusion), (offer_validity), (validity_details))
                 self.cursor.execute(query,values)
+
