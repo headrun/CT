@@ -82,7 +82,8 @@ class GoairBookBrowse(Spider):
                 except: price_diff = ''
                 
             elif out_travel_class == 'Business' and in_travel_class == 'Economy':
-                price_diff = cleartrip_price - int(int(''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoBusiness"]//span[@class="js-extract-text"]/text()' % out_flight_number).extract()).replace(',','')) + int(''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoSmart"]//span[@class="js-extract-text"]/text()' % in_flight_number).extract()).replace(',',''))) * no_of_passengers
+                try:price_diff = cleartrip_price - int(int(''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoBusiness"]//span[@class="js-extract-text"]/text()' % out_flight_number).extract()).replace(',','')) + int(''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoSmart"]//span[@class="js-extract-text"]/text()' % in_flight_number).extract()).replace(',',''))) * no_of_passengers
+                except: price_diff = ''
         
         
         if trip_type == 'Oneway' and out_travel_number:
@@ -129,6 +130,7 @@ class GoairBookBrowse(Spider):
                 data.append((in_price_key_name, in_price_key_value))
                 next_url = 'https://book.goair.in/Flight/Select'
                 yield FormRequest(next_url, callback=self.parse_passenger, formdata=data, method="POST", meta={'no_of_passengers':no_of_passengers}, dont_filter=True)
+            
             elif out_travel_class == 'Business' and in_travel_class == 'Business' and price_diff >= -2000 and price_diff != '':
                 out_price_key_value = ''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoBusiness"]/div[@class="fare-price-text  no-bundle"]/input/@value' % out_flight_number).extract())
                 out_price_key_name = ''.join(sel.xpath('//div[contains(text(),"%s")]/../../td[@data-mobile-label="GoBusiness"]/div[@class="fare-price-text  no-bundle"]/input/@name' % out_flight_number).extract())
