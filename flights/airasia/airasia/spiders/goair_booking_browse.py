@@ -11,11 +11,10 @@ class GoairBookBrowse(Spider):
         super(GoairBookBrowse, self).__init__(*args, **kwargs)
 
         self.passengers_dict = {"tripid":"", "outboundflightid":"G8 113", "outboundflightclass":"Economy", "inboundflightid":"G8 116", "inboundflightclass":"Economy", "pnr":"", "outboundmeal":[], "inboundmeal":[], "cleartripprice":"300000", "outboundbaggage":[], "inboundbaggage":[], "outbounddate":"2017-10-01", "inbounddate":"2017-10-05", "paxdetails":{"adults":"1", "child":"0", "infant":"1"}, "origin":"DEL", "destination":"BLR", "triptype":"Oneway", "countrycode":"IN", "countryisdcode":"91", "phonenumber":"", "emergencycontact":{"title":"MR", "firstname":"Charan", "lastname":"Malla", "countryisdcode":"91", "mobilenumber":"9876543210", "email":"bujji.charan@ymail.com", "landline":"2531479"}, "passengerdetails":[{"title":"MR", "gender":"Male", "firstname":"Prasad", "lastname":"K", "dob":"1989-08-12"}, {"title":"MR", "gender":"Male", "firstname":"Venu", "lastname":"E", "dob":"1992-08-12"}]}
-    
+        
     #def parse(self, response):
-		#sel = Selector(response)
-	
-		#import pdb;pdb.set_trace()
+        #sel = Selector(response)
+        #import pdb;pdb.set_trace()
 	
     def parse(self, response):
         sel = Selector(response)
@@ -91,7 +90,6 @@ class GoairBookBrowse(Spider):
                         (price_key_name, price_key_value)]
                 next_url = 'https://book.goair.in/Flight/Select'
                 yield FormRequest(next_url, callback=self.parse_passenger, formdata=data, method="POST", meta={'no_of_passengers':no_of_passengers}, dont_filter=True)
-
 
         elif trip_type =='Roundtrip' and in_flight_number in flight_numbers and out_flight_number in flight_numbers:
             data = []
@@ -191,7 +189,7 @@ class GoairBookBrowse(Spider):
                 data.append(('goAirGstContact.CompanyName', ''))
                 data.append(('goAirGstContact.EmailAddress', ''))
         
-	    next_url = 'https://book.goair.in/Passengers/Update'
+        next_url = 'https://book.goair.in/Passengers/Update'
         yield FormRequest(next_url, callback=self.parse_extras, formdata=data, method="POST", meta={'pax_names':pax_names})
 
     def parse_extras(self, response):
