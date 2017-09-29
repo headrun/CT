@@ -225,33 +225,33 @@ class GoairBookBrowse(Spider):
                 if pass_name in pax_names and item:
                     baggage_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//option[contains(text()," %s ")]/@value' % (pass_name,item)).extract()) + '|' + str(count)
                     data.append(('goAirSsr.SelectedJourneySsrs[0]', baggage_addon_value))
-            
-        if trip_type == 'Roundtrip' and out_travel_class == 'Economy' and out_meal_addons or in_meal_addons:
-			for i in out_meal_addons:
-				out_pass_name = i.split('-')[-1]
-				out_count = i.split('*')[-1].replace(out_pass_name,'').strip('-')
-				out_item = i.split('*')[0] 
-				if out_pass_name in pax_names and out_item:
-					out_food_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (out_pass_name,out_journey, out_item)).extract()) + '|' + str(out_count)
-                   	data.append(('goAirSsr.SelectedJourneySsrs[0]', out_food_addon_value))
 
-			for i in in_meal_addons:
-				in_pass_name = i.split('-')[-1]
-				in_count = i.split('*')[-1].replace(in_pass_name,'').strip('-')
-				in_item = i.split('*')[0]
-				if in_pass_name in pax_names and in_item:
-					in_food_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (in_pass_name,in_journey,in_item)).extract()) + '|' + str(in_count)
-					data.append(('goAirSsr.SelectedJourneySsrs[0]', in_food_addon_value))
+        if trip_type == 'Roundtrip' and out_travel_class == 'Economy' and out_meal_addons or in_meal_addons:
+            for i in out_meal_addons:
+                out_pass_name = i.split('-')[-1]
+                out_count = i.split('*')[-1].replace(out_pass_name,'').strip('-')
+                out_item = i.split('*')[0]
+                if out_pass_name in pax_names and out_item:
+                    out_food_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (out_pass_name,out_journey, out_item)).extract()) + '|' + str(out_count)
+                    data.append(('goAirSsr.SelectedJourneySsrs[0]', out_food_addon_value))
+
+            for i in in_meal_addons:
+                in_pass_name = i.split('-')[-1]
+                in_count = i.split('*')[-1].replace(in_pass_name,'').strip('-')
+                in_item = i.split('*')[0]
+                if in_pass_name in pax_names and in_item:
+                    in_food_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (in_pass_name,in_journey,in_item)).extract()) + '|' + str(in_count)
+                    data.append(('goAirSsr.SelectedJourneySsrs[0]', in_food_addon_value))
         
         if trip_type == 'Rountrip' and out_baggage_addons or in_baggage_addons:
             for i in out_baggage_addons:
-				out_pass_name = i.split('-')[-1]
-				out_count = i.split('*')[-1].replace(out_pass_name,'').strip('-')
-				out_item = i.split('*')[0]
-				if out_pass_name in pax_names and out_item:
-					out_baggage_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (out_pass_name,out_journey,out_item)).extract()) + '|' + str(out_count)
-					data.append(('goAirSsr.SelectedJourneySsrs[0]', out_baggage_addon_value))
-            
+                out_pass_name = i.split('-')[-1]
+                out_count = i.split('*')[-1].replace(out_pass_name,'').strip('-')
+                out_item = i.split('*')[0]
+                if out_pass_name in pax_names and out_item:
+                    out_baggage_addon_value = ''.join(sel.xpath('//span[contains(text(),"%s")]/../../div[@class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--12-col-phone"]//div[contains(text(),"%s")]/../../div[@class="mdl-grid mdl-grid--nesting ssr-forms"]//option[contains(text()," %s ")]/@value' % (out_pass_name,out_journey,out_item)).extract()) + '|' + str(out_count)
+                    data.append(('goAirSsr.SelectedJourneySsrs[0]', out_baggage_addon_value))
+                    
             for i in in_baggage_addons:
                 in_pass_name = i.split('-')[-1]
                 in_count = i.split('*')[-1].replace(in_pass_name, '').strip('-')
