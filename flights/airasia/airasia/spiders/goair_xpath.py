@@ -25,3 +25,5 @@ insu_qute_keys_xpath = '//div[@class="insurance-supplier-notes"]/../input/@name'
 insu_qute_values_xpath = '//div[@class="insurance-supplier-notes"]/../input/@value'
 
 final_price_xpath = '//div[@class="price-display-section price-display-section-total"]//div[@class="pull-right"]/text()'
+
+flight_numbers_xpath = '//div[@class="mdl-typography--body-1 lower-head-text"]/text()'
