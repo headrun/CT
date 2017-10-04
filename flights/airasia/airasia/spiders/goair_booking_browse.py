@@ -82,7 +82,7 @@ class GoairBookBrowse(Spider):
         in_flight_number = '  '.join(book_dict.get('inboundflightid', '').split(' '))
         out_travel_class = book_dict.get('outboundflightclass', '')
         in_travel_class = book_dict.get('inboundflightclass', '')
-        flight_numbers = sel.xpath('//div[@class="mdl-typography--body-1 lower-head-text"]/text()').extract()
+        flight_numbers = sel.xpath(flight_numbers_xpath).extract()
 
         if trip_type == 'Oneway' and out_flight_number in flight_numbers:
             additional_key = ''.join(sel.xpath(oneway_additional_key_xpath).extract())
