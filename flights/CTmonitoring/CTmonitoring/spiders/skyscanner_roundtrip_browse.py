@@ -91,8 +91,8 @@ class SkyBrowse(Spider):
                 "trip_type":"return"
 		        }
         
-        url = 'https://www.skyscanner.co.in/dataservices/flights/pricing/v3.0/search/?geo_schema=skyscanner&carrier_schema=skyscanner&response_include=query%3Bdeeplink%3Bsegment%3Bstats%3Bfqs%3Bpqs%3B_flights_availability'
-        yield Request(url, callback=self.parse_next, headers=headers, cookies=cookies, body=json.dumps(data), method="POST",
+            url = 'https://www.skyscanner.co.in/dataservices/flights/pricing/v3.0/search/?geo_schema=skyscanner&carrier_schema=skyscanner&response_include=query%3Bdeeplink%3Bsegment%3Bstats%3Bfqs%3Bpqs%3B_flights_availability'
+            yield Request(url, callback=self.parse_next, headers=headers, cookies=cookies, body=json.dumps(data), method="POST",
 				meta={'dx':dx, 'got_sk':got_sk, 'date':date, 're_date':re_date})
 
     def parse_next(self, response):
