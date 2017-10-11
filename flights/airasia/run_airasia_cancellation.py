@@ -86,6 +86,8 @@ def add_message():
 			    'modified_at':str(datetime.datetime.now())
 			   })
     logging.debug(result_dict)
+    cursor.close()
+    con.close()
     return jsonify(result_dict)
 
 @app.route('/airasia/booking', methods=['POST'])
@@ -142,6 +144,8 @@ def add_booking():
                                 'modified_at': str(datetime.datetime.now())
                              })
     logging.debug(book_fin_dict)
+    cursor.close()
+    conn.close()
     return jsonify(book_fin_dict)
 
 def get_current_ts_with_ms():

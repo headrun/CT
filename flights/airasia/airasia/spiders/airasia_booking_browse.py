@@ -11,6 +11,7 @@ from ast import literal_eval
 from scrapy import signals
 from airasia.items import *
 from scrapy.spider import Spider
+from collections import OrderedDict
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from scrapy.http import FormRequest, Request
@@ -19,10 +20,8 @@ from scrapy.selector import Selector
 from ConfigParser import SafeConfigParser
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy_splash import SplashRequest, SplashFormRequest
-from airasia_booking_data import *
 _cfg = SafeConfigParser()
 _cfg.read('airline_names.cfg')
-
 
 class AirAsiaBookingBrowse(Spider):
     name = "airasiabooking_browse"
@@ -33,14 +32,88 @@ class AirAsiaBookingBrowse(Spider):
 	self.price_patt = re.compile('\d+')
 	self.log = create_logger_obj('airasia_booking')
         self.booking_dict = kwargs.get('jsons', {})
-	self.insert_query = 'insert into airasia_booking_report(sk, airline, auto_pnr, pnr, ticket, triptype, cleartrip_price, airasia_price, status_message, tolerance_amount, error_message, paxdetails, created_at, modified_at) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) on duplicate key update modified_at=now(), sk=%s, pnr=%s, ticket=%s, tolerance_amount=%s, error_message=%s, status_message=%s'
-	self.existing_pnr_query = 'insert into airasia_booking_report (sk, airline, auto_pnr, flight_number, from_location, to_location, status_message, oneway_date, error_message, paxdetails, created_at, modified_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now()) on duplicate key update modified_at=now() error_message=%s, paxdetails=%s, flight_number=%s'
+	self.ow_input_flight = self.rt_input_flight = {}
+	self.ow_fullinput_dict = self.rt_fullinput_dict = {}
+	self.insert_query = 'insert into airasia_booking_report(sk, airline, auto_pnr, pnr, triptype, cleartrip_price, airasia_price, status_message, tolerance_amount, error_message, paxdetails, created_at, modified_at) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) on duplicate key update modified_at=now(), sk=%s, status_message=%s'
+	self.existing_pnr_query = 'insert into airasia_booking_report (sk, airline, auto_pnr, flight_number, from_location, to_location, status_message, oneway_date, error_message, paxdetails, created_at, modified_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now()) on duplicate key update modified_at=now(), error_message=%s, paxdetails=%s, sk=%s'
 	self.conn = MySQLdb.connect(host="localhost", user = "root", db = "TICKETBOOKINGDB", charset="utf8", use_unicode=True)
         self.cur = self.conn.cursor()
 
     def spider_closed(self, spider):
         self.cur.close()
         self.conn.close()
+    
+    def get_travel_date(self, date):
+        try:
+            date_ = datetime.datetime.strptime(date.strip(), '%d-%b-%y')
+            date_format = date_.strftime('%Y-%m-%d')
+        except:
+            date_format, day, month, year = ['']*4
+        return date_format
+
+    def process_input(self):
+	book_dict, paxdls = {}, {}
+	if self.booking_dict.get('trip_type', '') == 'OW': triptype = 'OneWay'
+	elif self.booking_dict.get('trip_type', '') == 'RT': triptype = 'RoundTrip'
+	else: triptype = 'MultiCity'
+	self.get_input_segments(self.booking_dict)
+	ow_flt_id = self.ow_input_flight.get('flight_id', '')
+	#ow_class = self.ow_input_flight.get('class', '')
+	rt_flt_id = self.rt_input_flight.get('flight_id', '')
+	#rt_class = self.rt_input_flight.get('class', '')
+	pnr = self.booking_dict.get('auto_pnr', '')
+	onewaymealcode = self.ow_input_flight.get('meal_codes', [])
+	returnmealcode = self.rt_input_flight.get('meal_codes', [])
+	onewaybaggagecode = self.ow_input_flight.get('baggage_codes', [])
+	returnbaggagecode = self.rt_input_flight.get('baggage_codes', [])
+	onewaydate = self.booking_dict.get('departure_date', '')#self.ow_input_flight.get('date', '')
+	onewaydate = str(self.get_travel_date(onewaydate))
+	returndate = self.booking_dict.get('return_date', '')#self.rt_input_flight.get('date', '')
+	returndate = str(self.get_travel_date(returndate))
+	origin = self.booking_dict.get('origin_code', '')
+	destination = self.booking_dict.get('destination_code', '')
+	pax_details = OrderedDict(self.booking_dict.get('pax_details', {}))
+	contact_no = self.booking_dict.get('contact_mobile', '')
+	countryphcode = self.booking_dict.get('country_phonecode', '')
+	countrycode = self.booking_dict.get('country_code', '')
+	email = self.booking_dict.get('emailid', '')
+	ticket_class = self.booking_dict.get('ticket_booking_class', '')
+	ct_ow_price = self.ow_fullinput_dict.get('amount', 0)
+	ct_rt_price = self.rt_fullinput_dict.get('amount', 0)
+	if triptype == 'RoundTrip': ct_price = ct_ow_price + ct_rt_price
+	else: ct_price = ct_ow_price
+	fin_pax, fin_infant, fin_chaild = [], [], []
+	for key, lst in pax_details.iteritems():
+	    pax_ = {}
+            title, firstname, lastname, day, month, year, gender = lst
+	    if day and month and year: dob = '%s-%s-%s'%(year, month, day)
+	    else: "1989-02-02"
+            pax_.update({'title':title, 'firstname':firstname, 'lastname':lastname,
+			'dob':dob, 'gender': gender, 'email':'', 'countrycode':''})
+	    if 'adult' in key:fin_pax.append(pax_)
+	    elif 'child'in key:fin_chaild.append(pax_)
+	    elif 'infant' in key:fin_infant.append(pax_)
+	paxdls.update({
+			'adult':str(self.booking_dict.get('no_of_adults', 0)),
+			'chaild':str(self.booking_dict.get('no_of_children', 0)),
+			'infant':str(self.booking_dict.get('no_of_infants', 0))
+			})
+	
+	book_dict.update({
+			"tripid":self.booking_dict.get('trip_ref', ''),
+			'onwayflightid': ow_flt_id, "onewayclass": ticket_class,
+			'returnflightid': rt_flt_id, 'returnclass': ticket_class,
+			'pnr': pnr, 'onewaymealcode': onewaymealcode,
+			'returnmealcode': returnmealcode, 'ctprice': str(ct_price),
+			'onewaybaggagecode': onewaybaggagecode, 'returnbaggagecode':returnbaggagecode,
+			'onewaydate': onewaydate, 'returndate': returndate, 'paxdetails':paxdls,
+			'origin': origin, 'destination': destination, 
+			'triptype': triptype, 'multicitytrip':{}, 'emergencycontact':{},
+			'guestdetails':fin_pax, 'infant': fin_infant, 'chailddetails':fin_chaild,
+			"countrycode": countrycode, "countryphcode": countryphcode, "phonenumber": contact_no,
+			"email": email, 
+			})
+	return book_dict
 
     def parse(self, response):
         sel = Selector(response)
@@ -62,8 +135,10 @@ class AirAsiaBookingBrowse(Spider):
 	    self.send_mail('Booking Scraper unable to login AirAsia', '')
 	if self.booking_dict:
             try:
-		book_dict = eval(self.booking_dict)
+		book_dict = OrderedDict(eval(self.booking_dict))
+		self.booking_dict = book_dict
 		pnr = book_dict.get('pnr', '')
+		book_dict = self.process_input()
             except Exception as e:
 		logging.debug(e.message)
 		self.send_mail('AirAsia Booking Faild', e.message)
@@ -74,10 +149,12 @@ class AirAsiaBookingBrowse(Spider):
                         'authority': 'booking2.airasia.com',
                         'referer': 'https://booking2.airasia.com/AgentHome.aspx',
                 }
+		
 	    if not pnr:
 	        search_flights = 'https://booking2.airasia.com/Search.aspx'
                 if book_dict.get('triptype', '') == 'OneWay' or book_dict.get('triptype', '') == 'RoundTrip':
-                    yield Request(search_flights, callback=self.parse_search_flights, headers=headers, dont_filter=True, meta={'book_dict':book_dict})
+                    yield Request(search_flights, callback=self.parse_search_flights, headers=headers,\
+					 dont_filter=True, meta={'book_dict':book_dict})
 		elif book_dict.get('triptype', '') == 'MultiCity':
 		    self.send_mail('AirAsia Booking Faild', 'AirAsia Booking Faild As its MultiCity trip')
             	    logging.debug('AirAsia Booking Faild As its MultiCity trip')
@@ -142,11 +219,13 @@ class AirAsiaBookingBrowse(Spider):
 		    logging.debug(error_msg)
 		    vals = (book_dict.get('tripid', ''), 'AirAsia', book_dict.get('pnr', ''), '', origin, desti, "Booking Failed",
 				'', error_msg, '', error_msg, '', '')
-		    self.cur.execute(self.existing_pnr_query, vals)
-		    #update the info in notes with the actual discrepancy
+		    try:
+			self.cur.execute(self.existing_pnr_query, vals)
+			self.conn.commt()
+		    except Exception as e:
+			print e.message
                     continue
                 edit_key = 'Edit:' + ''.join(re.findall('Edit:(.*)', href)).strip(")'")
-                cookies.update({'_gali':ids})
                 booking_headers.update({'Cookie': '_gali=%s'%normalize(ids)})
                 if ids:
                     booking_data_list.update({'__EVENTARGUMENT':normalize(edit_key)})
@@ -155,6 +234,18 @@ class AirAsiaBookingBrowse(Spider):
                     url = 'https://booking2.airasia.com/BookingList.aspx'
                     yield FormRequest(url, callback=self.parse_details, headers=booking_headers,\
                         formdata=booking_data_list, meta={'data_dict':data_dict, 'book_dict':book_dict})
+		else:
+		    err_vals = (
+				book_dict.get('tripid', ''), "AirAsia", book_dict.get('pnr', ''),
+				'', book_dict.get('origin', ''), book_dict.get('destination', ''),
+				'Booking Faild', '', 'itinerary exixts', json.dumps(book_dict.get('guestdetails', [])),
+				'itinerary exixts', json.dumps(book_dict.get('guestdetails', [])), book_dict.get('tripid', '')
+				)
+		    try:
+		        self.cur.execute(self.existing_pnr_query, err_vals)
+		        self.conn.commit()
+		    except Exception as e:
+			print e.message
 
     def parse_details(self, response):
         sel = Selector(response)
@@ -182,10 +273,9 @@ class AirAsiaBookingBrowse(Spider):
 	data_dict.update({'flightid':flight_id, 'guest':guest_name, 'mobile_no':mobile_no, 'email':email})
 	values = (book_dict.get('tripid', ''), 'AirAsia', booking_id, flight_id, data_dict.get('origin', ''), 
 		data_dict.get('destination', ''), "Booking Failed", '', 'itinerary exixts', json.dumps(data_dict),
-		'itinerary exixts', json.dumps(data_dict), booking_id)
+		'itinerary exixts', json.dumps(data_dict), book_dict.get('tripid', ''))
 	self.cur.execute(self.existing_pnr_query, values)
 	self.conn.commit()
-
     
     def parse_search_flights(self, response):
 	sel = Selector(response)
@@ -202,14 +292,14 @@ class AirAsiaBookingBrowse(Spider):
 	return_date = book_dict.get('returndate', '')
 	oneway_date_ = datetime.datetime.strptime(oneway_date, '%Y-%m-%d')
 	bo_day, bo_month, bo_year = oneway_date_.day, oneway_date_.month, oneway_date_.year
-	boarding_date = oneway_date_.strftime('m/%d/%Y')
+	boarding_date = oneway_date_.strftime('%m/%d/%Y')
 	if return_date:
 	    return_date_ = datetime.datetime.strptime(return_date, '%Y-%m-%d')
 	    re_day, re_month, re_year = return_date_.day, return_date_.month, return_date_.year,
 	    return_date = return_date_.strftime('%m/%d/%Y')
 	else : return_date, re_day, re_month, re_year = '', '', '', '', 
 	no_of_adt = book_dict.get('paxdetails', {}).get('adult', '0')
-	no_of_chd = book_dict.get('paxdetails', {}).get('child', '0')
+	no_of_chd = book_dict.get('paxdetails', {}).get('chaild', '0')
 	no_of_infant = book_dict.get('paxdetails', {}).get('infant', '0')
 	#OneWay,RoundTrip 
 	form_data = {
@@ -217,11 +307,6 @@ class AirAsiaBookingBrowse(Spider):
   		'__EVENTARGUMENT': '',
   		'__VIEWSTATE': view_state,
   		'pageToken': '',
-		'MemberLoginSearchView$HFTimeZone': '330',
-		'memberLogin_chk_RememberMe': 'on',
-		'MemberLoginSearchView$PasswordFieldPassword': '',
-		'hdRememberMeEmail': '',
-		'MemberLoginSearchView$TextBoxUserID': '',
   		'ControlGroupSearchView$MultiCurrencyConversionViewSearchView$DropDownListCurrency':'default',
   		'ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListSearchBy': 'columnView',
   		'__VIEWSTATEGENERATOR': gen,
@@ -260,7 +345,8 @@ class AirAsiaBookingBrowse(Spider):
 	if response.status != 200:
             logging.debug('Internal Server Error')
             self.send_mail('Internal Server Error', json.dumps(book_dict))
-	fare_class_dict = {'Lowfare': 'Lowfare', 'Regular': 'Regular', 'PremiumFlex': 'PremiumFlex', 'PremiumFlatbed':'PremiumFlatbed'}
+	fare_class_dict = {'Regular': 'Regular', 'PremiumFlex': 'PremiumFlex',
+				'PremiumFlatbed':'PremiumFlatbed', "Econamy":"Lowfare", "Economy": "Lowfare"}
 	view_state = normalize(''.join(sel.xpath(view_state_path).extract()))
         gen = normalize(''.join(sel.xpath(view_generator_path).extract()))
 	fin_fare_id, fin_fare_name, fin_fare_vlue, fin_price = [''] * 4
@@ -281,8 +367,10 @@ class AirAsiaBookingBrowse(Spider):
 	    refield_tab_index, refield_tab_value = ['']*2
         if not table_nodes:
 	     err = 'No Flithts found'
+	     logging.debug('Flithts  not found')
 	if not retable_nodes and book_dict.get('triptype', '') ==  'RoundTrip':
-	    err = 'No Flights found' 
+	    err = 'No Flights found'
+	    logging.debug('Flithts  not found')
 	member_time_zone = ''.join(sel.xpath('//input[@id="MemberLoginSelectView_HFTimeZone"]/@value').extract())
 	flight_oneway_fares = {}
 	for node in table_nodes:
@@ -321,7 +409,7 @@ class AirAsiaBookingBrowse(Spider):
 		    fare_cls = ''.join(renode.xpath('./..//th[%s]//div[contains(@class, "fontNormal")]//text()'%i).extract()).replace(' ', '').strip()
 		    flight_text = ''.join(renode.xpath('.//div[@class="scheduleFlightNumber"]//span[@class="hotspot"]/@onmouseover').extract())
                     fare_id = ''.join(renode.xpath('.//td[%s]//div[@id="fareRadio"]//input/@id'%i).extract())
-                    fare_name = ''.join(renode.xpath('.//td[%s]//div[@id="fareRadio"]//input/@name'%i).extract())
+		    fare_name = ''.join(node.xpath('.//td[%s]//div[@id="fareRadio"]//input/@name'%i).extract())
                     fare_vlue = ''.join(renode.xpath('.//td[%s]//div[@id="fareRadio"]//input/@value'%i).extract())
                     price = '<>'.join(renode.xpath('.//td[%s]//div[@class="price"]//div[@id="originalLowestFare"]//text()'%i).extract())
                     if fare_id:
@@ -344,10 +432,10 @@ class AirAsiaBookingBrowse(Spider):
 	rect_ticket_class = book_dict.get('returnclass', '').replace(' ', '').strip()
 	if book_dict.get('triptype', '') ==  'RoundTrip':
 	    rect_flight_id = book_dict.get('returnflightid', '').replace(' ', '').strip()
-            reaa_keys = flight_oneway_fares.keys()
+            reaa_keys = flight_return_fares.keys()
             for key in reaa_keys:
                 if ct_flight_id in key:
-                    refin_fare_dict = flight_oneway_fares.get(key, {})
+                    refin_fare_dict = flight_return_fares.get(key, {})
                     break
                 else:
                     refin_fare_dict = {}
@@ -361,16 +449,11 @@ class AirAsiaBookingBrowse(Spider):
 			     '__VIEWSTATEGENERATOR':gen,
 			     '__VIEWSTATE':view_state,
 			     'ControlGroupSelectView$ButtonSubmit': 'Continue',
-			     #'MemberLoginSelectView$TextBoxUserID':'',
-  			     #'hdRememberMeEmail': '',
-  			     #'MemberLoginSelectView$PasswordFieldPassword': '',
-  			     #'memberLogin_chk_RememberMe': 'on',
-  			     #'MemberLoginSelectView$HFTimeZone': '330',
 			})
 	    url = 'https://booking2.airasia.com/Select.aspx'
-	    if book_dict.get('triptype', '') == 'RoundTrip' and refin_fare_vlue:
-		form_data.update({      refield_tab_index:refield_tab_value,
-                                        refin_fare_name:refin_fare_vlue,
+	    if book_dict.get('triptype', '') == 'RoundTrip' and refin_fare_vlue: 
+	        form_data.update({      refield_tab_index:refield_tab_value,
+                                    'ControlGroupSelectView$AvailabilityInputSelectView$market2':refin_fare_vlue,
                                 })
 		yield FormRequest(url, callback=self.parse_travel, formdata=form_data, \
                         meta={'form_data':form_data, 'book_dict':book_dict}, method="POST")
@@ -378,9 +461,22 @@ class AirAsiaBookingBrowse(Spider):
 	        yield FormRequest(url, callback=self.parse_travel, formdata=form_data, \
 			meta={'form_data':form_data, 'book_dict':book_dict}, method="POST")
 	    else:
+		vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '', "Could not find flights", json.dumps(book_dict),
+                        'Could not find flights', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   )
+		self.cur.execute(self.existing_pnr_query, vals)
+		logging.debug("Couldn't find flights for %s"%book_dict.get('tripid', ''))
 		self.send_mail("Couldn't find flights for %s"%book_dict.get('tripid', ''), json.dumps(book_dict))
 	else:
-	    #insert the values
+	    vals = (
+			book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+			book_dict.get('destination', ''), "Booking Failed", '', "No flights find in selected class", json.dumps(book_dict),
+			'No flights find in selected class', json.dumps(book_dict), book_dict.get('tripid', ''),
+		   )
+	    self.cur.execute(self.existing_pnr_query, vals)
+	    logging.debug("Couldn't find flights for given class  %s"%book_dict.get('tripid', ''))
 	    self.send_mail("Couldn't find flights for %s"%book_dict.get('tripid', ''), json.dumps(book_dict))
 	    
 
@@ -394,7 +490,6 @@ class AirAsiaBookingBrowse(Spider):
 	dmeal_key_lst = book_dict.get('returnmealcode', [])
 	guest_count = book_dict.get('paxdetails', {})
 	emergency_contact = book_dict.get('emergencycontact', {})
-	no_of_pax = guest_count.get('adult', 0) + guest_count.get('child', 0) + guest_count.get('infant', 0)
 	guest_ph_number = book_dict.get('phonenumber', '')
 	view_state = normalize(''.join(sel.xpath(view_state_path).extract()))
         gen = normalize(''.join(sel.xpath(view_generator_path).extract()))
@@ -462,9 +557,9 @@ class AirAsiaBookingBrowse(Spider):
   		add_key%'ContactInputTravelerView$TextBoxLastName': 'FERNANDES',
   		add_key%'ContactInputTravelerView$TextBoxWorkPhone': '022 4055 4000',
   		add_key%'ContactInputTravelerView$TextBoxFax': '',
-  		add_key%'ContactInputTravelerView$TextBoxEmailAddress': 'amdtticket@cleartrip.com',
+  		add_key%'ContactInputTravelerView$TextBoxEmailAddress': book_dict.get('email', ''),#'amdtticket@cleartrip.com',
   		add_key%'ContactInputTravelerView$DropDownListHomePhoneIDC': '91',
-  		add_key%'ContactInputTravelerView$TextBoxHomePhone': book_dict.get('tripid', ''),
+  		add_key%'ContactInputTravelerView$TextBoxHomePhone': book_dict.get('phonenumber', ''),#book_dict.get('tripid', ''),
   		add_key%'ContactInputTravelerView$DropDownListOtherPhoneIDC': '91',
   		add_key%'ContactInputTravelerView$TextBoxOtherPhone': guest_ph_number,
   		add_key%'ContactInputTravelerView$EmergencyTextBoxGivenName': emergency_contact.get('firstname', ''),
@@ -487,23 +582,29 @@ class AirAsiaBookingBrowse(Spider):
   		'checkBoxInsuranceId': 'CONTROLGROUP_InsuranceInputControlAddOnsViewAjax_CheckBoxInsuranceAccept',
   		'checkBoxAUSNoInsuranceId': 'InsuranceInputControlAddOnsViewAjax_CheckBoxAUSNo',
   		'declineInsuranceLinkButtonId': 'InsuranceInputControlAddOnsViewAjax_LinkButtonInsuranceDecline',
-  		'insuranceLinkCancelId': 'InsuranceInputControlAddOnsViewAjax_LinkButtonInsuranceDecline',
+  		'iniiiisuranceLinkCancelId': 'InsuranceInputControlAddOnsViewAjax_LinkButtonInsuranceDecline',
   		'radioButtonNoInsuranceId': 'InsuranceInputControlAddOnsViewAjax_RadioButtonNoInsurance',
   		'radioButtonYesInsuranceId': 'InsuranceInputControlAddOnsViewAjax_RadioButtonYesInsurance',
+		'radioButton': 'on',
   		'HiddenFieldPageBookingData': booking_data,
   		'__VIEWSTATEGENERATOR': gen,
   		'CONTROLGROUP_OUTERTRAVELER$CONTROLGROUPTRAVELER$ButtonSubmit': 'Continue',
 		}
-	for idx, details in enumerate(book_dict.get('guestdetails', [])):
+	guestdetails = book_dict.get('guestdetails', [])
+	guestdetails.extend(book_dict.get('chailddetails', []))
+	for idx, details in enumerate(guestdetails):
 	    birth_date = details.get('dob', '')
 	    bo_day, bo_month, bo_year = ['']*3
 	    if birth_date:
 		birth_date = datetime.datetime.strptime(birth_date, '%Y-%m-%d')
         	bo_day, bo_month, bo_year = birth_date.day, birth_date.month, birth_date.year
+	    gender = details.get('gender', '')
+	    if gender == 'Male': gender_val = 1
+	    else: gender_val = 2
 	    if details:	
 	        data.update({
 	        add_key%'PassengerInputTravelerView$DropDownListTitle_%s'%idx: details.get('title', ''),
-                add_key%'PassengerInputTravelerView$DropDownListGender_%s'%idx:'1',
+                add_key%'PassengerInputTravelerView$DropDownListGender_%s'%idx:str(gender_val),
                 add_key%'PassengerInputTravelerView$TextBoxFirstName_%s'%idx: details.get('firstname', ''),
                 add_key%'PassengerInputTravelerView$TextBoxLastName_%s'%idx: details.get('lastname', ''),
                 add_key%'PassengerInputTravelerView$DropDownListNationality_%s'%idx: book_dict.get('countrycode', ''),
@@ -512,7 +613,28 @@ class AirAsiaBookingBrowse(Spider):
                 add_key%'PassengerInputTravelerView$DropDownListBirthDateYear_%s'%idx: str(bo_year),
                 add_key%'PassengerInputTravelerView$TextBoxCustomerNumber_%s'%idx: '',
 	    	})
-	
+
+
+	infants = book_dict.get('infant', [])
+	for idf, inf in enumerate(infants):
+	    birth_date = inf.get('dob', '')
+            bo_day, bo_month, bo_year = ['']*3
+            if birth_date:
+                birth_date = datetime.datetime.strptime(birth_date, '%Y-%m-%d')
+                bo_day, bo_month, bo_year = birth_date.day, birth_date.month, birth_date.year
+            gender = inf.get('gender', '')
+            if gender == 'Male': gender_val = 1
+            else: gender_val = 2
+	    data.update({
+		add_key%'PassengerInputTravelerView$DropDownListAssign_0_0': '0',
+                add_key%'PassengerInputTravelerView$DropDownListGender_0_%s'%idf: str(gender),
+		add_key%'PassengerInputTravelerView$TextBoxFirstName_0_%s'%idf: inf.get('firstname', ''),
+		add_key%'PassengerInputTravelerView$TextBoxLastName_0_%s'%idf: inf.get('lastname', ''),
+		add_key%'PassengerInputTravelerView$DropDownListNationality_0_%s'%idf: inf.get('countrycode', ''),
+		add_key%'PassengerInputTravelerView$DropDownListBirthDateDay_0_%s'%idf: str(bo_day),
+		add_key%'PassengerInputTravelerView$DropDownListBirthDateMonth_0_%s'%idf: str(bo_month),
+		add_key%'PassengerInputTravelerView$DropDownListBirthDateYear_0_%s'%idf: str(bo_year),
+		})
 	if oneway_baggage_value:
 	    data.update({baggage_up_name:oneway_baggage_value})
 	if return_baggage_value:
@@ -535,24 +657,22 @@ class AirAsiaBookingBrowse(Spider):
 	yield FormRequest(travel_url, callback=self.parse_form, formdata=data, meta={'book_dict':book_dict})
 
     def parse_form(self, response):
-	#skipping add-ons
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
 	    logging.debug('Internal Server Error')
 	    self.send_mail('Internal Server Error', json.dumps(book_dict))
 	sel = Selector(response)
-	ct_price = book_dict.get('cleartripprice', '0')
+	tolerance_value = 0
+	ct_price = book_dict.get('ctprice', '0')
 	total_fare = ''.join(sel.xpath('//div[@class="total-amount-bg-last"]//span[@id="overallTotal"]//text()').extract())
 	try:
-	    total_fare = int(total_fare.replace(',', '').strip())
+	    total_fare = float(total_fare.replace(',', '').strip())
 	except: total_fare = 0
 	if total_fare != 0:
-	    tolerance_value = total_fare - int(ct_price.replace(',', '').strip())
-	    if total_fare >= ct_price:
-	        if tolerance_value >= 2000:
+	    tolerance_value = total_fare - float(ct_price)
+	    if tolerance_value >= 2000:
 		    is_proceed = 0  #movie it to off line
-		else: is_proceed = 1
-	    else: is_proceed = 1
+            else: is_proceed = 1
 	else:
 	    tolerance_value, is_proceed = 0, 0
 	view_state = normalize(''.join(sel.xpath(view_state_path).extract()))
@@ -577,11 +697,18 @@ class AirAsiaBookingBrowse(Spider):
   		('HiddenFieldPageBookingData', booking_data),
  		('__VIEWSTATEGENERATOR', gen),
   		('CONTROLGROUPADDONSFLIGHTVIEW$ButtonSubmit', 'Continue'),
-		]
+		]	
 	travel_url = 'https://booking2.airasia.com/AddOns.aspx'
 	if is_proceed == 1:
+	    book_dict.update({'tolerance_value':tolerance_value})
             yield FormRequest(travel_url, callback=self.parse_seat, formdata=data, meta={'book_dict':book_dict})
 	else:
+	    vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '', "No flights find in selected class", json.dumps(book_dict),
+                        'No flights find in selected class', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   )
+	    self.cur.execute(self.existing_pnr_query, vals)
 	    self.send_mail('Fare increased by AirAsia', json.dumps(book_dict))
 
     def parse_seat(self, response):
@@ -608,15 +735,108 @@ class AirAsiaBookingBrowse(Spider):
 		  ('HiddenFieldPageBookingData', bookingdata),
 		  ('__VIEWSTATEGENERATOR', gen),
 		]
-
 	url = 'https://booking2.airasia.com/UnitMap.aspx'
-	yield FormRequest(url, callback=self.parse_unitmap, formdata=data)
+	#Navigating to Patment Process
+	yield FormRequest(url, callback=self.parse_unitmap, formdata=data, meta={'book_dict':book_dict, 'v_state':view_state, 'gen':gen}) 
 
     def parse_unitmap(self, response):
 	sel = Selector(response)
-        import pdb;pdb.set_trace()
-	    
-	
+	book_dict = response.meta['book_dict']
+	amount = ''.join(sel.xpath('//div[@class="totalAmtText"]//following-sibling::div[1]/text()').extract())
+	amount = ''.join(re.findall('\d+,?\d+', amount))
+	booking_data = ''.join(sel.xpath('//input[@name="HiddenFieldPageBookingData"]/@value').extract())
+	view_state = normalize(''.join(sel.xpath(view_state_path).extract()))
+        gen = normalize(''.join(sel.xpath(view_generator_path).extract()))
+	data = [
+		  ('__EVENTTARGET', 'CONTROLGROUPPAYMENTBOTTOM$PaymentInputViewPaymentView'),
+		  ('__EVENTARGUMENT', 'AgencyAccount'),
+		  ('__VIEWSTATE', agency_viewstate),
+		  ('pageToken', ''),
+		  ('eventTarget', ''),
+		  ('eventArgument', ''),
+		  ('viewState', agency_viewstate),
+		  ('pageToken', ''),
+		  ('PriceDisplayPaymentView$CheckBoxTermAndConditionConfirm', 'on'),
+		  ('CONTROLGROUPPAYMENTBOTTOM$MultiCurrencyConversionViewPaymentView$DropDownListCurrency', 'default'),
+		  ('MCCOriginCountry', 'IN'),
+		  ('CONTROLGROUPPAYMENTBOTTOM$PaymentInputViewPaymentView$HiddenFieldUpdatedMCC', ''),
+		  ('HiddenFieldPageBookingData', str(booking_data)),
+		  ('__VIEWSTATEGENERATOR', str(gen)),
+		]
+	url = 'https://booking2.airasia.com/Payment.aspx'
+	#Navigating to Agency Account
+	if not 'Payment' in response.url:
+	    vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '', "Payment Failed", json.dumps(book_dict),
+                        'Payment Failed', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   )
+            self.cur.execute(self.existing_pnr_query, vals)
+            self.send_mail('Payment Failed', json.dumps(book_dict))
+	else:
+	    yield FormRequest(url, callback=self.parse_agency, formdata=data,  meta={'book_dict':response.meta['book_dict'],
+					'booking_data':booking_data, 'gen':gen, 'amount':amount})
+
+    def parse_agency(self, response):
+	sel = Selector(response)
+	booking_data = ''.join(sel.xpath('//input[@name="HiddenFieldPageBookingData"]/@value').extract())
+	if not booking_data:
+	    booking_data = response.meta['booking_data']
+	amount = ''.join(sel.xpath('//input[@id="CONTROLGROUPPAYMENTBOTTOM_PaymentInputViewPaymentView_AgencyAccount_AG_AMOUNT"]/@value').extract())
+	view_state = sel.xpath('//input[@id="viewState"]/@value').extract()
+	if view_state: view_state = view_state[0]
+	else: view_state = ''
+        gen = normalize(''.join(sel.xpath(view_generator_path).extract()))
+	data = { 
+		  '__EVENTTARGET': '',
+		  '__EVENTARGUMENT': '',
+		  '__VIEWSTATE': view_state,
+		  'pageToken': '',
+		  'pageToken': '',
+		  'eventTarget': '',
+		  'eventArgument': '',
+		  'viewState': view_state,
+		  'PriceDisplayPaymentView$CheckBoxTermAndConditionConfirm': 'on',
+		  'MCCOriginCountry': 'IN',
+		  'CONTROLGROUPPAYMENTBOTTOM$PaymentInputViewPaymentView$AgencyAccount_AG_AMOUNT': amount,
+		  'HiddenFieldPageBookingData': booking_data,
+		  '__VIEWSTATEGENERATOR': gen,
+		  'CONTROLGROUPPAYMENTBOTTOM$ButtonSubmit': 'Submit payment',
+		}
+	url = 'https://booking2.airasia.com/Payment.aspx'
+	#Submit Payment
+	if amount:
+	    yield FormRequest(url, callback=self.parse_itinerary, formdata=data, meta={'book_dict':response.meta['book_dict']})
+	else:
+	    vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '', "Payment Failed", json.dumps(book_dict),
+                        'Payment Failed', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   )
+            self.cur.execute(self.existing_pnr_query, vals)
+            self.send_mail('Payment Failed', json.dumps(book_dict))
+
+    def parse_itinerary(self, response):
+	sel = Selector(response)
+	yield FormRequest.from_response(response, callback=self.parse_fin_details, meta={'book_dict':response.meta['book_dict']})
+
+    def parse_fin_details(self, response):
+	sel = Selector(response)
+	book_dict = response.meta['book_dict']
+	import pdb;pdb.set_trace()
+	conform = ''.join(sel.xpath('//span[@class="confirm status"]//text()').extract())
+	pnr_no = ''.join(sel.xpath('//span[@id="OptionalHeaderContent_lblBookingNumber"]//text()').extract())
+	paid_amount = ''.join(sel.xpath('//span[@id="OptionalHeaderContent_lblTotalPaid"]//text()').extract())
+	pax_details = ','.join(sel.xpath('//span[@class="guest-detail-name"]//text()').extract())
+	vals = (
+			book_dict.get('tripid'), 'AirAsia', book_dict.get('pnr', ''),
+			pnr_no, book_dict.get('triptype', ''), book_dict.get('ctprice', ''),
+			paid_amount, conform, book_dict.get('tolerance_value', ''), '', pax_details,
+			book_dict.get('tripid', ''), conform
+		)
+	import pdb;pdb.set_trace()
+	self.cur.execute(self.insert_query, vals)
+	self.conn.commit()
 
     def get_lower_fares(self, lst_):
 	lower_dict = {}
@@ -635,6 +855,40 @@ class AirAsiaBookingBrowse(Spider):
 	lower_details = lower_dict.get(min_price, ['']*4)
 	return lower_details
 
+    def get_input_segments(self, segments):
+        all_segments = segments.get('all_segments', [])
+        ow_flight_dict, rt_flight_dict = {}, {}
+        dest = segments.get('destination_code', '').strip()
+        origin = segments.get('origin_code', '').strip()
+        from_to = '%s-%s'%(origin, dest)
+        if len(all_segments) == 1:
+            key = ''.join(all_segments[0].keys())
+            ow_flight_dict = all_segments[0][key]
+            self.ow_fullinput_dict = ow_flight_dict
+            if ow_flight_dict:
+                try: self.ow_input_flight = ow_flight_dict.get('segments', [])[0]
+                except: self.ow_input_flight = {}
+            else:
+                self.ow_input_flight = {}
+        elif len(all_segments) == 2:
+            key1, key2 = ''.join(all_segments[0].keys()), ''.join(all_segments[1].keys())
+            flight_dict1, flight_dict2 = all_segments[0][key1], all_segments[1][key2]
+            f_to = flight_dict1.get('segments', [])
+            if f_to: seg = f_to[0]
+            else: seg = {}
+            try: f2_seg = flight_dict2.get('segments', [])[0]
+            except: f2_seg = {}
+            if seg.get('segment_name', '').replace(' ', '').strip() == from_to:
+                self.ow_input_flight = seg
+                self.rt_input_flight = f2_seg
+                self.ow_fullinput_dict, self.rt_fullinput_dict = flight_dict1, flight_dict2
+            else:
+                self.ow_input_flight = f2_seg
+                self.rt_input_flight = seg
+                self.ow_fullinput_dict, self.rt_fullinput_dict = flight_dict2, flight_dict1
+        else:
+           print "semd mail flight segments frormat changed"
+
     def send_mail(self, sub, error_msg):
 	recievers_list = []
 	'''
@@ -645,6 +899,7 @@ class AirAsiaBookingBrowse(Spider):
 			     ]
 	'''
 	recievers_list = ["prasadk@notemonk.com"]
+	#recievers_list = ["prasadk@notemonk.com", "rohit.kulkarni@cleartrip.com"]
         sender, receivers = 'prasadk@notemonk.com', ','.join(recievers_list)
         ccing = []
         msg = MIMEMultipart('alternative')
