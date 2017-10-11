@@ -76,6 +76,7 @@ class WegoNewBrowse(Spider):
 
     def parse_next(self, response):
 	res_body = response.body
+	import pdb;pdb.set_trace()
 	yield Request(response.meta['url'], callback=self.parse_data, \
 			headers=response.meta['headers_data'],
 			body=res_body, method="POST",
@@ -86,17 +87,28 @@ class WegoNewBrowse(Spider):
 	try: body = json.loads(response.body)
 	except: body = {}
 	trip_list = body.get('trips', [])
+	legs = body.get('legs', [])
+	legs_dict = {}
+	for i in legs:
+	    ids = i.get('id', '')
+	    if ids: legs_dict.update({ids:i})
 	for lst in trip_list:
 	    ids = lst.get('id', '')
+	    l_id = lst.get('code', '').replace('-', ':')
+	    stopoverscount = legs_dict.get(l_id, {}).get('stopoversCount', '0')
 	    url = "https://srv.wego.com/v2/metasearch/flights/trips/%s?currencyCode=INR"%ids
 	    yield Request(url, callback=self.parse_fares,
-			meta={'got_sk':response.meta['got_sk'],
+			meta={'got_sk':response.meta['got_sk'], 'stopoverscount':stopoverscount,
                         'dx':response.meta['dx'], 'ref_url':response.meta['ref_url']})
 	if trip_list:
 	    got_page(self.cr_tabe, self.source_name, response.meta['got_sk'], 1, self.crawl_type, self.trip_type)
+
     def parse_fares(self, response):
 	try:data = json.loads(response.body)
 	except: data = {}
+	aux_info = {}
+	import pdb;pdb.set_trace()
+	aux_info.update({'stop_count':str(response.meta['stopoverscount'])})
 	if data:
 	    airline, flight_id, detature, arrival, de_date = ['']*5
 	    trip = data.get('trip', {})
@@ -126,6 +138,6 @@ class WegoNewBrowse(Spider):
 	    sk = str(hashlib.md5( str(sk_data) + str(provider_dict)).hexdigest())
 	    if flight_id:
 		flight_id = re.sub(flight_id[1],flight_id[1]+'-',flight_id)
-		avail.update({'sk': sk, 'flight_id':flight_id, 'date': de_date, 'type': self.crawl_type, 'is_available': str(is_avail), 'airline': airline, 'departure_time': de_date, 'arrival_time': '', 'from_location': detature, 'to_location' : arrival, 'providers': json.dumps(provider_dict), 'aux_info': '', 'reference_url':response.meta.get('ref_url', ''), 'dx':response.meta['dx'], 'no_of_passengers':'1'})
+		avail.update({'sk': sk, 'flight_id':flight_id, 'date': de_date, 'type': self.crawl_type, 'is_available': str(is_avail), 'airline': airline, 'departure_time': de_date, 'arrival_time': '', 'from_location': detature, 'to_location' : arrival, 'providers': json.dumps(provider_dict), 'aux_info': json.dumps(aux_info), 'reference_url':response.meta.get('ref_url', ''), 'dx':response.meta['dx'], 'no_of_passengers':'1'})
             	self.out_put.write('%s\n'%json.dumps(avail))
 		

@@ -21,8 +21,8 @@ class SendCSVmail(object):
         self.ip     = 'localhost'
 	self.csv_path = '/root/headrun/CTmonitoring/CTmonitoring/scripts/csv_processing'
 	self.csv_mv_path = '/root/headrun/CTmonitoring/CTmonitoring/scripts/csv_file'
-        self.data_query = "select sk, flight_id, providers, airline, dx, no_of_passengers, departure_time, arrival_time, from_location, to_location from Availability where date(modified_at)=curdate()-1"
-	self.header_params = ["Flight number", "Airline", "Origin", "Destination", "Departure date", "Dx", "No.of Passengers", "Price b/w CT and OTA", "Cleartrip-Price" ,"Cleartrip-Rank", "Sastiticket-Price", "Sastiticket-Rank", "Easemytrip-Price", "Easemytrip-Rank", "Cheapticket-Price", "Cheapticket-Rank", "in.via-Price", "in.via-Rank", "ezeego1-Price", "ezeego1-Rank", "in.musafir-Price", "in.musafir-Rank", "Smartfares-Price", "Smartfares-Rank", "in.airtickets-Price", "in.airtickets-Rank",  "Travelgenio-Price", "Travelgenio-Rank", "Traveasy-Price", "Traveasy-Rank", "Jetairways-Price", "Jetairways-Rank", "Kiwi-Price", "Kiwi-Rank", "Mytrip-Price", "Mytrip-Rank"]
+        self.data_query = "select sk, flight_id, providers, airline, dx, no_of_passengers, departure_time, arrival_time, from_location, to_location, aux_info from Availability where date(modified_at)=curdate()-1"
+	self.header_params = ["Flight number", "Airline", "Origin", "Destination", "Departure date", "Dx", "Stops Count", "No.of Passengers", "Price b/w CT and OTA", "Cleartrip-Price" ,"Cleartrip-Rank", "Sastiticket-Price", "Sastiticket-Rank", "Easemytrip-Price", "Easemytrip-Rank", "Cheapticket-Price", "Cheapticket-Rank", "in.via-Price", "in.via-Rank", "ezeego1-Price", "ezeego1-Rank", "in.musafir-Price", "in.musafir-Rank", "Smartfares-Price", "Smartfares-Rank", "in.airtickets-Price", "in.airtickets-Rank",  "Travelgenio-Price", "Travelgenio-Rank", "Traveasy-Price", "Traveasy-Rank", "Jetairways-Price", "Jetairways-Rank", "Kiwi-Price", "Kiwi-Rank", "Mytrip-Price", "Mytrip-Rank"]
 
 	self.main()
 
@@ -86,14 +86,12 @@ class SendCSVmail(object):
             recievers_list = ['sudhir.mantena@cleartrip.com']
 	    #recievers_list = ["prasadk@notemonk.com"]
             sender, receivers  = 'prasadk@notemonk.com', ','.join(recievers_list)
-	     
-	    ccing = ['aravind@headrun.com', 'raja@headrun.com',
+	    ccing = ['lakshmi.b@cleartrip.com', 'srinivas.v@cleartrip.com',
 			'cleartrip@headrun.com','hareesh.r@cleartrip.com',
 			'pallav.singhvi@cleartrip.com', 'chetan.sharma@cleartrip.com',
 			'adhvaith.h@cleartrip.com', 'deepak.sharma@cleartrip.com',
-			'ashwin.d@cleartrip.com'
+			'ashwin.d@cleartrip.com', 'ankit.dutt@cleartrip.com'
 		     ]
-	    
             msg = MIMEMultipart('alternative')
             msg['Subject'] = 'Cleartrip - Monitoring Availability On %s'%(str(datetime.datetime.now().date()))
             mas = '<h2>Cleartrip - Monitoring Availability on ONE-WAY</h2>'
@@ -123,7 +121,7 @@ class SendCSVmail(object):
         for rec in records:
 	    pro_lst = []
 	    sk, flight_id, providers, airline, dx, no_of_passengers, \
-		departure_time, arrival_time, from_location, to_location = rec
+		departure_time, arrival_time, from_location, to_location, aux_info = rec
 	    ct_price, ct_rank, least_price, price_diff = ['']*4
 	    pd_dict= {
                         "sastiticket":{}, "easemytrip":{}, "cheapticket":{}, "via":{},
@@ -154,15 +152,14 @@ class SendCSVmail(object):
 	    if ct_price and least_price:
 	        price_diff = str(float(str(least_price).replace(',', '')) - float(str(ct_price).replace(',', '')))
 	    if ct_rank == '': ct_rank = 'NA'
-	    fin_recs.append((flight_id, airline, from_location, to_location, str(departure_time), dx, no_of_passengers,
+	    try: aux_info_dic = json.loads(aux_info)
+	    except: aux_info_dic = {}
+	    no_of_stops = aux_info_dic.get('stop_count', '0') 
+	    fin_recs.append((flight_id, airline, from_location, to_location, str(departure_time), dx, no_of_stops, no_of_passengers,
 				price_diff, pd_dict.get('cleartrip', {}).get('price', 'NA'), pd_dict.get('cleartrip', {}).get('rank', 'NA'),
 				pd_dict.get('sastiticket', {}).get('price', ''), pd_dict.get('sastiticket', {}).get('rank', ''),
 				pd_dict.get('easemytrip', {}).get('price', ''), pd_dict.get('easemytrip', {}).get('rank', ''),
 				pd_dict.get('cheapticket', {}).get('price', ''),pd_dict.get('cheapticket', {}).get('rank', ''),
-				pd_dict.get('via', {}).get('price', ''), pd_dict.get('via', {}).get('rank', ''),
-				pd_dict.get('ezeego1', {}).get('price', ''), pd_dict.get('ezeego1', {}).get('rank', ''),
-				pd_dict.get('musafir', {}).get('price', ''), pd_dict.get('musafir', {}).get('rank', ''),
-				pd_dict.get('smartfares', {}).get('price', ''), pd_dict.get('smartfares', {}).get('rank', ''),
 				pd_dict.get('airtickets', {}).get('price', ''),  pd_dict.get('airtickets', {}).get('rank', ''),
 				pd_dict.get('travelgenio', {}).get('price', ''), pd_dict.get('travelgenio', {}).get('rank', ''),
 				pd_dict.get('traveasy', {}).get('price', ''), pd_dict.get('traveasy', {}).get('rank', ''),
