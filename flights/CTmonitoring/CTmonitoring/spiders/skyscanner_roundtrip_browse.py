@@ -22,7 +22,8 @@ class SkyBrowse(Spider):
 
     def __init__(self, *args, **kwargs):
         super(SkyBrowse, self).__init__(*args, **kwargs)
-        self.source_name = 'skyscanner'
+        self.source_name = 'skyscannerrt'
+        self.crawl_table_name = 'skyscanner'
         self.log = create_logger_obj(self.source_name)
         self.crawl_type = kwargs.get('crawl_type', '')
         self.trip_type = kwargs.get('trip_type', '')
@@ -48,7 +49,7 @@ class SkyBrowse(Spider):
                 try : key, val = data.split('=', 1)
                 except : import pdb;pdb.set_trace()
                 cookies.update({key.strip():val.strip()})
-        requests = terminal_requests(self.cr_tabe, self.source_name, self.crawl_type, self.trip_type, self.limit)
+        requests = terminal_requests(self.cr_tabe, self.crawl_table_name, self.crawl_type, self.trip_type, self.limit)
         for input_ in requests:
             got_sk, from_, to_, date, dx, re_date = input_
             refer_date = str(date.strftime("%y%m%d"))
@@ -101,7 +102,7 @@ class SkyBrowse(Spider):
         if data:
             date = response.meta['date']
             re_date = response.meta['re_date']
-            places_dict, carriers_dict, prices_dict, agents_dict, segments_dict, aux_info  = {}, {}, {}, {}, {}, {}
+            places_dict, carriers_dict, prices_dict, agents_dict, segments_dict,  = {}, {}, {}, {}, {}
             oneway_list, return_list = [], []
             flights_lst = data.get('legs', [])
             segments = data.get('segments', [])
@@ -129,49 +130,42 @@ class SkyBrowse(Spider):
             price_keys = prices_dict.keys()
             for key in price_keys:
                 oneway_key, return_key = key.split('|')[0], key.split('|')[-1]
-                for flg in flights_lst:
-                    if oneway_key == flg.get('id', ''):oneway_list.append(flg)
+            	for flg in flights_lst:
+		    if oneway_key == flg.get('id', ''):oneway_list.append(flg)
                     if return_key == flg.get('id', ''):return_list.append(flg)
-                        
-            for i,j in zip(oneway_list, return_list):
-                providers_dict = {}
-                provider_lst = prices_dict.get(i.get('id', '') + '|' + j.get('id', ''), '') 
-                try:
-                    oneway_seg_id = i.get('segment_ids', [])[0]
-                    return_seg_id = j.get('segment_ids', [])[0]
+        
+            for i,k in zip(oneway_list, return_list):
+                providers_dict, aux_info = {}, {}
+                provider_lst = prices_dict.get(key, '')
+                oneway_seg_ids = i.get('segment_ids', [])
+                return_seg_ids = k.get('segment_ids', [])
+                if len(oneway_seg_ids) > len(return_seg_ids): return_seg_ids.extend([return_seg_ids[-1]]*abs(len(oneway_seg_ids)-len(return_seg_ids)))
+                if len(return_seg_ids) > len(oneway_seg_ids): oneway_seg_ids.extend([oneway_seg_ids[-1]]*abs(len(oneway_seg_ids)-len(return_seg_ids)))
+                for oneway_id, return_id in zip(oneway_seg_ids, return_seg_ids):
+                    oneway_segments_data = segments_dict.get(oneway_id, {})
+                    return_segments_data = segments_dict.get(return_id, {})
+                    oneway_flight_id = oneway_segments_data.get('marketing_flight_number', '')
+                    return_flight_id = return_segments_data.get('marketing_flight_number', '')
+                    oneway_date, return_date = oneway_segments_data.get('departure', '').split('T')[0], return_segments_data.get('departure', '').split('T')[0]
+                    origin_ = places_dict.get(oneway_segments_data.get('origin_place_id', ''), {}).get('display_code', '')
+                    desct_ = places_dict.get(oneway_segments_data.get('destination_place_id', ''), {}).get('display_code', '')
+                    oneway_airline = carriers_dict.get(oneway_segments_data.get('marketing_carrier_id', ''), '').get('name', '')
+                    return_airline = carriers_dict.get(return_segments_data.get('marketing_carrier_id', ''), '').get('name', '')
+                    rank, is_avail = 0, 0
+                    for prv in provider_lst:
+                        item = prv.get('items', [])
+                        if item:
+                            item = item[0]
+                            agent = agents_dict.get(item.get('agent_id', ''), {}).get('name', '')
+                            price = item.get('price', {}).get('amount', '')
+                            if agent:
+                                rank = rank + 1
+                                if 'cleartrip' in agent.lower(): is_avail = 1
+                                providers_dict.update({agent:{'rank':rank, 'price':str(price)}})
                 
-                except: 
-                    oneway_seg_id = ''
-                    return_seg_id = ''
-                oneway_flight_id = segments_dict.get(oneway_seg_id, {}).get('marketing_flight_number', '')
-                return_flight_id = segments_dict.get(return_seg_id, {}).get('marketing_flight_number', '')
-                #oneway_arrival, return_arrival = i.get('arrival', '').split('T')[1], j.get('arrival', '').split('T')[1]
-                #oneway_departure, return_departure = i.get('departure', '').split('T')[1], j.get('departure', '').split('T')[1]
-                oneway_date, return_date = i.get('departure', '').split('T')[0], j.get('departure', '').split('T')[0]
-                origin_ = places_dict.get(flg.get('origin_place_id', ''), {}).get('display_code', '')
-                desct_ = places_dict.get(flg.get('destination_place_id', ''), {}).get('display_code', '')
-                oneway_stop_count, return_stop_count = i.get('stop_count', ''), j.get('stop_count', '')
-                if oneway_stop_count > 0 or return_stop_count > 0:
-                    aux_info.update({'oneway_stop_count':oneway_stop_count, 'return_stop_count':return_stop_count})
-                carr_lst = i.get('operating_carrier_ids', []) + j.get('operating_carrier_ids', [])
-                if carr_lst: carr_id = carr_lst[0]
-                else: carr_id = ''
-                airline_ = carriers_dict.get(carr_id, {}).get('name', '')
-                rank, is_avail = 0, 0
-                for prv in provider_lst:
-                    item = prv.get('items', [])
-                    if item:
-                        item = item[0]
-                        agent = agents_dict.get(item.get('agent_id', ''), {}).get('name', '')
-                        price = item.get('price', {}).get('amount', '')
-                        if agent:
-                            rank = rank + 1
-                            if 'cleartrip' in agent.lower(): is_avail = 1
-                            providers_dict.update({agent:{'rank':rank, 'price':str(price)}})
-                            
-                sk = str(hashlib.md5(str(flg)).hexdigest())
-                if sk and oneway_flight_id and return_flight_id:
-                    avail = {}
-                    avail.update({'sk': sk, 'flight_id':oneway_flight_id, 'date': oneway_date, 'type': self.crawl_type, 'is_available': str(is_avail), 'airline': airline_, 'departure_time': oneway_date, 'arrival_time': oneway_date, 'from_location': origin_, 'to_location' : desct_, 'providers': json.dumps(providers_dict), 'aux_info': json.dumps(aux_info), 'reference_url': response.url, 'dx':response.meta['dx'], 'no_of_passengers':'1', 'return_flight_id':return_flight_id, 'return_date':return_date, 'return_departure_time':return_date, 'return_arrival_time':return_date})
-                    self.out_put.write('%s\n'%json.dumps(avail))
-            got_page(self.cr_tabe, self.source_name, response.meta['got_sk'], 1, self.crawl_type, self.trip_type)
+                    sk = str(hashlib.md5(str(oneway_segments_data) + str(return_segments_data) + str(provider_lst)).hexdigest())
+                    if sk and oneway_flight_id and return_flight_id:
+                        avail = {}
+                        avail.update({'sk': sk, 'flight_id':oneway_flight_id, 'date': oneway_date, 'type': self.crawl_type, 'is_available': str(is_avail), 'airline': oneway_airline, 'departure_time': oneway_date, 'arrival_time': oneway_date, 'from_location': origin_, 'to_location' : desct_, 'providers': json.dumps(providers_dict), 'aux_info': json.dumps(aux_info), 'reference_url': response.url, 'dx':response.meta['dx'], 'no_of_passengers':'1', 'return_flight_id':return_flight_id, 'return_date':return_date, 'return_airline':return_airline, 'return_departure_time':return_date})
+                        self.out_put.write('%s\n'%json.dumps(avail))
+                        got_page(self.cr_tabe, self.crawl_table_name, response.meta['got_sk'], 1, self.crawl_type, self.trip_type)
