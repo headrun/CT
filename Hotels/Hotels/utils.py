@@ -4,8 +4,8 @@ import MySQLdb
 import time
 import datetime
 import re
-import logging
 import asyncore
+import logging
 from scripts.crawl_table_queries import *
 
 
