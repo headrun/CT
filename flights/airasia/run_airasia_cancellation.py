@@ -20,7 +20,7 @@ error_query = 'select * from error_report where pnr="%s"'
 def welcome():
     return "Hello World!"
 
-@app.route('/airasia/cancel', methods=['POST'])
+@app.route('/airasia/cancel', methods=['GET', 'POST'])
 def add_message():
     try:
         content = request.get_json(silent=True)
@@ -32,8 +32,8 @@ def add_message():
 	return jsonify(content)
     try:
         content = eval(content)
-    except Exception as e:
-        print e
+    except:
+	pass
     os.system('source /root/cleartrip/bin/activate')
     os.chdir(spiders_directory)
     os.system('pwd')
@@ -90,17 +90,16 @@ def add_message():
     con.close()
     return jsonify(result_dict)
 
-@app.route('/airasia/booking', methods=['POST'])
+@app.route('/airasia/booking', methods=['GET', 'POST'])
 def add_booking():
     book_query = 'select * from airasia_booking_report where sk = "%s"'
+    print 'came'
     try:
+        content = request.args.get('content', {}).replace('\n', '').strip()
+    except:
         content = request.get_json(silent=True)
-        logging.debug(content)
-    except Exception as e:
-        content = {}
-        content.update({"ErrorMessage":e.message})
-        logging.debug( e.message)
-        return jsonify(content)
+    if not content:
+	content = request.get_json(silent=True)
     try:
         content = eval(content)
     except Exception as e:
@@ -109,7 +108,7 @@ def add_booking():
     os.system('source /root/cleartrip/bin/activate')
     os.chdir(spiders_directory)
     os.system('pwd')
-    pnr = content.get('tripid', '')
+    pnr = content.get('trip_ref', '')
     output_file = 'airasia_%s_%s.json'%(pnr, get_current_ts_with_ms())
     run_cmd = 'scrapy crawl airasiabooking_browse -a jsons="%s"' % (content)
     try:
@@ -117,35 +116,40 @@ def add_booking():
     except:
         print traceback.format_exc()
     fin_data_dict, error_dict = {}, {}
+    departdate = content.get('departure_date', '')
+    origin = content.get('origin_code', '')
+    destination = content.get('destination_code', '')
+    all_segments = content.get('all_segments', [])
+    if all_segments:
+	all_seg = all_segments[0]
+	pcc = all_seg.keys()
+    else: pcc = ''
     con, cursor = create_cursor('TICKETBOOKINGDB')
     cursor.execute(book_query%pnr)
-    db_data = cursor.fetchall('TICKETBOOKINGDB')
+    db_data = cursor.fetchall()
     book_fin_dict = {}
     if db_data:
         data = db_data[0]
-	book_fin_dict.update({  
-                                'tripid': data[0],
-                                'pnr':data[3],
-                                'airline':data[1],
-                                'cleartripprice':data[9],
-                                'airasia_price': data[10],
-                                'status_message': data[11],
-                                'toleranceamount': data[12],
-                                'error': data[15],
-                                'paxdetails': data[16],
-                                'created_at':str(data[16]),
-                                'modified_at':str(data[17])
-                             })
-    else:
-        book_fin_dict.update({
-                                'tripid': content.get('tripid', ''),
-                                'error': "Booking Failed",
-                                'created_at': str(datetime.datetime.now()),
-                                'modified_at': str(datetime.datetime.now())
-                             })
+    else: data = ['']*19
+    tax_detais = json.loads(data[17])
+    rslt, logs_ = [], []
+    for key, vals_ in tax_detais.iteritems():
+	dict_, log_ = {}, {}
+	seg = vals_.get('seg', '')
+	total_price = vals_.get('total', '')
+	del vals_['seg']
+	del vals_['total']
+	dict_.update({"pcc": pcc, "amount":data[10], "flight_no": key.strip(),
+			"errorMessage": data[15], "errorCode": '', "departDate": departdate,
+			"pnrCaptured":data[3], "pricingDetails": vals_, "segments":seg,
+			"trip_id": content.get('trip_ref', ''), 'TotalFare':total_price})
+	log_.update({"pcc": pcc, "flight_no": key.strip(), "actualPrice":data[10], 'custPaidPrice':data[9]})
+	rslt.append(dict_)
+	logs_.append(log_)
+    book_fin_dict.update({'result':rslt, 'logReport':logs_})
     logging.debug(book_fin_dict)
     cursor.close()
-    conn.close()
+    con.close()
     return jsonify(book_fin_dict)
 
 def get_current_ts_with_ms():
@@ -168,4 +172,4 @@ def create_cursor(db_name):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0')
