@@ -438,7 +438,6 @@ class IndioBookBrowse(Spider):
     def parse_payment(self, response):
 	sel = Selector(response)
 	book_dict = response.meta['book_dict']
-	import pdb;pdb.set_trace()
 	res_headers = json.dumps(str(response.request.headers))
         res_headers = json.loads(res_headers)
         my_dict = literal_eval(res_headers)
@@ -450,7 +449,6 @@ class IndioBookBrowse(Spider):
                 except : continue
                 cookies.update({key.strip():val.strip()})
 	cookies.update({'journey':json.dumps(self.journey)})
-	#'journey': '{"origin":"BOM","destination":"GOI","fromDate":"07 May 2018","toDate":"","multiCity":null,"promo":"fnf","market":"","currencyCode":"INR","adults":1,"children":1,"infants":1,"journeyType":"oneWay","optionalPromo":""}',
 	cookies.update({'journeyPath': '[{"id":"paxDetails","className":"passenger-details","i18nKey":"passengers"},{"id":"paxAddOns","className":"add-ons","i18nKey":"add-ons"},{"id":"paxInsurance","className":"insurance","i18nKey":"insurance"},{"id":"seatSelect","className":"seat-select","i18nKey":"seat-select"}]'})
 	cookies.update({
 			'RandomCookie': 'Random',
@@ -472,7 +470,6 @@ class IndioBookBrowse(Spider):
 	    self.insert_error_msg(book_dict, "Agency Account not found")
 	else:
 	    tolerance_value, is_proceed = self.check_tolerance(ct_price, amount)
-	import pdb;pdb.set_trace()
 	headers = {
 		    'Pragma': 'no-cache',
 		    'Accept-Encoding': 'gzip, deflate, br',
@@ -493,9 +490,9 @@ class IndioBookBrowse(Spider):
 		  'agencyPayment.QuotedAmount': amount,
 		}
 	    url = 'https://book.goindigo.in/Payment/Create'
-	    import pdb;pdb.set_trace()
+	    #print block
 	    yield FormRequest(url, callback=self.parse_create_payment, formdata=data, cookies=cookies,\
-			 headers=headers, meta={'book_dict':book_dict, 'cookies_':cookies, \
+			 meta={'book_dict':book_dict, 'cookies_':cookies, \
 			'headers_':headers, "tamount":amount, 'tolerance_value':tolerance_value})
 	else:
 	    self.send_mail("fare increased by IndiGo for %s"%book_dict.get('tripid', ''), '')
@@ -510,7 +507,6 @@ class IndioBookBrowse(Spider):
 
     def parse_create_payment(self, response):
 	sel = Selector(response)
-	import pdb;pdb.set_trace()
 	cookies = response.meta['cookies_']
 	headers = response.meta['headers_']
 	url = 'https://book.goindigo.in/Booking/PostCommit'
@@ -523,7 +519,6 @@ class IndioBookBrowse(Spider):
 	book_dict = response.meta['book_dict']
 	id_price = response.meta['tamount']
 	tolerance_value = response.meta['tolerance_value']
-	import pdb;pdb.set_trace()
 	pnr = ''.join(sel.xpath('//label[contains(text(), "Booking Reference")]/following-sibling::h4/text()').extract())
 	booking_conform = ''.join(sel.xpath('//label[contains(text(), "Booking Status")]/following-sibling::h4//text()').extract())
 	payment_status = ''.join(sel.xpath('//label[contains(text(), "Payment Status")]/following-sibling::h4//text()').extract())
@@ -533,10 +528,8 @@ class IndioBookBrowse(Spider):
 		id_price, booking_conform, tolerance_value, '', '',
 		'', '', book_dict.get('tripid', '')
 		)
-	import pdb;pdb.set_trace()
 	self.cur.execute(self.insert_query, vals)
 	self.conn.commit()
-	import pdb;pdb.set_trace() 
 	    
 
     def check_tolerance(self, ctprice, indiprice):
@@ -619,68 +612,3 @@ class IndioBookBrowse(Spider):
         s.login(sender, 'amma@nanna')
         s.sendmail(sender, (recievers_list + ccing), msg.as_string())
         s.quit()
-
-    def process_input(self):
-        book_dict, paxdls = {}, {}
-        if self.booking_dict.get('trip_type', '') == 'OW': triptype = 'OneWay'
-        elif self.booking_dict.get('trip_type', '') == 'RT': triptype = 'RoundTrip'
-        else: triptype = 'MultiCity'
-        self.get_input_segments(self.booking_dict)
-        ow_flt_id = self.ow_input_flight.get('flight_id', '')
-        ow_class = self.ow_input_flight.get('class', '')
-        rt_flt_id = self.rt_input_flight.get('flight_id', '')
-        rt_class = self.rt_input_flight.get('class', '')
-        pnr = self.booking_dict.get('auto_pnr', '')
-        onewaymealcode = self.ow_input_flight.get('meal_codes', [])
-        returnmealcode = self.rt_input_flight.get('meal_codes', [])
-        onewaybaggagecode = self.ow_input_flight.get('baggage_codes', [])
-        returnbaggagecode = self.rt_input_flight.get('baggage_codes', [])
-        onewaydate = self.ow_input_flight.get('date', '')
-        onewaydate = str(self.get_travel_date(onewaydate))
-        returndate = self.rt_input_flight.get('date', '')
-        returndate = str(self.get_travel_date(returndate))
-        origin = self.booking_dict.get('origin_code', '')
-        destination = self.booking_dict.get('destination_code', '')
-        pax_details = OrderedDict(self.booking_dict.get('pax_details', {}))
-        contact_no = self.booking_dict.get('contact_mobile', '')
-        countryphcode = '91'#change needed
-        countrycode = 'IN'#change needed
-        email = self.booking_dict.get('emailid', '')
-        ct_ow_price = self.ow_fullinput_dict.get('amount', 0)
-        ct_rt_price = self.rt_fullinput_dict.get('amount', 0)
-        if triptype == 'RoundTrip': ct_price = ct_ow_price + ct_rt_price
-        else: ct_price = ct_ow_price
-        fin_pax, fin_infant, fin_chaild = [], [], []
-        for key, lst in pax_details.iteritems():
-            pax_ = {}
-            title, firstname, lastname, gender, day, month, year = lst
-            if day and month and year: dob = '%s-%s-%s'%(year, month, day)
-	    else: "1989-02-02"
-            pax_.update({'title':title, 'firstname':firstname, 'lastname':lastname,
-                        'dob':dob, 'gender': gender, 'email':'', 'countrycode':''})
-            if 'adult' in key:fin_pax.append(pax_)
-            elif 'child'in key:fin_chaild.append(pax_)
-            elif 'infant' in key:fin_infant.append(pax_)
-        paxdls.update({
-                        'adult':str(self.booking_dict.get('no_of_adults', 0)),
-                        'chaild':str(self.booking_dict.get('no_of_children', 0)),
-                        'infant':str(self.booking_dict.get('no_of_infants', 0))
-                        })
-
-
-        book_dict.update({
-                        "tripid":self.booking_dict.get('trip_ref', ''),
-                        'onwayflightid': ow_flt_id, "onewayclass": ow_class,
-                        'returnflightid': rt_flt_id, 'returnclass': rt_class,
-                        'pnr': pnr, 'onewaymealcode': onewaymealcode,
-                        'returnmealcode': returnmealcode, 'ctprice': str(ct_price),
-                        'onewaybaggagecode': onewaybaggagecode, 'returnbaggagecode':returnbaggagecode,
-                        'onewaydate': onewaydate, 'returndate': returndate, 'paxdetails':paxdls,
-                        'origin': origin, 'destination': destination,
-                        'triptype': triptype, 'multicitytrip':{}, 'emergencycontact':{},
-                        'guestdetails':fin_pax, 'infant': fin_infant, 'chailddetails':fin_chaild,
-                        "countrycode": countrycode, "countryphcode": countryphcode, "phonenumber": contact_no,
-                        "email": email,
-                        })
-        return book_dict
-

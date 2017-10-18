@@ -19,7 +19,7 @@ from email.mime.multipart import MIMEMultipart
 from scrapy.selector import Selector
 from ConfigParser import SafeConfigParser
 from scrapy.xlib.pydispatch import dispatcher
-from scrapy_splash import SplashRequest, SplashFormRequest
+#from scrapy_splash import SplashRequest, SplashFormRequest
 _cfg = SafeConfigParser()
 _cfg.read('airline_names.cfg')
 
@@ -34,10 +34,11 @@ class AirAsiaBookingBrowse(Spider):
         self.booking_dict = kwargs.get('jsons', {})
 	self.ow_input_flight = self.rt_input_flight = {}
 	self.ow_fullinput_dict = self.rt_fullinput_dict = {}
-	self.insert_query = 'insert into airasia_booking_report(sk, airline, auto_pnr, pnr, triptype, cleartrip_price, airasia_price, status_message, tolerance_amount, error_message, paxdetails, created_at, modified_at) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) on duplicate key update modified_at=now(), sk=%s, status_message=%s'
+	self.insert_query = 'insert into airasia_booking_report(sk, airline, flight_number, auto_pnr, pnr, triptype, cleartrip_price, airasia_price, status_message, tolerance_amount, error_message, paxdetails, price_details, created_at, modified_at) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) on duplicate key update modified_at=now(), sk=%s, status_message=%s'
 	self.existing_pnr_query = 'insert into airasia_booking_report (sk, airline, auto_pnr, flight_number, from_location, to_location, status_message, oneway_date, error_message, paxdetails, created_at, modified_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now()) on duplicate key update modified_at=now(), error_message=%s, paxdetails=%s, sk=%s'
 	self.conn = MySQLdb.connect(host="localhost", user = "root", db = "TICKETBOOKINGDB", charset="utf8", use_unicode=True)
         self.cur = self.conn.cursor()
+	dispatcher.connect(self.spider_closed, signals.spider_closed)
 
     def spider_closed(self, spider):
         self.cur.close()
@@ -52,27 +53,37 @@ class AirAsiaBookingBrowse(Spider):
         return date_format
 
     def process_input(self):
+	'''
+	Reruest processing to required dict format
+	'''
 	book_dict, paxdls = {}, {}
 	if self.booking_dict.get('trip_type', '') == 'OW': triptype = 'OneWay'
 	elif self.booking_dict.get('trip_type', '') == 'RT': triptype = 'RoundTrip'
 	else: triptype = 'MultiCity'
 	self.get_input_segments(self.booking_dict)
-	ow_flt_id = self.ow_input_flight.get('flight_id', '')
-	#ow_class = self.ow_input_flight.get('class', '')
-	rt_flt_id = self.rt_input_flight.get('flight_id', '')
-	#rt_class = self.rt_input_flight.get('class', '')
-	pnr = self.booking_dict.get('auto_pnr', '')
-	onewaymealcode = self.ow_input_flight.get('meal_codes', [])
-	returnmealcode = self.rt_input_flight.get('meal_codes', [])
-	onewaybaggagecode = self.ow_input_flight.get('baggage_codes', [])
-	returnbaggagecode = self.rt_input_flight.get('baggage_codes', [])
+	try: ow_input_flight = self.ow_input_flight[0]
+	except: ow_input_flight = {}
+        try:rt_input_flight = self.rt_input_flight[0]
+	except: rt_input_flight = {}
+	ow_flt_id, rt_flt_id = [], []
+	for i in self.ow_input_flight:
+	    flt = i.get('flight_no', '')
+	    if flt: ow_flt_id.append(flt)
+	for i in self.rt_input_flight:
+            flt = i.get('flight_no', '')
+            if flt: rt_flt_id.append(flt)
+        pnr = self.booking_dict.get('auto_pnr', '')
+	onewaymealcode = ow_input_flight.get('meal_codes', [])
+	returnmealcode = rt_input_flight.get('meal_codes', [])
+	onewaybaggagecode = ow_input_flight.get('baggage_codes', [])
+	returnbaggagecode = rt_input_flight.get('baggage_codes', [])
 	onewaydate = self.booking_dict.get('departure_date', '')#self.ow_input_flight.get('date', '')
 	onewaydate = str(self.get_travel_date(onewaydate))
 	returndate = self.booking_dict.get('return_date', '')#self.rt_input_flight.get('date', '')
 	returndate = str(self.get_travel_date(returndate))
 	origin = self.booking_dict.get('origin_code', '')
 	destination = self.booking_dict.get('destination_code', '')
-	pax_details = OrderedDict(self.booking_dict.get('pax_details', {}))
+	pax_details = self.booking_dict.get('pax_details', {})
 	contact_no = self.booking_dict.get('contact_mobile', '')
 	countryphcode = self.booking_dict.get('country_phonecode', '')
 	countrycode = self.booking_dict.get('country_code', '')
@@ -82,26 +93,26 @@ class AirAsiaBookingBrowse(Spider):
 	ct_rt_price = self.rt_fullinput_dict.get('amount', 0)
 	if triptype == 'RoundTrip': ct_price = ct_ow_price + ct_rt_price
 	else: ct_price = ct_ow_price
-	fin_pax, fin_infant, fin_chaild = [], [], []
+	fin_pax, fin_infant, fin_child = [], [], []
 	for key, lst in pax_details.iteritems():
 	    pax_ = {}
             title, firstname, lastname, day, month, year, gender = lst
 	    if day and month and year: dob = '%s-%s-%s'%(year, month, day)
 	    else: "1989-02-02"
             pax_.update({'title':title, 'firstname':firstname, 'lastname':lastname,
-			'dob':dob, 'gender': gender, 'email':'', 'countrycode':''})
+			'dob':dob, 'gender': gender, 'email':email, 'countrycode':'IN'})
 	    if 'adult' in key:fin_pax.append(pax_)
-	    elif 'child'in key:fin_chaild.append(pax_)
+	    elif 'child'in key:fin_child.append(pax_)
 	    elif 'infant' in key:fin_infant.append(pax_)
 	paxdls.update({
 			'adult':str(self.booking_dict.get('no_of_adults', 0)),
-			'chaild':str(self.booking_dict.get('no_of_children', 0)),
+			'child':str(self.booking_dict.get('no_of_children', 0)),
 			'infant':str(self.booking_dict.get('no_of_infants', 0))
 			})
 	
 	book_dict.update({
 			"tripid":self.booking_dict.get('trip_ref', ''),
-			'onwayflightid': ow_flt_id, "onewayclass": ticket_class,
+			'onewayflightid': ow_flt_id, "onewayclass": ticket_class,
 			'returnflightid': rt_flt_id, 'returnclass': ticket_class,
 			'pnr': pnr, 'onewaymealcode': onewaymealcode,
 			'returnmealcode': returnmealcode, 'ctprice': str(ct_price),
@@ -109,13 +120,16 @@ class AirAsiaBookingBrowse(Spider):
 			'onewaydate': onewaydate, 'returndate': returndate, 'paxdetails':paxdls,
 			'origin': origin, 'destination': destination, 
 			'triptype': triptype, 'multicitytrip':{}, 'emergencycontact':{},
-			'guestdetails':fin_pax, 'infant': fin_infant, 'chailddetails':fin_chaild,
+			'guestdetails':fin_pax, 'infant': fin_infant, 'childdetails':fin_child,
 			"countrycode": countrycode, "countryphcode": countryphcode, "phonenumber": contact_no,
 			"email": email, 
 			})
 	return book_dict
 
     def parse(self, response):
+	'''
+	Login to AirAsia
+	'''
         sel = Selector(response)
         view_state = ''.join(sel.xpath(view_state_path).extract())
         gen = ''.join(sel.xpath(view_generator_path).extract())
@@ -130,6 +144,9 @@ class AirAsiaBookingBrowse(Spider):
 
     def parse_next(self, response):
         sel = Selector(response)
+	'''
+	Parse the request to my bookings or manage my booking
+	'''
 	manage_booking = sel.xpath('//a[@id="MyBookings"]/@href').extract()
 	if response.status !=200 and not manage_booking:
 	    self.send_mail('Booking Scraper unable to login AirAsia', '')
@@ -149,7 +166,6 @@ class AirAsiaBookingBrowse(Spider):
                         'authority': 'booking2.airasia.com',
                         'referer': 'https://booking2.airasia.com/AgentHome.aspx',
                 }
-		
 	    if not pnr:
 	        search_flights = 'https://booking2.airasia.com/Search.aspx'
                 if book_dict.get('triptype', '') == 'OneWay' or book_dict.get('triptype', '') == 'RoundTrip':
@@ -158,11 +174,31 @@ class AirAsiaBookingBrowse(Spider):
 		elif book_dict.get('triptype', '') == 'MultiCity':
 		    self.send_mail('AirAsia Booking Faild', 'AirAsia Booking Faild As its MultiCity trip')
             	    logging.debug('AirAsia Booking Faild As its MultiCity trip')
+		    vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '',
+                        "Booking Faild As its MultiCity trip", json.dumps(book_dict),
+                        'Booking Faild As its MultiCity trip', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   	)
+                    self.cur.execute(self.existing_pnr_query, vals)
+		else:
+		    self.send_mail('AirAsia Booking Faild', 'Request not found')
+                    logging.debug('Request not found')
+                    vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '',
+                        "Request not found", json.dumps(book_dict),
+                        'Request not found', json.dumps(book_dict), book_dict.get('tripid', ''),
+                        )
+                    self.cur.execute(self.existing_pnr_query, vals)
             elif book_dict:
                 url = 'https://booking2.airasia.com/BookingList.aspx'
                 yield Request(url, callback=self.parse_search, dont_filter=True, meta={'book_dict':book_dict})
 
     def parse_search(self, response):
+	'''
+	Fetching the details for Existing PNR
+	'''
         sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
@@ -179,6 +215,9 @@ class AirAsiaBookingBrowse(Spider):
             yield FormRequest(url, formdata=search_data_list, callback=self.parse_pnr_deatails, meta={'book_dict':book_dict})
 
     def parse_pnr_deatails(self, response):
+	'''
+	Checking the auto PNR presented in AirAsia or not.
+	'''
         sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
@@ -201,6 +240,13 @@ class AirAsiaBookingBrowse(Spider):
 	    elif book_dict.get('triptype', '') == 'MultiCity': 
 		self.send_mail('AirAsia Booking Faild', 'AirAsia Booking Faild As its MultiCity trip')
                 logging.debug('AirAsia Booking Faild As its MultiCity trip')
+		vals = (
+                        book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '',
+			"Booking Faild As its MultiCity trip", json.dumps(book_dict),
+                        'Booking Faild As its MultiCity trip', json.dumps(book_dict), book_dict.get('tripid', ''),
+                   )
+                self.cur.execute(self.existing_pnr_query, vals)
 	else:
 	    logging.debug('Auto PNR exists in AirAsia')
 	    for node in nodes:
@@ -255,6 +301,9 @@ class AirAsiaBookingBrowse(Spider):
                         'book_dict':response.meta['book_dict']})
 
     def parse_existing_pax(self, response):
+	'''
+	PNR data parsing
+	'''
         sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
@@ -278,6 +327,9 @@ class AirAsiaBookingBrowse(Spider):
 	self.conn.commit()
     
     def parse_search_flights(self, response):
+	'''
+	Fetching flights
+	'''
 	sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:#
@@ -299,7 +351,7 @@ class AirAsiaBookingBrowse(Spider):
 	    return_date = return_date_.strftime('%m/%d/%Y')
 	else : return_date, re_day, re_month, re_year = '', '', '', '', 
 	no_of_adt = book_dict.get('paxdetails', {}).get('adult', '0')
-	no_of_chd = book_dict.get('paxdetails', {}).get('chaild', '0')
+	no_of_chd = book_dict.get('paxdetails', {}).get('child', '0')
 	no_of_infant = book_dict.get('paxdetails', {}).get('infant', '0')
 	#OneWay,RoundTrip 
 	form_data = {
@@ -339,6 +391,9 @@ class AirAsiaBookingBrowse(Spider):
 			formdata=form_data, meta={'form_data':form_data, 'book_dict':book_dict})
 
     def parse_select_fare(self, response):
+	'''
+	Selecting flight as per request
+	'''
 	sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
         form_data = response.meta['form_data']
@@ -349,7 +404,7 @@ class AirAsiaBookingBrowse(Spider):
 				'PremiumFlatbed':'PremiumFlatbed', "Econamy":"Lowfare", "Economy": "Lowfare"}
 	view_state = normalize(''.join(sel.xpath(view_state_path).extract()))
         gen = normalize(''.join(sel.xpath(view_generator_path).extract()))
-	fin_fare_id, fin_fare_name, fin_fare_vlue, fin_price = [''] * 4
+	fin_fare_id, fin_fare_name, fin_fare_vlue, fin_price, rt_flt_no = [''] * 5
 	refin_fare_id, refin_fare_name, refin_fare_vlue, refin_price = [''] * 4
 	table_nodes = sel.xpath('//table[@id="fareTable1_4"]//tr')
 	retable_nodes = sel.xpath('//table[@id="fareTable2_4"]//tr')
@@ -416,31 +471,20 @@ class AirAsiaBookingBrowse(Spider):
                     	refares_.update({fare_cls:(fare_id, fare_name, fare_vlue, price)})
 	    if reflt_id:
                 flight_return_fares.update({reflt_id:refares_})
-	ct_flight_id = book_dict.get('onewayflightid', '').replace(' ', '').strip()
-	ct_ticket_class = book_dict.get('onewayclass', '').replace(' ', '').strip()	
+	ct_flight_id = book_dict.get('onewayflightid', [])
+	ct_ticket_class = book_dict.get('onewayclass', []).replace(' ', '').strip()
 	aa_keys = flight_oneway_fares.keys()
-	fin_fare_dict = {}
-	for key in aa_keys:
-	    if ct_flight_id in key:
-		fin_fare_dict = flight_oneway_fares.get(key, {})
-		break
-	    else:
-		fin_fare_dict = {}
+	fin_fare_dict, ow_flt_no = self.get_fin_fares_dict(flight_oneway_fares, ct_flight_id)
 	final_flt_tuple = fin_fare_dict.get(fare_class_dict.get(ct_ticket_class, ''), ['']*4)
 	fin_fare_id, fin_fare_name, fin_fare_vlue, fin_price = final_flt_tuple
 	refin_fare_dict = {}
 	rect_ticket_class = book_dict.get('returnclass', '').replace(' ', '').strip()
 	if book_dict.get('triptype', '') ==  'RoundTrip':
-	    rect_flight_id = book_dict.get('returnflightid', '').replace(' ', '').strip()
-            reaa_keys = flight_return_fares.keys()
-            for key in reaa_keys:
-                if ct_flight_id in key:
-                    refin_fare_dict = flight_return_fares.get(key, {})
-                    break
-                else:
-                    refin_fare_dict = {}
+	    rect_flight_id = book_dict.get('returnflightid', [])
+	    refin_fare_dict, rt_flt_no = self.get_fin_fares_dict(flight_return_fares, rect_flight_id)
         refinal_flt_tuple = refin_fare_dict.get(fare_class_dict.get(rect_ticket_class, ''), ['']*4)
         refin_fare_id, refin_fare_name, refin_fare_vlue, refin_price = refinal_flt_tuple
+	book_dict.update({'ow_flt':ow_flt_no, 'rt_flt':rt_flt_no})
 	if fin_fare_vlue:
 	    form_data.update({
 			     field_tab_index:field_tab_value,
@@ -451,12 +495,13 @@ class AirAsiaBookingBrowse(Spider):
 			     'ControlGroupSelectView$ButtonSubmit': 'Continue',
 			})
 	    url = 'https://booking2.airasia.com/Select.aspx'
-	    if book_dict.get('triptype', '') == 'RoundTrip' and refin_fare_vlue: 
+	    if book_dict.get('triptype', '') == 'RoundTrip' and refin_fare_vlue:
 	        form_data.update({      refield_tab_index:refield_tab_value,
                                     'ControlGroupSelectView$AvailabilityInputSelectView$market2':refin_fare_vlue,
                                 })
 		yield FormRequest(url, callback=self.parse_travel, formdata=form_data, \
                         meta={'form_data':form_data, 'book_dict':book_dict}, method="POST")
+
 	    elif fin_fare_vlue and book_dict.get('triptype', '') == 'OneWay':
 	        yield FormRequest(url, callback=self.parse_travel, formdata=form_data, \
 			meta={'form_data':form_data, 'book_dict':book_dict}, method="POST")
@@ -481,6 +526,9 @@ class AirAsiaBookingBrowse(Spider):
 	    
 
     def parse_travel(self, response):
+	'''
+	Booking form filling 
+	'''
 	sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
@@ -552,21 +600,21 @@ class AirAsiaBookingBrowse(Spider):
   		'isAutoSeats': 'false',
   		'CONTROLGROUP_OUTERTRAVELER$CONTROLGROUPTRAVELER$ContactInputTravelerView$CONTROLGROUP_OUTERTRAVELER_CONTROLGROUPTRAVELER_ContactInputTravelerViewHtmlInputHiddenAntiForgeryTokenField': token_field,
  		add_key%'ContactInputTravelerView$HiddenSelectedCurrencyCode': 'INR',
-  		add_key%'ContactInputTravelerView$DropDownListTitle': 'MR',
-  		add_key%'ContactInputTravelerView$TextBoxFirstName': 'MAXY',
-  		add_key%'ContactInputTravelerView$TextBoxLastName': 'FERNANDES',
+  		add_key%'ContactInputTravelerView$DropDownListTitle': 'MS',
+  		add_key%'ContactInputTravelerView$TextBoxFirstName': 'Preeti',
+  		add_key%'ContactInputTravelerView$TextBoxLastName': 'Yadav',
   		add_key%'ContactInputTravelerView$TextBoxWorkPhone': '022 4055 4000',
   		add_key%'ContactInputTravelerView$TextBoxFax': '',
-  		add_key%'ContactInputTravelerView$TextBoxEmailAddress': book_dict.get('email', ''),#'amdtticket@cleartrip.com',
+  		add_key%'ContactInputTravelerView$TextBoxEmailAddress': book_dict.get('email', ''),
   		add_key%'ContactInputTravelerView$DropDownListHomePhoneIDC': '91',
-  		add_key%'ContactInputTravelerView$TextBoxHomePhone': book_dict.get('phonenumber', ''),#book_dict.get('tripid', ''),
+  		add_key%'ContactInputTravelerView$TextBoxHomePhone': guest_ph_number,#book_dict.get('', ''),
   		add_key%'ContactInputTravelerView$DropDownListOtherPhoneIDC': '91',
   		add_key%'ContactInputTravelerView$TextBoxOtherPhone': guest_ph_number,
   		add_key%'ContactInputTravelerView$EmergencyTextBoxGivenName': emergency_contact.get('firstname', ''),
  		add_key%'ContactInputTravelerView$EmergencyTextBoxSurname': emergency_contact.get('lastname', ''),
   		add_key%'ContactInputTravelerView$DropDownListMobileNo': emergency_contact.get('mobilephcode', ''),
   		add_key%'ContactInputTravelerView$EmergencyTextBoxMobileNo': emergency_contact.get('mobilenumber', ''),
-  		add_key%'ContactInputTravelerView$DropDownListRelationship': emergency_contact.get('relationship', ''),
+  		add_key%'ContactInputTravelerView$DropDownListRelationship': 'other',
   		add_key%'ContactInputTravelerView$DropDownListSelectedGSTState': '',
   		add_key%'ContactInputTravelerView$GSTTextBoxCompanyName': '',
   		add_key%'ContactInputTravelerView$GSTTextBoxCompanyStreet': '',
@@ -591,7 +639,7 @@ class AirAsiaBookingBrowse(Spider):
   		'CONTROLGROUP_OUTERTRAVELER$CONTROLGROUPTRAVELER$ButtonSubmit': 'Continue',
 		}
 	guestdetails = book_dict.get('guestdetails', [])
-	guestdetails.extend(book_dict.get('chailddetails', []))
+	guestdetails.extend(book_dict.get('childdetails', []))
 	for idx, details in enumerate(guestdetails):
 	    birth_date = details.get('dob', '')
 	    bo_day, bo_month, bo_year = ['']*3
@@ -613,7 +661,6 @@ class AirAsiaBookingBrowse(Spider):
                 add_key%'PassengerInputTravelerView$DropDownListBirthDateYear_%s'%idx: str(bo_year),
                 add_key%'PassengerInputTravelerView$TextBoxCustomerNumber_%s'%idx: '',
 	    	})
-
 
 	infants = book_dict.get('infant', [])
 	for idf, inf in enumerate(infants):
@@ -657,6 +704,9 @@ class AirAsiaBookingBrowse(Spider):
 	yield FormRequest(travel_url, callback=self.parse_form, formdata=data, meta={'book_dict':book_dict})
 
     def parse_form(self, response):
+	'''
+	parsing Addons page
+	'''
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
 	    logging.debug('Internal Server Error')
@@ -699,19 +749,23 @@ class AirAsiaBookingBrowse(Spider):
   		('CONTROLGROUPADDONSFLIGHTVIEW$ButtonSubmit', 'Continue'),
 		]	
 	travel_url = 'https://booking2.airasia.com/AddOns.aspx'
-	if is_proceed == 1:
+	if is_proceed == 0 or is_proceed == 1:
 	    book_dict.update({'tolerance_value':tolerance_value})
-            yield FormRequest(travel_url, callback=self.parse_seat, formdata=data, meta={'book_dict':book_dict})
+            yield FormRequest(travel_url, callback=self.parse_seat, dont_filter=True, formdata=data, meta={'book_dict':book_dict})
 	else:
 	    vals = (
                         book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
-                        book_dict.get('destination', ''), "Booking Failed", '', "No flights find in selected class", json.dumps(book_dict),
-                        'No flights find in selected class', json.dumps(book_dict), book_dict.get('tripid', ''),
+                        book_dict.get('destination', ''), "Booking Failed", '',
+			"No flights find in selected class or Fare increased by AirAsia", json.dumps(book_dict),
+                        'No flights find in selected class or Fare increased by AirAsia', json.dumps(book_dict), book_dict.get('tripid', ''),
                    )
 	    self.cur.execute(self.existing_pnr_query, vals)
-	    self.send_mail('Fare increased by AirAsia', json.dumps(book_dict))
+	    self.send_mail('No flights find in selected class or Fare increased by AirAsia', json.dumps(book_dict))
 
     def parse_seat(self, response):
+	'''
+	parsing seat selection page
+	'''
         sel = Selector(response)
 	book_dict = response.meta.get('book_dict', {})
 	if response.status != 200:
@@ -723,7 +777,7 @@ class AirAsiaBookingBrowse(Spider):
 	data = [
 		  ('__EVENTTARGET', 'ControlGroupUnitMapView$UnitMapViewControl$LinkButtonAssignUnit'),
 		  ('__EVENTARGUMENT', ''),
-		  ('__VIEWSTATE', view_state),
+		  ('__VIEWSTATE', str(view_state)),
 		  ('pageToken', ''),
 		  ('ControlGroupUnitMapView$UnitMapViewControl$compartmentDesignatorInput', ''),
 		  ('ControlGroupUnitMapView$UnitMapViewControl$deckDesignatorInput', '1'),
@@ -732,14 +786,17 @@ class AirAsiaBookingBrowse(Spider):
 		  ('ControlGroupUnitMapView$UnitMapViewControl$HiddenEquipmentConfiguration_0_PassengerNumber_0', ''),
 		  ('ControlGroupUnitMapView$UnitMapViewControl$EquipmentConfiguration_0_PassengerNumber_0', ''),
 		  ('ControlGroupUnitMapView$UnitMapViewControl$EquipmentConfiguration_0_PassengerNumber_0_HiddenFee', 'NaN'),
-		  ('HiddenFieldPageBookingData', bookingdata),
-		  ('__VIEWSTATEGENERATOR', gen),
+		  ('HiddenFieldPageBookingData', str(bookingdata)),
+		  ('__VIEWSTATEGENERATOR', str(gen)),
 		]
 	url = 'https://booking2.airasia.com/UnitMap.aspx'
 	#Navigating to Patment Process
 	yield FormRequest(url, callback=self.parse_unitmap, formdata=data, meta={'book_dict':book_dict, 'v_state':view_state, 'gen':gen}) 
 
     def parse_unitmap(self, response):
+	'''
+	Parsing to Agency Account for payment
+	'''
 	sel = Selector(response)
 	book_dict = response.meta['book_dict']
 	amount = ''.join(sel.xpath('//div[@class="totalAmtText"]//following-sibling::div[1]/text()').extract())
@@ -774,11 +831,32 @@ class AirAsiaBookingBrowse(Spider):
             self.cur.execute(self.existing_pnr_query, vals)
             self.send_mail('Payment Failed', json.dumps(book_dict))
 	else:
-	    yield FormRequest(url, callback=self.parse_agency, formdata=data,  meta={'book_dict':response.meta['book_dict'],
-					'booking_data':booking_data, 'gen':gen, 'amount':amount})
+	    yield FormRequest(url, callback=self.parse_agency, formdata=data, dont_filter=True,  meta={'book_dict':response.meta['book_dict'],
+	    				'booking_data':booking_data, 'gen':gen, 'amount':amount})
 
     def parse_agency(self, response):
+	'''
+	collecting payment details and submit payment
+	'''
 	sel = Selector(response)
+	book_dict = response.meta['book_dict']
+	tax_dict1, tax_dict2, fin_tax = {}, {}, {}
+	flt1 = ''.join(sel.xpath('//div[@class="flightDisplay_1"]//div[@id="section_1"]//span[@class="right-text bold grey1"]//text()').extract())
+	seg = '-'.join(sel.xpath('//div[@class="flightDisplay_1"]//div[@id="section_1"]//div[@class="row2 mtop-row"]//div//text()').extract()).replace('\n', '').replace('\t', '').replace('\r', '').strip()
+	tax_key = sel.xpath('//div[@class="flightDisplay_1"]//div[@id="section_1"]//span[@class="left-text black2"]//text()').extract()
+	tax_val = sel.xpath('//div[@class="flightDisplay_1"]//div[@id="section_1"]//span[@class="right-text black2"]//text()').extract()
+	tot1_price = ''.join(sel.xpath('//span[@id="totalJourneyPrice_1"]//text()').extract())
+        for i , j in zip(tax_key, tax_val):
+	    tax_dict1.update({i.replace(' ', ''):j, 'seg':seg, 'total':tot1_price})
+	if flt1: fin_tax.update({flt1:tax_dict1})
+	flt2 = ''.join(sel.xpath('//div[@class="flightDisplay_2"]//div[@id="section_2"]//span[@class="right-text bold grey1"]//text()').extract())
+	seg2 = '-'.join(sel.xpath('//div[@class="flightDisplay_2"]//div[@id="section_2"]//div[@class="row2 mtop-row"]//div//text()').extract()).replace('\n', '').replace('\t', '').replace('\r', '').strip()
+	tax2_key = sel.xpath('//div[@class="flightDisplay_2"]//div[@id="section_2"]//span[@class="left-text black2"]//text()').extract()
+	tax2_val = sel.xpath('//div[@class="flightDisplay_2"]//div[@id="section_2"]//span[@class="right-text black2"]//text()').extract()
+	tot2_price = ''.join(sel.xpath('//span[@id="totalJourneyPrice_2"]//text()').extract())
+	for i, j in zip(tax2_key, tax2_val):
+	    tax_dict2.update({i.replace(' ', ''):j, 'seg':seg2, 'total':tot2_price})
+	if flt2: fin_tax.update({flt2:tax_dict2})
 	booking_data = ''.join(sel.xpath('//input[@name="HiddenFieldPageBookingData"]/@value').extract())
 	if not booking_data:
 	    booking_data = response.meta['booking_data']
@@ -806,7 +884,8 @@ class AirAsiaBookingBrowse(Spider):
 	url = 'https://booking2.airasia.com/Payment.aspx'
 	#Submit Payment
 	if amount:
-	    yield FormRequest(url, callback=self.parse_itinerary, formdata=data, meta={'book_dict':response.meta['book_dict']})
+	    yield FormRequest(url, callback=self.parse_itinerary, formdata=data,\
+		 meta={'book_dict':response.meta['book_dict'], 'tax_dict':fin_tax})
 	else:
 	    vals = (
                         book_dict.get('tripid', ''), 'AirAsia', '', '', book_dict.get('origin', ''),
@@ -817,28 +896,40 @@ class AirAsiaBookingBrowse(Spider):
             self.send_mail('Payment Failed', json.dumps(book_dict))
 
     def parse_itinerary(self, response):
+	'''
+	parsing itinerary form response
+	'''
 	sel = Selector(response)
-	yield FormRequest.from_response(response, callback=self.parse_fin_details, meta={'book_dict':response.meta['book_dict']})
+	yield FormRequest.from_response(response, callback=self.parse_fin_details, \
+		meta={'book_dict':response.meta['book_dict'], 'tax_dict': response.meta['tax_dict']})
 
     def parse_fin_details(self, response):
+	'''
+	collecting the final booking detais
+	'''
 	sel = Selector(response)
 	book_dict = response.meta['book_dict']
-	import pdb;pdb.set_trace()
+	tax_dict = response.meta['tax_dict']
 	conform = ''.join(sel.xpath('//span[@class="confirm status"]//text()').extract())
 	pnr_no = ''.join(sel.xpath('//span[@id="OptionalHeaderContent_lblBookingNumber"]//text()').extract())
 	paid_amount = ''.join(sel.xpath('//span[@id="OptionalHeaderContent_lblTotalPaid"]//text()').extract())
 	pax_details = ','.join(sel.xpath('//span[@class="guest-detail-name"]//text()').extract())
+	flt_no = book_dict.get('ow_flt', '').replace('<>', ' ').strip()
+	rt_flt_no = book_dict.get('rt_flt', '').replace('<>', ' ').strip()
+	flt = [flt_no, rt_flt_no]
 	vals = (
-			book_dict.get('tripid'), 'AirAsia', book_dict.get('pnr', ''),
-			pnr_no, book_dict.get('triptype', ''), book_dict.get('ctprice', ''),
-			paid_amount, conform, book_dict.get('tolerance_value', ''), '', pax_details,
-			book_dict.get('tripid', ''), conform
-		)
-	import pdb;pdb.set_trace()
+                        book_dict.get('tripid'), 'AirAsia', str(flt), '',
+                        pnr_no, book_dict.get('triptype', ''), book_dict.get('ctprice', ''),
+                        paid_amount, conform, book_dict.get('tolerance_value', ''), '', pax_details, json.dumps(tax_dict),
+                        book_dict.get('tripid', ''), conform
+                )
 	self.cur.execute(self.insert_query, vals)
 	self.conn.commit()
 
     def get_lower_fares(self, lst_):
+	'''
+	returing the low fare flight details
+	'''
 	lower_dict = {}
 	if lst_:
 	    for lst in lst_:
@@ -855,7 +946,30 @@ class AirAsiaBookingBrowse(Spider):
 	lower_details = lower_dict.get(min_price, ['']*4)
 	return lower_details
 
+    def get_fin_fares_dict(self, flight_fares, ct_flights):
+	'''
+        returing the requested flight details
+        '''
+	aa_keys = flight_fares.keys()
+        fin_fare_dict, flight_no = {}, ''
+        for key in aa_keys:
+            flt_status_key = False
+            for ct_flt in ct_flights:
+                ct_flt = ct_flt.replace(' ', '').replace('-', '').strip()
+                if ct_flt.lower() in key.lower(): flt_status_key = True
+                else: flt_status_key = False
+            if flt_status_key:
+                fin_fare_dict = flight_fares.get(key, {})
+		flight_no = key
+                break
+            else:
+                fin_fare_dict, flight_no = {}, ''
+	return (fin_fare_dict, flight_no)
+
     def get_input_segments(self, segments):
+	'''
+	returing segments
+	'''
         all_segments = segments.get('all_segments', [])
         ow_flight_dict, rt_flight_dict = {}, {}
         dest = segments.get('destination_code', '').strip()
@@ -866,7 +980,7 @@ class AirAsiaBookingBrowse(Spider):
             ow_flight_dict = all_segments[0][key]
             self.ow_fullinput_dict = ow_flight_dict
             if ow_flight_dict:
-                try: self.ow_input_flight = ow_flight_dict.get('segments', [])[0]
+                try: self.ow_input_flight = ow_flight_dict.get('segments', [])
                 except: self.ow_input_flight = {}
             else:
                 self.ow_input_flight = {}
@@ -874,34 +988,29 @@ class AirAsiaBookingBrowse(Spider):
             key1, key2 = ''.join(all_segments[0].keys()), ''.join(all_segments[1].keys())
             flight_dict1, flight_dict2 = all_segments[0][key1], all_segments[1][key2]
             f_to = flight_dict1.get('segments', [])
-            if f_to: seg = f_to[0]
-            else: seg = {}
-            try: f2_seg = flight_dict2.get('segments', [])[0]
-            except: f2_seg = {}
-            if seg.get('segment_name', '').replace(' ', '').strip() == from_to:
-                self.ow_input_flight = seg
-                self.rt_input_flight = f2_seg
-                self.ow_fullinput_dict, self.rt_fullinput_dict = flight_dict1, flight_dict2
-            else:
-                self.ow_input_flight = f2_seg
-                self.rt_input_flight = seg
-                self.ow_fullinput_dict, self.rt_fullinput_dict = flight_dict2, flight_dict1
+	    self.ow_input_flight = flight_dict1.get('segments', [])
+	    self.rt_input_flight = flight_dict2.get('segments', [])
+	    self.ow_fullinput_dict, self.rt_fullinput_dict = flight_dict2, flight_dict1
         else:
-           print "semd mail flight segments frormat changed"
+	    vals = (
+                        segments.get('trip_ref', ''), 'AirAsia', '', '', segments.get('origin_code', ''),
+                        segments.get('destination_code', ''), "Booking Failed", '', "Multi-city booking", json.dumps(segments),
+                        'Multi-city booking', json.dumps(segments), segments.get('trip_ref', ''),
+                   )
+            self.cur.execute(self.existing_pnr_query, vals)
 
     def send_mail(self, sub, error_msg):
-	recievers_list = []
 	'''
-	recievers_list = ['rfan.madha@cleartrip.com',
+	sending mails
+	'''
+	recievers_list = []
+	ccing = ['rfan.madha@cleartrip.com',
 				'rohit.kulkarni@cleartrip.com',
 				'samir.nayak@cleartrip.com',
 				'pallavi.khandekar@cleartrip.com',
 			     ]
-	'''
-	recievers_list = ["prasadk@notemonk.com"]
-	#recievers_list = ["prasadk@notemonk.com", "rohit.kulkarni@cleartrip.com"]
+	recievers_list = ["prasadk@notemonk.com", "rohit.kulkarni@cleartrip.com"]
         sender, receivers = 'prasadk@notemonk.com', ','.join(recievers_list)
-        ccing = []
         msg = MIMEMultipart('alternative')
         msg['Subject'] = '%s On %s'%(sub, str(datetime.datetime.now().date()))
         mas = '<p>%s</p>'%error_msg
@@ -919,6 +1028,9 @@ class AirAsiaBookingBrowse(Spider):
         s.quit()
 
     def get_date_values(self, date):
+	'''
+	parsing date format
+	'''
 	try:
 	    date_ = datetime.datetime.strptime(date, '%Y-%m-%d')
             bo_day, bo_month, bo_year = date_.day, date_.month, date_.year
@@ -928,6 +1040,9 @@ class AirAsiaBookingBrowse(Spider):
 	return (boarding_date, bo_day, bo_month, bo_year)
 
     def get_flight_fares(self, dict_):
+	'''
+	flight fare selection for multi-city
+	'''
         schedules = dict_.get('Schedules', [])
         segments_len = len(schedules)
         seg1_flt, seg2_flt, seg3_flt, seg4_flt, seg5_flt, seg6_flt = {},\
@@ -948,6 +1063,9 @@ class AirAsiaBookingBrowse(Spider):
         return (seg1_flt, seg2_flt, seg3_flt, seg4_flt, seg5_flt, seg6_flt)
 
     def get_flight_prices(self, flt):
+	'''
+	returnig multi-city flights
+	'''
         market = flt.get('JourneyDateMarketList', [])
         flights = {}
         if market:
