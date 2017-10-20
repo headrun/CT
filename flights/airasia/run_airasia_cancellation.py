@@ -130,8 +130,9 @@ def add_booking():
     book_fin_dict = {}
     if db_data:
         data = db_data[0]
-    else: data = ['']*19
-    tax_detais = json.loads(data[17])
+    else: data = ['']*20
+    try: tax_detais = json.loads(data[17])
+    except: tax_detais = {}
     rslt, logs_ = [], []
     for key, vals_ in tax_detais.iteritems():
 	dict_, log_ = {}, {}
@@ -139,14 +140,14 @@ def add_booking():
 	total_price = vals_.get('total', '')
 	del vals_['seg']
 	del vals_['total']
-	dict_.update({"pcc": pcc, "amount":data[10], "flight_no": key.strip(),
+	dict_.update({"pcc": pcc, "amount":data[10], "flight_no": [key.strip()],
 			"errorMessage": data[15], "errorCode": '', "departDate": departdate,
-			"pnrCaptured":data[3], "pricingDetails": vals_, "segments":seg,
+			"pnrCaptured":data[3], "pricingDetails": vals_, "segments":[seg],
 			"trip_id": content.get('trip_ref', ''), 'TotalFare':total_price})
 	log_.update({"pcc": pcc, "flight_no": key.strip(), "actualPrice":data[10], 'custPaidPrice':data[9]})
 	rslt.append(dict_)
 	logs_.append(log_)
-    book_fin_dict.update({'result':rslt, 'logReport':logs_})
+    book_fin_dict.update({'result':rslt, 'logReport':logs_, 'created_at': data[18],'modified_at':data[19]})
     logging.debug(book_fin_dict)
     cursor.close()
     con.close()
