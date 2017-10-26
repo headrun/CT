@@ -96,9 +96,11 @@ class IndioBookBrowse(Spider):
         if triptype == 'RoundTrip': ct_price = ct_ow_price + ct_rt_price
         else: ct_price = ct_ow_price
         fin_pax, fin_infant, fin_child = [], [], []
+	gender_format_dict = {'Mr': 'Male', 'Mrs': 'Female', 'Ms': 'Female' , 'Miss': 'Female', 'Mstr': 'Male'}
         for key, lst in pax_details.iteritems():
             pax_ = {}
-            title, firstname, lastname, day, month, year, gender = lst
+            title, firstname, lastname, day, month, year = lst
+	    gender = gender_format_dict.get(title.strip(), '')
             if day and month and year: dob = '%s-%s-%s'%(year, month, day)
             else: "1989-02-02"
             pax_.update({'title':title, 'firstname':firstname, 'lastname':lastname,
@@ -164,7 +166,7 @@ class IndioBookBrowse(Spider):
 	self.trip_type = book_dict.get('triptype', '')
 	if self.trip_type == 'OneWay': journey_type = 'oneWay'
 	elif self.trip_type == 'RoundTrip': journey_type = 'roundTrip'
-	else: journey_type = 'multicity'
+	else: return #journey_type = 'multicity'
 	pax = book_dict.get('paxdetails', {})
         adult_count, chaild_count, infant_count = pax.get('adult', '0'), pax.get('child', '0'), pax.get('infant', '0')
 	currency_code = book_dict.get('currencycode', '')
@@ -283,7 +285,7 @@ class IndioBookBrowse(Spider):
 	m1_sell, m2_sell, m3_sell, m4_sell, m5_sell = ['']*5
 	market1, market2, market3, market4, market5 = seg_flights.get(0, {}), seg_flights.get(1, {}),\
 			seg_flights.get(2, {}), seg_flights.get(3, {}), seg_flights.get(4, {})
-
+	m1_fare, m2_fare = '', ''
 	if self.trip_type == 'OneWay' or self.trip_type == 'RoundTrip':
 	    market1_ct_flight = book_dict.get('onewayflightid', '')#.replace(' ', '').replace('-', '')
 	    m1_class = book_dict.get('onewayclass', '')
@@ -294,6 +296,8 @@ class IndioBookBrowse(Spider):
 		m2_class = book_dict.get('returnclass', '')
 		m2_fare, m2_sell = self.get_flight_keys(market2, m2_class, market2_ct_flight)
 		if not m2_sell : fare_error = True
+	price_details = {'ow_fare' : m1_fare, 'rt_fare' : m2_fare}
+	print m1_sell, m2_sell
 	if fare_error:
 	    self.send_mail("Booking failed %s"%book_dict.get('tripid', ''), "Flight not found in selected class")
 	    #Fourth Error Msg To Db
@@ -318,16 +322,8 @@ class IndioBookBrowse(Spider):
 			})
 	        if self.trip_type == 'RoundTrip':
 	            data.update({'indiGoAvailability.MarketFareKeys[1]': m2_sell})
-	    else:
-	        data.update({
-			'indiGoAvailability.MarketFareKeys[0]': m1_sell,
-			'indiGoAvailability.MarketFareKeys[1]': m2_sell,
-			})
-	        if m3_sell: data['indiGoAvailability.MarketFareKeys[2]'] = m3_sell
-	        if m4_sell: data['indiGoAvailability.MarketFareKeys[3]'] = m4_sell
-	        if m5_sell: data['indiGoAvailability.MarketFareKeys[4]'] = m5_sell
 	    url = 'https://book.goindigo.in/Flight/SelectAEM'
-	    yield FormRequest(url, callback=self.parse_mem, formdata=data, cookies=cookies, meta={'book_dict':book_dict})
+	    yield FormRequest(url, callback=self.parse_mem, formdata=data, cookies=cookies, meta={'book_dict':book_dict, 'price_details' : price_details})
 
     def parse_mem(self, response):
 	print 'Seach click works'
@@ -335,6 +331,7 @@ class IndioBookBrowse(Spider):
 	res_headers = json.dumps(str(response.request.headers))
         res_headers = json.loads(res_headers)
         my_dict = literal_eval(res_headers)
+	price_details = response.meta.get('price_details')
         cookies = {}
         for i in my_dict.get('Cookie', []):
             data_ = i.split(';')
@@ -342,7 +339,9 @@ class IndioBookBrowse(Spider):
                 try : key, val = data.split('=', 1)
                 except : continue
                 cookies.update({key.strip():val.strip()})
+	print cookies
 	cookies.update({'journey': json.dumps(self.journey)})
+	print self.journey
 	cookies.update({'userSession': 'true',
     			's_ppv': 'flight-select',
     			's_ppn': 'flight-select',
@@ -360,14 +359,21 @@ class IndioBookBrowse(Spider):
 		}
 	url = 'https://book.goindigo.in/Passengers/EditAEM'
 	yield Request(url, callback=self.parse_member, headers=headers, cookies=cookies,\
-			 method='GET', meta={'book_dict':response.meta['book_dict']})
+			 method='GET', meta={'book_dict':response.meta['book_dict'], 'price_details' : price_details})
 
     def parse_member(self, response):
 	print 'flight select journey works'
-	import pdb;pdb.set_trace()
 	sel = Selector(response)
+	print response.url	
 	book_dict = response.meta['book_dict']
+	open('edit_old.html', 'w').write(response.body)
 	res_headers = json.dumps(str(response.request.headers))
+	edit_data = json.loads(response.body)
+	price_details = response.meta.get('price_details')
+	print price_details
+	baggage_keys, meal_keys = self.get_baggage_meals(edit_data, book_dict)
+	print edit_data['indiGoAvailableSsr']
+	import pdb;pdb.set_trace()
         res_headers = json.loads(res_headers)
         my_dict = literal_eval(res_headers)
         cookies = {}
@@ -422,6 +428,8 @@ class IndioBookBrowse(Spider):
 		  'submitToSeatMap': 'Select Seats',
 		}
 	child_details = book_dict.get('childdetails', [])
+	all_keys = baggage_keys + meal_keys
+	data.update({'indiGoSsr.Ssrs' : all_keys})
 	guests_lst = book_dict.get('guestdetails', [])
 	if child_details:
 		guests_lst.extend(child_details)
@@ -466,13 +474,13 @@ class IndioBookBrowse(Spider):
   			'indiGoPassengers.Infants[0].AttachedPassengerNumber': '0',
 			})
 	url = 'https://book.goindigo.in/Passengers/EditAEM'
-	yield FormRequest(url, callback=self.parse_pax, formdata=data, cookies=cookies, meta={'book_dict':book_dict})
+	yield FormRequest(url, callback=self.parse_pax, formdata=data, cookies=cookies, meta={'book_dict':book_dict, 'price_details' : price_details})
 
     def parse_pax(self, response):
 	print 'Passenger edit works'
 	open('edit.html', 'w').write(response.body)
-	import pdb;pdb.set_trace()
 	sel = Selector(response)
+	price_details = response.meta.get('price_details')
 	res_headers = json.dumps(str(response.request.headers))
         res_headers = json.loads(res_headers)
         my_dict = literal_eval(res_headers)
@@ -494,7 +502,7 @@ class IndioBookBrowse(Spider):
 		    'Cache-Control': 'no-cache',
 		}
 	url = 'https://book.goindigo.in/Payment/New'
-	yield Request(url, callback=self.parse_payment, headers=headers, cookies=cookies, meta={'book_dict':response.meta['book_dict']})	
+	yield Request(url, callback=self.parse_payment, headers=headers, cookies=cookies, meta={'book_dict':response.meta['book_dict'], 'price_details' : price_details })	
 
     def parse_payment(self, response):
 	print 'Payment works'
@@ -504,6 +512,13 @@ class IndioBookBrowse(Spider):
 		self.insert_error_msg(book_dict, "Session expired at payment function")
 		return'''
 	sel = Selector(response)
+	price_details = response.meta.get('price_details')
+	pay_summary = [i.strip() for i in sel.xpath('//div[@class="sumry_table"]//td/text()').extract()]
+	from itertools import izip
+	i = iter(pay_summary)
+	price_details_ = dict(izip(i, i))
+	price_details.update(price_details_)
+	import pdb;pdb.set_trace()
 	open('pays.html', 'w').write(response.body)
 	res_headers = json.dumps(str(response.request.headers))
         res_headers = json.loads(res_headers)
@@ -564,7 +579,7 @@ class IndioBookBrowse(Spider):
 	    import pdb;pdb.set_trace()
 	    #yield FormRequest(url, callback=self.parse_create_payment, formdata=data, cookies=cookies,\
 			 #headers=headers, meta={'book_dict':book_dict, 'cookies_':cookies, \
-			#'headers_':headers, "tamount":amount, 'tolerance_value':tolerance_value})
+			#'headers_':headers, "tamount":amount, 'tolerance_value':tolerance_value, 'price_details' : price_details})
 	else:
 	    self.send_mail("fare increased by IndiGo for %s or response error"%book_dict.get('tripid', ''), '')
 	    vals = (
@@ -582,6 +597,7 @@ class IndioBookBrowse(Spider):
 	print response.url
 	sel = Selector(response)
 	cookies = response.meta['cookies_']
+	price_details = response.meta.get('price_details')
 	#Proof
 	open('PostCommit.html', 'w').write(response.body)
 	headers = response.meta['headers_']
@@ -590,11 +606,12 @@ class IndioBookBrowse(Spider):
 	time.sleep(3)
 	yield Request(url, callback=self.parse_final_report, headers=headers, \
 		cookies=cookies, meta={'book_dict':response.meta['book_dict'], \
-		'tamount':response.meta['tamount'], 'tolerance_value':response.meta['tolerance_value']}, dont_filter=True)
+		'tamount':response.meta['tamount'], 'tolerance_value':response.meta['tolerance_value'], 'price_details' : price_details}, dont_filter=True)
 
     def parse_final_report(self, response):
 	print 'final report payment works'
 	print response.url
+	price_details = response.meta.get('price_details')
 	open('IndigoFinal.html', 'w').write(response.body)
 	sel = Selector(response)
 	book_dict = response.meta['book_dict']
@@ -604,7 +621,7 @@ class IndioBookBrowse(Spider):
 	booking_conform = ''.join(sel.xpath('//label[contains(text(), "Booking Status")]/following-sibling::h4//text()').extract())
 	import pdb;pdb.set_trace()
 	payment_status = ''.join(sel.xpath('//label[contains(text(), "Payment Status")]/following-sibling::h4//text()').extract())
-	price_details = '{}'#Code needed here
+	#price_details = '{}'#Code needed here
 	vals = (
 		book_dict.get('tripid', ''), 'IndiGo', pnr, '', book_dict.get('origin', ''),
 		book_dict.get('destination', ''), book_dict.get('triptype', ''), book_dict.get('ctprice', ''),
@@ -617,6 +634,7 @@ class IndioBookBrowse(Spider):
 		self.conn.commit()
 	except:
 		self.send_mail("IndiGo Booking Scraper Success Insert Failed: %s" % pnr, '')	
+		
 	print 'Done'
 	    
 
@@ -761,3 +779,35 @@ class IndioBookBrowse(Spider):
                         'Multi-city booking', json.dumps(segments), segments.get('trip_ref', ''),
                    )
             self.cur.execute(self.existing_pnr_query, vals)
+
+    def get_baggage_meals(self, edit_data, book_dict):
+	baggages, meals = [], []
+	if edit_data['indiGoAvailableSsr']['availableSsrsList'] != None:
+		meals_available_ow = edit_data['indiGoAvailableSsr']['availableSsrsList']['ssrsMealsList'][0]['paxSsrsList'][0]['ssrsList']
+		baggages_available_ow = edit_data['indiGoAvailableSsr']['availableSsrsList']['ssrsBaggagesList'][0]['paxSsrsList'][0]['ssrsList']
+		
+		meals_available_rt = edit_data['indiGoAvailableSsr']['availableSsrsList']['ssrsMealsList'][1]['paxSsrsList'][0]['ssrsList']
+		baggages_available_rt = edit_data['indiGoAvailableSsr']['availableSsrsList']['ssrsBaggagesList'][1]['paxSsrsList'][0]['ssrsList']
+
+		baggages, meals = [], []
+		for i in baggages_available_ow:
+			for j in book_dict['onewaybaggagecode']:
+				if j in i['value']:
+					baggages.append(i['key'])
+		for k in meals_available_ow:
+			for l in book_dict['onewaymealcode']:
+				if l in k['key']:
+					meals.append(k['key'])
+		for i in baggages_available_rt:
+			for j in book_dict['returnbaggagecode']:
+				if j in i['value']:
+					baggages.append(i['key'])
+		for k in meals_available_rt:
+			for l in book_dict['returnmealcode']:
+				if l in k['key']:
+					meals.append(k['key'])
+	if baggages == [] or meals == []:
+		print 'baggage : %s' % len(baggages)
+		print 'meals : %s' % len(meals)
+		
+	return baggages, meals
