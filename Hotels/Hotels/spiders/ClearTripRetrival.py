@@ -21,7 +21,10 @@ class CrawlCTreterive(scrapy.Spider):
     
     def __init__(self,*args,**kwargs):
         super(CrawlCTreterive,self).__init__(*args,**kwargs)
+	self.check = kwargs.get('check','')
         self.name = 'Cleartrip'
+	if self.check == 'dynamic':
+		self.name = 'Cleartriponetime'
         self.log = create_logger_obj(self.name)
         self.crawl_type = kwargs.get('crawl_type','keepup')
         self.content_type = kwargs.get('content_type','hotels')

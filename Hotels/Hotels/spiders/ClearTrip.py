@@ -34,12 +34,17 @@ class ClearTrip(scrapy.Spider):
     
     def __init__(self, Configfile='', *args,**kwargs):
         super(ClearTrip,self).__init__(*args,**kwargs)
+	self.check = kwargs.get('check','')
         self.name ='Cleartrip'
+	json_file_name = 'City_H_IDNS.json'
+	if self.check == 'dynamic':
+		self.name ='Cleartriponetime'
+		json_file_name =  'City_H_IDNSdynamic.json'
 	self.Configfile=Configfile
         self.cursor=create_ct_table_cusor()
         ensure_ct_table(self.cursor,self.name)
 	drop_ct_table(self.cursor,self.name)
-        with open('City_H_IDNS.json') as json_data:
+        with open(json_file_name) as json_data:
             self.d = json.load(json_data)
             
             

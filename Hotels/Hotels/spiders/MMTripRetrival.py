@@ -23,7 +23,10 @@ class MMTCrawltreterive(scrapy.Spider):
 
     def __init__(self,*args,**kwargs):
         super(MMTCrawltreterive,self).__init__(*args,**kwargs)
+	self.check = kwargs.get('check','')
         self.name = 'Makemytrip'
+	if self.check == 'dynamic':
+		self.name = 'Makemytriponetime'
         self.log = create_logger_obj(self.name)
         self.crawl_type = kwargs.get('crawl_type','keepup')
         self.content_type = kwargs.get('content_type','hotels')

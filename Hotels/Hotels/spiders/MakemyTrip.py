@@ -31,11 +31,16 @@ class mytripspider(scrapy.Spider):
     
     def __init__(self, *args, **kwargs):
         super(mytripspider, self).__init__(*args, **kwargs)
+	self.check = kwargs.get('check','')
         self.name='Makemytrip'
+	json_file_name = 'SampleCITY.json'
+	if self.check == 'dynamic':
+		self.name='Makemytriponetime'
+		json_file_name = 'SampleCITYdynamic.json'
         self.cursor =create_mmt_table_cusor()
         ensure_mmt_table(self.cursor,self.name)
 	drop_mmt_table(self.cursor,self.name)
-        with open('SampleCITY.json') as json_data:
+        with open(json_file_name) as json_data:
             self.d = json.load(json_data) 
 
 
@@ -48,7 +53,10 @@ class mytripspider(scrapy.Spider):
         #timestamp = str(time.time()).replace('.', '')
         #payload = {'filters': {},'filterApplied': 'false','uiFilterOrClear': 'false','seoSemFilterApplied': 'false'}
         #headers = {'Content-Type': 'application/json'}
-        config = ConfigObj('MmtConfig.cfg')
+	config_file_name = 'MmtConfig.cfg'
+	if self.check == 'dynamic':
+		config_file_name = 'MmtConfigdynamic.cfg'
+        config = ConfigObj(config_file_name)
         #combinations_dict_Pax = {'1 Adult0 Child': '1e0e','2 Adult0 Child': '2e0e','3 Adult0 Child': '3e0e','2 Adult1 ChildChild Age = 8': '2e1e8e','2 Adult2 ChildChild Age = 88': '2e2e8e8e'}
 
         combinations_dict_Pax = {'2 Adult0 Child': '2e0e'}
