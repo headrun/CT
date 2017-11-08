@@ -94,7 +94,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, li
 
 DOWNLOAD_DELAY = 0.25
 LOG_LEVEL = 'INFO' 
-HTTP_PROXY = "http://cleartrip:x1WoHub492@cleartrip.shader.io:60000"
+HTTP_PROXY = "http://cleartrip:x1WoHub492@cleartrip.shader.io:60001"
 
 DOWNLOADER_MIDDLEWARES = {
         'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,

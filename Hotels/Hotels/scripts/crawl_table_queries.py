@@ -231,11 +231,21 @@ GB_TABLE_SELECT_QUERY = 'SELECT sk, url, dx, los, pax, start_date, end_date, cco
 
 GB_TABLE_SELECT_QUERY_LIMIT = 'SELECT sk, url, dx, los, pax, start_date, end_date, ccode, hotel_ids, hotel_name FROM %s WHERE crawl_type="%s" AND crawl_status=0 AND content_type="%s" ORDER BY crawl_type DESC LIMIT %s;'
 
-
-
 UPDATE_QUERY = 'UPDATE %s SET crawl_status=9, modified_at=NOW() WHERE crawl_type="%s" AND crawl_status=0 AND sk = "%s" AND content_type="%s";'
 
-
-
-
 UPDATE_WITH_9_STATUS = 'UPDATE %s SET crawl_status=%s, modified_at=NOW() WHERE crawl_status=9 AND crawl_type="%s" AND sk="%s" AND content_type="%s";'
+
+TA_UPDATE_QUERY = 'UPDATE %s SET crawl_status=9, modified_at=NOW() WHERE crawl_type="%s" AND (crawl_status=0 or crawl_status=8) AND sk = "%s" AND content_type="%s";'
+
+TA_TABLE_SELECT_QUERY = 'SELECT sk, url, dx, los, pax, start_date, end_date, ccode, hotel_ids, hotel_name, aux_info FROM %s WHERE crawl_type="%s" AND crawl_status=0 AND content_type="%s" AND dx="%s" ORDER BY crawl_type DESC LIMIT 100;'
+
+TA_TABLE_SELECT_QUERY_LIMIT = 'SELECT sk, url, dx, los, pax, start_date, end_date, ccode, hotel_ids, hotel_name, aux_info FROM %s WHERE crawl_type="%s" AND crawl_status=0 AND content_type="%s" AND dx="%s" ORDER BY crawl_type DESC LIMIT %s;'
+
+TA_TABLE_SELECT_AQUERY_LIMIT = 'SELECT sk, url, dx, los, pax, start_date, end_date, ccode, hotel_ids, hotel_name, aux_info FROM %s WHERE crawl_type="%s" AND crawl_status=8 AND content_type="%s" AND dx="%s" ORDER BY crawl_type DESC LIMIT %s;'
+
+TAH_TABLE_SELECT_AQUERY_LIMIT = 'SELECT DISTINCT hotel_ids, reference_url FROM %s WHERE crawl_type="%s" AND crawl_ref_status=0 AND content_type="%s" ORDER BY crawl_type DESC LIMIT %s;'
+
+TAH_UPDATE_QUERY = 'UPDATE %s SET crawl_ref_status=9, modified_at=NOW() WHERE crawl_type="%s" AND crawl_ref_status=0 AND hotel_ids = "%s" AND content_type="%s";'
+
+TAH_TABLE_SELECT_QUERY = 'SELECT sk, reference_url FROM %s WHERE crawl_type="%s" AND crawl_ref_status=0 AND content_type="%s" ORDER BY crawl_type DESC LIMIT 100;'
+

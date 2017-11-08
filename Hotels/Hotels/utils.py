@@ -4,8 +4,8 @@ import MySQLdb
 import time
 import datetime
 import re
-import asyncore
 import logging
+import asyncore
 from scripts.crawl_table_queries import *
 
 
@@ -147,6 +147,41 @@ def insert_crawlgb_tables_data(cur,source,val):
                 )
 
         cur.execute(CRAWL_TABLE_QUERY,vals)
+
+def terminal_tripadvisor_requests(cursor, source, crawl_type, content_type, dx_val, limit):
+    crawl_table_name = "%s_crawl" % (source)
+    if limit:
+        cursor.execute(TA_TABLE_SELECT_AQUERY_LIMIT%(crawl_table_name, crawl_type, content_type, dx_val, limit))
+    else:
+        cursor.execute(TA_TABLE_SELECT_QUERY%(crawl_table_name, crawl_type, content_type, dx_val))
+    rows = cursor.fetchall()
+    if not rows:
+        if limit:
+                cursor.execute(TA_TABLE_SELECT_QUERY_LIMIT%(crawl_table_name, crawl_type, content_type, dx_val, limit))
+                rows = cursor.fetchall()
+    sks_lst = []
+    if rows:  
+        for row in rows:
+            if row[0]:
+                sks_lst.append(str(row[0]))
+                cursor.execute(TA_UPDATE_QUERY%(crawl_table_name, crawl_type, str(row[0]), content_type))
+        return rows
+
+def terminal_advisor_hotels(cursor, source, crawl_type, content_type, limit):
+    crawl_table_name = "%s_crawl" % (source)
+    if limit:
+        cursor.execute(TAH_TABLE_SELECT_AQUERY_LIMIT%(crawl_table_name, crawl_type, content_type, limit))
+    else:
+        cursor.execute(TAH_TABLE_SELECT_QUERY%(crawl_table_name, crawl_type, content_type))
+    rows = cursor.fetchall()
+    sks_lst = []
+    if rows:
+        for row in rows:
+            if row[0]:
+                sks_lst.append(str(row[0]))
+                cursor.execute(TAH_UPDATE_QUERY%(crawl_table_name, crawl_type, str(row[0]), content_type))
+        return rows
+
 
 def drop_gob_table(curs,source):
     dropcrawl_table ='%s' %(source)

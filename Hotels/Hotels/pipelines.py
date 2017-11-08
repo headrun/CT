@@ -53,6 +53,21 @@ class HotelsPipeline(object):
              spider.out_put_file.write('%s\n' % gbtrip_values)
              spider.out_put_file.flush()
 
+         if isinstance(item, TRIPADVISORItem):
+             tripad_values = '#<>#'.join([
+                str(item['sk']), str(item.get('city_name', '')),  str(item.get('property_name', '')), str(item.get('TA_hotel_id', '')), str(item.get('checkin', '')), str(item.get('DX', '')), str(item.get('Pax', '')), str(item.get('Ranking_Agoda', '')), str(item.get('Ranking_BookingCom', '')), str(item.get('Ranking_ClearTrip', '')), str(item.get('Ranking_Expedia', '')), str(item.get('Ranking_Goibibo', '')), str(item.get('Ranking_HotelsCom2', '')), str(item.get('Ranking_MakeMyTrip', '')), str(item.get('Ranking_Yatra', '')), str(item.get('Ranking_TG', '')), str(item.get('Price_Agoda', '')), str(item.get('Price_BookingCom', '')), str(item.get('Price_ClearTrip', '')), str(item.get('Price_Expedia', '')), str(item.get('Price_Goibibo', '')), str(item.get('Price_HotelsCom2', '')), str(item.get('Price_MakeMyTrip', '')), str(item.get('Price_Yatra', '')), str(item.get('Price_TG', '')), str(item.get('Tax_Agoda', '')), str(item.get('Tax_BookingCom', '')), str(item.get('Tax_ClearTrip', '')), str(item.get('Tax_Expedia', '')), str(item.get('Tax_Goibibo', '')), str(item.get('Tax_HotelsCom2', '')), str(item.get('Tax_MakeMyTrip', '')), str(item.get('Tax_Yatra', '')), str(item.get('Tax_TG', '')), str(item.get('Total_Agoda', '')), str(item.get('Total_BookingCom', '')), str(item.get('Total_ClearTrip', '')), str(item.get('Total_Expedia', '')), str(item.get('Total_Goibibo', '')), str(item.get('Total_HotelsCom2', '')), str(item.get('Total_MakeMyTrip', '')), str(item.get('Total_Yatra', '')), str(item.get('Total_TG', '')), str(item.get('Cheaper_Agoda', '')), str(item.get('Cheaper_BookingCom', '')), str(item.get('Cheaper_ClearTrip', '')), str(item.get('Cheaper_Expedia', '')), str(item.get('Cheaper_Goibibo', '')), str(item.get('Cheaper_HotelsCom2', '')), str(item.get('Cheaper_MakeMyTrip', '')), str(item.get('Cheaper_Yatra', '')), str(item.get('Cheaper_TG', '')), str(item.get('Status_Agoda', '')), str(item.get('Status_BookingCom', '')), str(item.get('Status_ClearTrip', '')), str(item.get('Status_Expedia', '')), str(item.get('Status_Goibibo', '')), str(item.get('Status_HotelsCom2', '')), str(item.get('Status_MakeMyTrip', '')), str(item.get('Status_Yatra', '')), str(item.get('Status_TG', '')), str(item.get('Ranking_Stayzilla', '')), str(item.get('Price_Stayzilla', '')), str(item.get('Tax_Stayzilla', '')), str(item.get('Total_Stayzilla', '')), str(item.get('Cheaper_Stayzilla', '')), str(item.get('Status_Stayzilla', '')), str(item.get('Time', '')), str(item.get('reference_url', ''))
+                ])
+             spider.out_put_file.write('%s\n' % tripad_values)
+             spider.out_put_file.flush()
+
+         if isinstance(item, TRIPADVISORcityrankItem):
+             tripci_value = '#<>#'.join([
+                str(item['sk']), str(item.get('city_rank', ''))
+                ])
+             spider.out_put_file.write('%s\n' % tripci_value)
+             spider.out_put_file.flush()
+
+
 
          return item
          
