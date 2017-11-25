@@ -10,6 +10,7 @@ import collections
 import MySQLdb
 import optparse
 import datetime
+import time
 import json
 import csv
 import sys
@@ -22,8 +23,10 @@ class CTrankOrder(object):
         self.ip     = 'localhost'
 	self.csv_path = '/root/headrun/pbm_scrapers/pbm_scrapers/spiders/OUTPUT/cvs_file'
 	self.csv_mv_path = '/root/headrun/pbm_scrapers/pbm_scrapers/spiders/OUTPUT/processed'
-        self.ct_data_query = "select * from %s_availability where date(modified_at)=curdate() and segment_type='%s' order by rank"
-	self.headers = ["Airline", "Segments", "Trip Type", "Segment Type", "Date", "Flight Number", "CT Rank", "CT Price", "MMT Rank", "MMT Price"]
+        self.ct_data_query = "select * from %s where date(modified_at)=curdate() and segment_type='%s' order by rank"
+	self.ct_mmt_headers = ["Airline", "Segments", "Trip Type", "Segment Type", "Date", "Flight Number", "CT Rank", "CT Price", "MMT Rank", "MMT Price"]
+	self.ct_ya_headers = ["Airline", "Segments", "Trip Type", "Segment Type", "Date", "Flight Number", "CT Rank", "CT Price", "Yatra Rank", "Yatra Price"]
+	self.ct_go_headers = ["Airline", "Segments", "Trip Type", "Segment Type", "Date", "Flight Number", "CT Rank", "CT Price", "Goibibo Rank", "Goibibo Price"]
 	self.main()
 
     def check_options(self):
@@ -128,15 +131,14 @@ class CTrankOrder(object):
 	    key = '%s%s'%(segments.strip(), flight_id.strip())
 	    try: date = arrival_datetime.date()
 	    except: date = depature_datetime.date()
-	    dict_.update({key.lower():[airline, segments, trip_type, flight_id, rank, price, date, segment_type]})
+	    dict_.update({key.replace('-', '').lower():[airline, segments, trip_type, flight_id, rank, price, date, segment_type]})
 	return dict_
 
     def get_cvs_file(self, ct_dict, mmt_dict, excel_file):
-	#excel_file, file_name = self.open_excel_files(source)
-	#headers = ["Airline", "Segments", "Trip Type", "Segment Type", "Date", "Flight Number", "CT Rank", "CT Price", "MMT Rank", "MMT Price"]
-	#excel_file.writerow(headers)
         for key, ct_lst in ct_dict.iteritems():
 	    mmt_lst = mmt_dict.get(key.lower(), ['']*7)
+	    if not mmt_lst[2]:
+		 mmt_lst = mmt_dict.get(key.replace('<>', '').strip().lower(), ['']*7)
 	    airline_name = '<>'.join(list(set(ct_lst[0].split('<>'))))
 	    vals = (airline_name, ct_lst[1], ct_lst[2], ct_lst[7], ct_lst[6], ct_lst[3], ct_lst[4], ct_lst[5], mmt_lst[4], mmt_lst[5]) 
 	    excel_file.writerow(vals)
@@ -144,7 +146,12 @@ class CTrankOrder(object):
 
     def main(self):
         self.check_options()
-	ct, other = self.source.split(',')
+	table_names = {'ct': 'ct_availability',
+			'mmt': 'mmt_availability',
+			'yt': 'yt_availability',
+			'go': 'go_availability'
+			}
+	inputs = self.source.split(',')
 	csv_lst = []
 	seg_list = ['Domestic', 'International']
 	#seg_list = ['International']
@@ -153,13 +160,27 @@ class CTrankOrder(object):
 	    if not self.ensure_db_exists(self.ip, 'CLEARTRIP_MAP'):
 		    print 'Enter valid DB and Ip'
 		    pass
-	    ct_dict = self.get_db_data(cursor, ct, seg)
-	    mmt_dict = self.get_db_data(cursor, other, seg)
-	    if ct_dict:
-		excel_file, file_name = self.open_excel_files('%s-%s'%(ct, other), seg.lower())
-                excel_file.writerow(self.headers)
+	    ct_dict = mmt_dict = ya_dict = go_dict = {}
+	    for table in inputs:
+		table_ = table_names.get(table, '')
+		data_dict = self.get_db_data(cursor, table_, seg)
+	        if table == 'ct': ct_dict = data_dict
+		if table == 'mmt': mmt_dict = data_dict
+		if table == 'yt': ya_dict = data_dict
+		if table == 'go': go_dict = data_dict
+	    if ct_dict and mmt_dict:
+		excel_file, file_name = self.open_excel_files('ct-mmt', seg.lower())
+                excel_file.writerow(self.ct_mmt_headers)
 	        self.get_cvs_file(ct_dict, mmt_dict, excel_file)
-	        csv_lst.append(file_name)
+	    if ct_dict and ya_dict:
+		excel_file, file_name = self.open_excel_files('ct-yatra', seg.lower())
+                excel_file.writerow(self.ct_ya_headers)
+                self.get_cvs_file(ct_dict, ya_dict, excel_file)
+	    if ct_dict and go_dict:
+		excel_file, file_name = self.open_excel_files('ct-goibibo', seg.lower())
+                excel_file.writerow(self.ct_go_headers)
+                self.get_cvs_file(ct_dict, go_dict, excel_file)
+	time.sleep(5)
 	gz_file = self.get_compressed_file()
         self.send_mails([gz_file])
 	self.move_compressed_file()
