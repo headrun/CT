@@ -19,32 +19,25 @@ from utils import *
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')  
-
-class ArabicBrowse(Spider):
-    name = "arabicnew_browse"
+class ArabicBrowse3(Spider):
+    name = "arabicnew3_browse"
     start_urls = ["https://www.tajawal.com/"]
 
     def __init__(self, *args, **kwargs):
-        super(ArabicBrowse, self).__init__(*args, **kwargs)
+        super(ArabicBrowse3, self).__init__(*args, **kwargs)
 	self.fin_lst = []
 	dispatcher.connect(self.spider_closed, signals.spider_closed)
 
     def spider_closed(self, spider):
-	open('arabic_names.json', 'w+').write('%s'%json.dumps(self.fin_lst, ensure_ascii=False, encoding="utf-8"))
+	open('arabic_names_fin.json', 'w+').write('%s'%json.dumps(self.fin_lst, ensure_ascii=False, encoding="utf-8"))
 
     def parse(self, response):
         sel = Selector(response)
-	#codes = ['RUH','JED','DMM','HBE','ELQ','YNB','AHB','IST','CAI','BAH','MED','HOF','SZB','SAW','HYD','TIF','GIZ','ATZ','COK','DEL','TZX','MAA','DXB','HAS','BOM','KRT','KUL','KTM','CCJ','TUU','CGK','DMK','HMB','SHJ','LGK','TRV','URY','SSH','SHW','MNL','AJF','RUJ','BLR','KHI','BEY','CDG','KWI','ABT','VIE','IXE','MUC','PEN','ISB','SXR','AYT','AQI','LHE','ATH','HKT','BHH','MAD','MRS','JHB','HRG','MCO','CMN','GYD','BUS','PDX','JFK','TBS','LIS','BCN','AMM','KBP','EJH','BRU','GOI','MCT','CMB','LYS','FCO','LHR','DWD','DWC','IXM','IAH','RAE','LGA','LKO','MIA','AMD','IBZ','ORY','SLL','PEW','CCU','TRZ','AGP','SUB','DLM','MSQ','MAN','MXP','PAT','VGA','BKK','NAP','KBV','DME','JTR','ADB','GVA','MUX','LGW','CEB','LIN','SKT','HGH','CZL','DMS','DOH','YOW','DPS','SXF','IXJ','DTW','BGW','NRT','DFW','PNS','DAC','VTZ','LYP','JNB','LAX','OSL','YYZ','ZRH','EWR','PRG','ESB','MLE','HAN','NCE','ZAM','RAH','TAC','RBA','FRA','MHD','UDR','DUS','SMF','TOL','HKG','NLA','JMK','CNX','KBR','AMS','KHV','ATL','CAN','CPH','ICN','CRK','AUH','MEL','TUI','VCE','VNS','ARN','GMP','ORD','IAS','NAG','BJV','TUN','KCH','BBI','BGY','YEG','SYX','PZU','YUL','LAS','ILO','RJA','SFO','YYC','CPT','DKR','BOS','KIX','JAI','HGA','MLA','MLX','SGN']
-	#codes = ['RJA', 'NLA','TOL','RBA','RAH','ZAM','ATZ']
-	#codes = ['HKT']
-	codes = ['MED','ADD','CGP','BSR','AAN','ALG','ATQ','ACC','IAD','IKA','KHS','DAR','DVO','DMS','DUB','BHX','BNE','RAH','BWI','EBB','ASM','DQM','BUD','AKL','HTY','CGY','BEG','KBL','CGO','CBO','ABZ','PEK','PAT','DEN','BOG','BCD','DLA','AGA','ADA','ABJ','LOS','DUR','ASW','GES','ALA','BLQ','NBO','BDQ','EBL','EDI','GLA','CTU','HAM','SIN','ZYL','NJF','WAE','SJJ','XNB','PVG','SYD','TXL','LXR','OTP','SEZ','WAW','SEA','LCA','ZNZ','USM','RYK','ZAG','PNQ','TUK','EVN','ZVJ','RBA','YVR','NCL','MBA','MRU','ZAM','RAK','TAS','SVO','HAN','PER','HND','IXB','SYZ','TPE','MSP','GRU','SAN','RGN','NKC','PHL','TSE','CJB','IXC','IDR','RKT','BHO','IXR','DED','GAU','RPR','JDH','HRE','RUJ','LED','TIR','VKO','STN','IXU','RAJ','AER','STV','GOT','SOF','IXZ','MPH','IXL','JLR','DHM','GAY','TAC','IXS','LCY','HEL','IEV','BHJ','ECN','IMF','GOP','LGP','KEF','SLV','TFS','SZZ','PAG','YSJ','TOS','MDW','UTP','SWA','GAN','IKT','CYZ','VOZ','BRQ','YKS','YXU','USU','EDL','YKA','MGA','ALF','BHK','COU','MBT','PDL','UME','YQB','ONT','MYR','YQG','SDU','HDS','SCW','DIU','MFE','RZE','STS','MBS','SJW','NDC','CWA','JMU','THR','OAK','KHN','SSA','GRB','PBI','BOJ','USH','OSR','MMK','IFO','MBJ','SLZ','NTY','SEN','YXX','TIM','BLJ','CEI','RCB','JSA','FKB','LYI','KUN','UTH','VLI','CDP','ACE','PMR','BKS','NAT','KWL','UUS','TEZ','KRN','TRF','VDA','MDL','MMX','TXN','GEO','MGF','WEF','SNW','MLI','MZR','PNY','PTG','KAD','SHL','RTW','UVF','SZK','EIN','MSN','GOJ','JOI','GWL','PNI','SAP','MAF','AGU','IGR','KEJ','TIJ','ZSE','TLM','MGM','SJZ','ERC','TET','LKN','NOZ','TGR','MLG','NQY','BKB','PLQ','SPN','GIB','YTZ','DSA','MUB','AGR','ARK','TYN','BOO','RDM','ITM','GOM','YCD','NAV','LUH','VFA','TLH','CPR','LPQ','YTS','HTA','VAS','MYQ','MAO','AVV','TBU','FTE','SOU','KVA','MSU','DTM','STW','YQM','LPL','DLI','BAX','BJX','KTT','SDK','SXB','TOF','EQS','HDY',]
-	#codes = ['STW', 'FTE', 'AVV', 'HTA', 'GOM', 'TGR']
-	#codes = ['HTY', 'EBL', 'IXS', 'CYZ',  'ONT', 'NDC', 'IFO', 'SLZ', 'TEZ', 'SNW', 'MZR', 'PNY', 'SHL', 'UVF','ZSE', 'MGM', 'ERC', 'TET','NOZ', 'TGR', 'HTA', 'AVV', 'FTE']
-	#codes = ['RPR', 'SZZ', 'STS', 'SSA', 'LYI', 'VLI', 'RTW', 'GOJ', 'SAP', 'LKN']
-	#codes = ['YXU', 'PDL', 'YCD']
-	#codes = ['NJF', 'YKS', 'MBT', 'GOM',]
+	codes = ['CLE','ADL','ABV','CKY','BKO','CLT','AUS','BNA','DEA','ASB','BWN','FLL','DCA','BHD','CKG','BHV','BXU','JIB','BUS','FRU','HNL','ALC','BUF','COO','BND','DGT','EZE','CGN','BJM','CVG','HAJ','IND','BSL','BOD','CTA','GZT','AWZ','CMH','ELP','ASR','TIP','BGO','GIG','CUN','LAD','BIO','CXB','BKI','CHC','FLR','CCS','HRK','LIN','JAX','DLC','CBR','KGL','DBV','BDJ','DPL','DAY','BJL','BOI','OOL','HAV','DSE','BPN','CAG','GWD','PHX','CSX','BRE','BTH','JRO','IFN','HAH','KAN','ORF','BJR','MCI','IXA','BLL','MEX','BRI','KLO','CWL','KRK','CHS','ANC','GEG','CGQ','AQJ','GRJ','GBE','LIM','GDN','AEP','GNY','CNS','CLJ','LUN','DYU','FNA','ABQ','PRI','BDS','CAE','AAL','AAE','AEX','AZO','GRK','CTS','OPO','BDL','CJU','LUX','BES','FAO','DAD','BTS','LJU','FNC','FUK','CNF','BLZ','BSB','BRS','LAO','HBA','NIM','DRS','KIV','LBA','BDO','PIT','HDQ','JUB','CWB','CRC','JSR','YHZ','KRR','BHM','LFW','DIR','IOM','MQX','FIH','BFN','ICT','HME','COS','CIT','BGI','NDJ','MSY','DRW','AXU','BZV','SPU','MAR','BIQ','OKC','LCG','NAN','ASU','GDL','YWG','BGF','GOA','CGH','BZN','PNH','ISU','KZN','FAT','CUZ','NUE','GSO','GZP','INN','AAR','BTV','LPA','OUA','LOP','DQA','FAY','EUG','BZL','AGS','JJN','AAQ','MPM','LEJ','ABI','CRP','RDU','AOR','GPT','ODS','HSV','GRX','BTU','DJE','AOI','AHO','GUW','DSM','HER','ELS','JOG','ASF','CID','NOU','PMI','INC','QQS','CRL','KUF','KUA','AUA','PRN','BUQ','JER','MEM','CLO','BGA','RIX','KIN','FOC','HUY','GRZ','FWA','GCM','ALB','GRR','JAN','INV','BDA','DNK','CAK','OMA','KMG','MRA','PUW','BAQ','BME',]
+	codes2 = ['PUS','MRV','SHA','LBV','GUM','FEZ','EAS','LST','KGD','RNO','LEX','APL','CTG','AES','AKX','GUA','BTR','DIY','GBB','YQR','GYE','ROV','PTY','KYA','MGQ','GDQ','KNO','HRB','FDH','MPL','SIP','KOA','AVP','JIM','FLN','MFM','RST','NKT','ORN','LLW','KIS','LIT','MKE','CUR','ANU','CND','LTN','NSI','CFU','POZ','FSD','CFE','ASP','CEK','HOU','DUD','EVV','FMO','KRS','JGA','ARM','PLZ','BLA','ORK','KWE','DNZ','DJB','BVA','FOR','LWO','AMA','GSP','LBB','NKG','CRW','STR','YXE','ERI','BAL','NGO','TLV','GNV','ALO','CHA','KJA','BFS','MCX','SAT','YYJ','NTE','CFS','AJL','FAI','ARH','REP','ROC','BEW','GFK','DHN','LEI','EZS','KHH','KTW','FBM','AJA','BIL','MQM','GTR','LHW','PSA','BGR','YLW','MCY','PQC','JRH','AVL','HOR','CHQ','OUD','LAN','PSC','CLL','DAL','BEN','DIB','OGG','DBQ','POM','HTI','COR','CXR','DAB','SZX','BFL','HIJ','LDE','REN','BIA','OVB','CRM','OKA','KTA','YQT','PPS','ULH','TPA','TNR','ZVH','UET','TLS','STL','TIA','SLC','XMN','SRG','SKZ','WUH','SKG','VLC','TAG','SCL','TAO','WNZ','SKP','TUS','UPG','SHE','TUG','TNG','MYY','SVG','XIY','WLG','VNO','SZG','OZC','URC','WDH','NWI','POS','TLL','SAV','TGD','YIW','VAR','USN','SOC','RXS','ULN','UIO','WRO','TRN','SYR','UFA','TFN','RIC','WNP','SVQ','VTE','TUL','PMO','PJG','LRR','VRN','SJC','PKU','OLB','PUF','PEE','SJO','SVX','VPS','KHE','MME','SAL','SJU','SHV','TRD','TGG','NAS','OZH','SDQ','ZQN','SDF','MDE','SNN','SZF','YYT','SBW','MJD','SNA','OVD','POA','LFT','TIV','SCO','MVD','RHO','TSV','NGB','RUN','NLA','MOB','TRS','VGO','TYS','ROB','YNT','MTY','PNR','ZYR','SGF','XNA','XRY','TNA','VOG','TSN','SSG','VVO','SJD','PPT','TBZ','QKL','HLA','TJM','RSW','UTN','MHK','PLM','LBU','MQP','SCQ','VVI','MDC','TKG','TCR','IXG','TSR','IXD','DMU','SAG','OHS','HBX','HRI','HHN','KUU','RVN','PGH','RRG','CIA','MWZ','YYG','BHU','BMA','IXY','OMS','TSF','FAR','YFC','KSC','NNG','PDG','HJR','NRN','LDB','PBD']	
 	url = 'https://www.tajawal.com/api/air/airport/search?query=%s'
-	for i in codes:
+	codes2.extend(codes)
+	for i in codes2:
 	    yield Request(url%i, callback=self.parse_next, meta={'airport_code':i})
 	#yield Request(url, callback=self.parse_next, meta={'airport_code':'DEL'})
 
@@ -107,6 +100,10 @@ class ArabicBrowse(Spider):
 	    clean_name_lst = ["Yakutsk Airport", "Masbate Airport", "Goma Airport"]
 	    for i in clean_name_lst:
 		arbic_name = arbic_name.replace(i, '').strip()
+	    air = ['Weeze Airport', 'Oman Sohar', 'Malabo Airport',  'Saudi Arabia Al Ula', 'Puerto Princesa International Airport', ' Cam Ranh International Airport', 'Phu Quoc Airport', 'Turkey Cizre', 'Sri Lanka Hambantota', 'Cam Ranh International Airport']
+	    for k in air:
+		arbic_name = arbic_name.replace(k, '').strip()
+	    cities_lst = ['Aktyubinsk', 'Kandla', 'Mwanza', 'Kulu', 'Hahn', 'Hubli', 'Dimapur', 'Tuticorin', 'Ar', 'mo', 'Pakistan', 'Zaporozhye', 'Durham Tees Valley', 'United States', 'Naga', 'and Tobago', 'Abdulaziz', 'Aizawl', 'Tel Aviv-Yafo', 'WV', 'Lubbock', 'SC', 'Indonesia', 'Gondar']
 	    if site_code == 'NJF': arbic_name = arbic_name.replace('Iraq Al-Najaf', '')
 	    if site_code == 'EBL': arbic_name = arbic_name.replace('Iraq', '').strip()
 	    if site_code == 'HTY': arbic_name = arbic_name.replace('Turkey', '').strip()
@@ -119,6 +116,17 @@ class ArabicBrowse(Spider):
 		city = ''
 		arbic_name= arbic_name.replace('Egypt', '').strip()
 	    print city, '*******', site_code, '*****', arbic_name
+	    for j in cities_lst:
+		city = city.replace(j, '').strip()
+	    ci = ['Misurata', 'Grand Rapids', 'Islands', 'Pristina', 'AL', 'GA', 'OR', 'Axum', 'Kingdom', 'Ethiopia', 'Cartago', 'Juba', 'PA', 'LA', 'Bahar Dar', 'Coolangatta (Gold Coast)', 'OH', 'France', 'NY', ]
+	    for h in ci:
+		city = city.replace(h, '').strip()
+	    air1 = ['Galeao Antonio Carlos Jobim International Airport', 'Brasilia International Airport', 'Turkey Golgen', 'J. Paul II International Airport Krakow-Balice', 'China', 'Indonesia Praya', 'Turkey Gazipasa', 'Iraq', 'Perm International Airport']
+	    for j in air1:
+		arbic_name= arbic_name.replace(j, '').strip()
+	    empty_air = ['GWD','DSE','AWZ','BND','GBB','RRG','HHN','KHE','PJG','FBM']
+	    if site_code in empty_air:
+		city, arbic_name = '', ''
 	    #arbic_name = arbic_name.lstrip(city).strip()
 	    #arbic_name = '%s - %s, %s'%(arbic_name, cr_country.strip(), city.strip())
 	    if 'Rajahmundry' in arbic_name: arbic_name = arbic_name.replace('Rajahmundry', '').strip().strip(',')
