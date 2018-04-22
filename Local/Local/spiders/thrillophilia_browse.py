@@ -1,3 +1,4 @@
+#run command scrapy crawl thrillophilia_browse --set LOG_LEVEL='DEBUG' -a city_name='pondicherry,mysore'
 from handle_utils import *
 from scrapy.spider import BaseSpider
 from scrapy.http import Request
@@ -11,6 +12,7 @@ def get_cursor():
                     user = 'root',         
                     charset="utf8",
                     host='localhost',
+		    passwd = 'root',
                     use_unicode=True)
     cursor = conn.cursor()
     return conn,cursor
@@ -18,24 +20,27 @@ def get_cursor():
 class ThrillophiliaBrowse(BaseSpider):
     name = 'thrillophilia_browse'
     start_urls = ['https://www.thrillophilia.com/']
-    handle_httpstatus_list = [302]
+    handle_httpstatus_list = [302, 404]
 
     def __init__(self, *args, **kwargs):
         super(ThrillophiliaBrowse, self).__init__(*args, **kwargs)
+	self.city_name  = kwargs.get('city_name', '')
         self.conn,self.cursor=get_cursor()
        
     def parse(self,response):
         sel = Selector(response)
-        cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
+        #cities_list = ['bangalore','hyderabad','chennai','mumbai','pune','kolkata','chandigarh','mysore','agra','jaipur','goa','ahmedabad','kochi','trivandrum','munnar','coorg','pondicherry','ooty','jodhpur','udaipur','guwahati','darjeeling','shillong','gangtok','dehradun','manali','kullu','rishikesh','tehri','shimla','corbett','nainital','dharamshala','srinagar','mahabaleshwar','matheran','alibag','lavasa','lonavala']
+	#cities_list = ['pondicherry', 'mysore', 'shillong', 'mahabalipuram', 'dalhousie', 'jammu', 'deoghar', 'mathura', 'tiruvannamalai', 'srinagar', 'ahmedabad', 'kodaikanal', 'pachmarhi', 'lansdowne', 'pune', 'neil island', 'hampi', 'mount abu', 'matheran', 'kukke subramanya', 'port blair', 'bikaner', 'alibaug', 'thekkady', 'pushkar', 'ooty', 'ujjain', 'sawai madhopur', 'digha', 'mussoorie', 'guruvayoor', 'agra', 'chikmagalur', 'corbett', 'munnar', 'amritsar', 'sundarbans', 'gangtok', 'jodhpur', 'katra', 'bhimtal', 'bangalore', 'velankanni', 'marayoor', 'vrindavan', 'wayanad', 'kolhapur', 'hyderabad', 'haridwar', 'dharamshala', 'yercaud', 'trichy', 'somnath', 'varanasi', 'kanchipuram', 'jaisalmer', 'puri', 'mahabaleshwar', 'yelagiri', 'dwarka', 'shimla', 'dadra nagar & haveli', 'udupi', 'nainital', 'kovalam', 'kanyakumari', 'darjeeling', 'khandala', 'coorg', 'hassan', 'chidambaram', 'lavasa', 'madurai', 'conoor', 'kozhikode', 'gokarna', 'ganpatipule', 'kollam', 'neemrana', 'havelock island', 'alleppey', 'jaipur', 'goa', 'ajmer', 'leh-ladakh', 'lonavala', 'rameshwaram', 'udaipur', 'kollur', 'mandarmoni', 'tirupati', 'kausani', 'panchgani', 'kumbakonam', 'kannur', 'tanjore', 'manali', 'shirdi', 'rishikesh', 'kumarakom', 'shantiniketan', 'daman']
+	cities_list = self.city_name.split(',')
         for city in cities_list:
             activity_link = 'https://www.thrillophilia.com/cities/' + city + '/things-to-do'
-            yield Request(activity_link,callback=self.listing)
+            yield Request(activity_link,callback=self.top_page)
 
             stays_link = 'https://www.thrillophilia.com/cities/' + city + '/stays'
-            yield Request(stays_link,callback=self.listing)
+            yield Request(stays_link,callback=self.top_page)
 
             rentals_link = 'https://www.thrillophilia.com/cities/' + city + '/rentals'
-            yield Request(rentals_link,callback=self.listing)
+            yield Request(rentals_link,callback=self.top_page)
 
     def listing(self,response):
         sel = Selector(response)
@@ -46,23 +51,28 @@ class ThrillophiliaBrowse(BaseSpider):
                 yield Request(top_page, callback=self.top_page, dont_filter=True)
         
     def top_page(self,response):
-        sel = Selector(response)
-        city = normalize(response.url.split('/')[-2]).title()
-        if 'Activity' in response.url:
-            program_type = 'Activity'
-        elif 'Stay' in response.url:
-            program_type = 'Stay'
-        else:
-            program_type = 'Rental'
-        activities_links = data_list_get(sel,activities_links_xpath)
-        for link in activities_links:
-            if 'http' not in link:
-                link = 'https://www.thrillophilia.com' + normalize(link)
-                yield Request(link, callback=self.meta_data_parse, meta={'city':city,'program_type':program_type}, dont_filter=True)
+	city = normalize(response.url.split('/')[-2]).title()
+	if response.status == 404:
+		file("failed_urls","ab+").write("%s:-%s\n" %(response.url,city))
+	else:
+		sel = Selector(response)
+		if ('Activity' in response.url) or ('/things-to-do' in response.url):
+		    program_type = 'Activity'
+		elif ('Stay' in response.url) or ('/stays' in response.url):
+		    program_type = 'Stay'
+		else:
+		    program_type = 'Rental'
+		activities_links = data_list_get(sel,activities_links_xpath)
+		for link in activities_links:
+		    if 'http' not in link:
+			link = 'https://www.thrillophilia.com' + normalize(link)
+			yield Request(link, callback=self.meta_data_parse, meta={'city':city,'program_type':program_type}, dont_filter=True)
 
-        load_more_collection = normalize(data_get(sel,load_more_collection_link_xpath))
-        if load_more_collection:
-            yield Request(load_more_collection, callback=self.top_page, dont_filter=True)
+		load_more_collection = normalize(data_get(sel,load_more_collection_link_xpath))
+		if load_more_collection:
+		    if 'https://' not in load_more_collection:
+			load_more_collection = 'https://www.thrillophilia.com' + normalize(load_more_collection)
+		    yield Request(load_more_collection, callback=self.top_page, dont_filter=True)
 
     def meta_data_parse(self,response):
         sel = Selector(response)
