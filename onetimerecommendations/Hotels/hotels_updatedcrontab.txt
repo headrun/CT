@@ -1,0 +1,140 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+
+
+#Hotels [MMT,CT,GOIB]  ALL scrapers
+#python Hotels_unique.py
+10 00 * * * /usr/local/bin/lockrun --lockfile=/tmp/hotels_inputsc.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python Hotels_unique.py' 2>/tmp/hotels_inputsc.log 1>/tmp/hotels_inputsc.log
+
+30 00 * * * /usr/local/bin/lockrun --lockfile=/tmp/mmt_browse.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl Makemytrip_browse --set HTTP_PROXY="http://zagent300.luminati.io:24000"' 2>/tmp/mmt_browse.log 1>/tmp/mmt_browse.log
+
+30 00 * * * /usr/local/bin/lockrun --lockfile=/tmp/goib_browse.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl Goibibotrip_browse' 2>/tmp/goib_browse.log 1>/tmp/goib_browse.log
+
+30 00 * * * /usr/local/bin/lockrun --lockfile=/tmp/booking_browse.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl Booking_browse' 2>/tmp/booking_browse.log 1>/tmp/booking_browse.log
+
+#Hotels MMT CT GOIB Browses Mail_Alert
+
+35 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/ctbrowse_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python CT_browse_mail_alert.py' 2>/tmp/ctbrowse_email.log 1>/tmp/ctbrowse_email.log
+
+36 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/mmtbrowse_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python MMT_browse_mail_alert.py' 2>/tmp/mmtbrowse_email.log 1>/tmp/mmtbrowse_email.log
+
+37 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/goibbrowse_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python GOIBIBO_browse_mail_alert.py' 2>/tmp/goibbrowse_email.log 1>/tmp/goibbrowse_email.log
+
+
+
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/mmt.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl MMTRIP_terminal --set DOWNLOAD_DELAY=0.5 --set HTTP_PROXY="http://zagent300.luminati.io:24000"' 2>/tmp/mmt.log 1>/tmp/mmt.log
+
+*/2 * * * * /usr/local/bin/lockrun --lockfile=/tmp/mmt1.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl MMTRIP_terminal --set DOWNLOAD_DELAY=0.5 --set HTTP_PROXY="http://zagent300.luminati.io:24000"' 2>/tmp/mmt1.log 1>/tmp/mmt1.log
+
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/mmt2.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl MMTRIP_terminal --set DOWNLOAD_DELAY=0.5 --set HTTP_PROXY="http://zagent300.luminati.io:24000"' 2>/tmp/mmt2.log 1>/tmp/mmt2.log
+
+
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/gob.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl GOIBTRIP_terminal' 2>/tmp/gob.log 1>/tmp/gob.log
+
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/booking_terminal.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl Bookingretrival_terminal' 2>/tmp/booking_terminal.log 1>/tmp/booking_terminal.log
+
+
+#Hotels CT Files
+
+22 01 * * * /usr/local/bin/lockrun --lockfile=/tmp/ctapi_browse.lock  -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl Cleartripapi_browse -a Configfile='MCConfig.cfg' --set BOT_NAME="CTReportsFH" --set USER_AGENT="CTReportsFH (+http://www.cleartrip.com)" --set HTTP_PROXY=""' 2>/tmp/ctapi_browse.log 1>/tmp/ctapi_browse.log
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/ct.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl CLEARTRIPapi_terminal --set BOT_NAME="CTReportsFH" --set USER_AGENT="CTReportsFH (+http://www.cleartrip.com)" --set HTTP_PROXY=""' 2>/tmp/ct.log 1>/tmp/ct.log
+*/2 * * * * /usr/local/bin/lockrun --lockfile=/tmp/ct1.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl CLEARTRIPapi_terminal --set BOT_NAME="CTReportsFH" --set USER_AGENT="CTReportsFH (+http://www.cleartrip.com)" --set HTTP_PROXY=""' 2>/tmp/ct1.log 1>/tmp/ct1.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/ctfl.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl CLEARTRIPapi_terminal --set BOT_NAME="CTReportsFH" --set USER_AGENT="CTReportsFH (+http://www.cleartrip.com)" --set HTTP_PROXY=""' 2>/tmp/ctfl.log 1>/tmp/ctfl.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/ct2.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl CLEARTRIPapi_terminal --set BOT_NAME="CTReportsFH" --set USER_AGENT="CTReportsFH (+http://www.cleartrip.com)" --set HTTP_PROXY=""' 2>/tmp/ct2.log 1>/tmp/ct2.log
+
+#Hotels MMT CT GOIB  Terminal Mail_Alert
+
+50 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/ctterminal_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python CTterm_mail_alert.py' 2>/tmp/ctterminal_email.log 1>/tmp/ctterminal_email.log
+
+51 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/mmtterminal_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python MMTterm_mail_alert.py' 2>/tmp/mmtterminal_email.log 1>/tmp/mmtterminal_email.log
+
+52 1 * * * /usr/local/bin/lockrun --lockfile=/tmp/goibterminal_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python GOIBIBOterm_mail_alert.py' 2>/tmp/goibterminal_email.log 1>/tmp/goibterminal_email.log
+
+
+#Hotels CT MMT GOIB DB Loading Script
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/mmtctgob_dump.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python Load_db_files.py' 2>/tmp/mmtctgob_dump.log 1>/tmp/mmtctgob_dump.log
+
+
+#Hotels DB to CSV FILES Scripts
+10 9 * * * /usr/local/bin/lockrun --lockfile=/tmp/mmtct_csv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python MMTCT_DB_CSV.py' 2>/tmp/mmtct_csv.log 1>/tmp/mmtct_csv.log
+
+25 9 * * * /usr/local/bin/lockrun --lockfile=/tmp/goibct_csv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python GOBCT_DB_CSV.py' 2>/tmp/goibct_csv.log 1>/tmp/goibct_csv.log
+
+
+00 10 * * * /usr/local/bin/lockrun --lockfile=/tmp/commongm_csv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python HOTELS_COMG_CSV_script.py' 2>/tmp/commongm_csv.log 1>/tmp/commongm_csv.log
+
+29 10 * * * /usr/local/bin/lockrun --lockfile=/tmp/commongm_csvmail.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python GOBIBOMMT_COMMON_CSV_Mailscript.py ' 2>/tmp/commongm_csvmail.log 1>/tmp/commongm_csvmail.log
+
+#removal_of_unwantedfiles.py
+00 22 * * * /usr/local/bin/lockrun --lockfile=/tmp/removal_of_logfiles.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python removal_of_unwantedfiles.py' 2>/tmp/removal_of_logfiles.log 1>/tmp/removal_of_logfiles.log
+
+
+#Hotels  CSV FILES Mail Alerts
+10 9 * * * /usr/local/bin/lockrun --lockfile=/tmp/mmtct_csv_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python MMT_CSV_Mailscript.py' 2>/tmp/mmtct_csv_email.log 1>/tmp/mmtct_csv_email.log
+
+25 9 * * * /usr/local/bin/lockrun --lockfile=/tmp/goibct_csv_email.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python GOBIBO_CSV_Mailscript.py' 2>/tmp/goibct_csv_email.log 1>/tmp/goibct_csv_email.log
+
+
+#Tripadvisor crons
+
+30 2 * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisor_browse.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TripAdvisor_browse.py' 2>/tmp/tripadvisor_browse.log 1>/tmp/tripadvisor_browse.log
+
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx1.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=1' 2>/tmp/tripadvisordx1.log 1>/tmp/tripadvisordx1.log
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx5.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=5' 2>/tmp/tripadvisordx5.log 1>/tmp/tripadvisordx5.log
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx15.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=15' 2>/tmp/tripadvisordx15.log 1>/tmp/tripadvisordx15.log
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx40.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=25' 2>/tmp/tripadvisordx40.log 1>/tmp/tripadvisordx40.log
+
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx11.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=1' 2>/tmp/tripadvisordx11.log 1>/tmp/tripadvisordx11.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx51.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=5' 2>/tmp/tripadvisordx51.log 1>/tmp/tripadvisordx51.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx151.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=15' 2>/tmp/tripadvisordx151.log 1>/tmp/tripadvisordx151.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisordx401.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisoro_terminal -a limit=500 -a dx=25' 2>/tmp/tripadvisordx401.log 1>/tmp/tripadvisordx401.log
+
+
+*/2 * * * * /usr/local/bin/lockrun --lockfile=/tmp/tripadvisorcityrank.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl tripadvisorcityrank_terminal -a limit=500' 2>/tmp/tripadvisorcityrank.log 1>/tmp/tripadvisorcityrank.log
+
+40 09 * * * /usr/local/bin/lockrun --lockfile=/tmp/tripdbcsv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TRIPADVISOR_DB_CSV.py' 2>/tmp/tripdbcsv.log 1>/tmp/tripdbcsv.log
+
+59 09 * * * /usr/local/bin/lockrun --lockfile=/tmp/tripdbcsvlog.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TRIPADVISOR_LOGFILE.py' 2>/tmp/tripdbcsvlog.log 1>/tmp/tripdbcsvlog.log
+
+00 10 * * * /usr/local/bin/lockrun --lockfile=/tmp/tripcsvmail.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TRIPADVISOR_NEWCSV_Mailscript.py' 2>/tmp/tripcsvmail.log 1>/tmp/tripcsvmail.log
+
+10 10 * * * /usr/local/bin/lockrun --lockfile=/tmp/booking_db_csv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python BOOKING_DB_CSV.py' 2>/tmp/booking_db_csv.log 1>/tmp/booking_db_csv.log
+
+
+#Trivago crons
+40 05 * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago_browse.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python Trivago_browse.py' 2>/tmp/trivago_browse.log 1>/tmp/trivago_browse.log
+
+*/1 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=1' 2>/tmp/trivago.log 1>/tmp/trivago.log
+*/2 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago2.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=2' 2>/tmp/trivago2.log 1>/tmp/trivago2.log
+*/3 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago3.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=3' 2>/tmp/trivago3.log 1>/tmp/trivago3.log
+*/4 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago4.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=4' 2>/tmp/trivago4.log 1>/tmp/trivago4.log
+*/5 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago5.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=6' 2>/tmp/trivago5.log 1>/tmp/trivago5.log
+*/6 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago6.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=7' 2>/tmp/trivago6.log 1>/tmp/trivago6.log
+##*/7 * * * * /usr/local/bin/lockrun --lockfile=/tmp/trivago7.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/spiders; /usr/local/bin/scrapy crawl trivago_terminal -a limit=8' 2>/tmp/trivago7.log 1>/tmp/trivago7.log
+
+00 11 * * * /usr/local/bin/lockrun --lockfile=/tmp/trivagocsv.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TRIVAGO_DB_CSV.py' 2>/tmp/trivagocsv.log 1>/tmp/trivagocsv.log
+10 11 * * * /usr/local/bin/lockrun --lockfile=/tmp/trivagocsvmail.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python TRIVAGO_CSV_Mailscript.py' 2>/tmp/trivagocsvmail.log 1>/tmp/trivagocsvmail.log
+
+15 11 * * * /usr/local/bin/lockrun --lockfile=/tmp/trivagocsvmailinternal.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python ALL_HOTELS_INTERNAL_MAIL_REPORT.py' 2>/tmp/trivagocsvmailinternal.log 1>/tmp/trivagocsvmailinternal.log
+
+32 11 * * * /usr/local/bin/lockrun --lockfile=/tmp/scrapingreport.lock -- bash -c 'cd /root/scrapers/Hotels/Hotels/scripts; python HOTELS_CSV_Mailscript.py' 2>/tmp/scrapingreport.log 1>/tmp/scrapingreport.log
