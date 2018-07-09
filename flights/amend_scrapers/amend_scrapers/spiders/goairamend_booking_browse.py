@@ -25,13 +25,15 @@ from scrapy.xlib.pydispatch import dispatcher
 from amend_scrapers.utils import *
 from goair_amend_utils import *
 
+from scrapy.conf import settings
+
 import sys
-sys.path.append('/root/scrapers/flights/')
+sys.path.append(settings['ROOT_PATH'])
 
 from root_utils import *
 
 _cfg = SafeConfigParser()
-_cfg.read('/root/scrapers/flights/amend_airline_names.cfg')
+_cfg.read(settings['BOOK_PCC_PATH'])
 
 
 class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
@@ -50,8 +52,16 @@ class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
         self.price_patt = re.compile('\d+')
         self.log = create_logger_obj('goair_amend_booking')
         self.insert_query = 'insert into goairamend_booking_report (sk, airline, pnr, flight_number, from_location, to_location, triptype, cleartrip_price, airline_price, status_message, tolerance_amount, oneway_date, return_date, error_message, request_input, price_details, created_at, modified_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now(),now()) on duplicate key update modified_at=now(), sk=%s, airline=%s, pnr=%s, flight_number=%s, from_location=%s, to_location=%s, triptype=%s, cleartrip_price=%s, airline_price=%s, status_message=%s, tolerance_amount=%s, oneway_date=%s, return_date=%s, error_message=%s, request_input=%s, price_details=%s'
-        self.conn = MySQLdb.connect(host='localhost', user = 'root', passwd='', db='AMENDBOOKINGDB', charset="utf8", use_unicode=True)
+
+        db_cfg = SafeConfigParser()
+        db_cfg.read(settings['BOOK_DB_PATH'])
+        host = db_cfg.get('amendbooking', 'IP')
+        passwd = db_cfg.get('amendbooking', 'PASSWD')
+        user = db_cfg.get('amendbooking', 'USER')
+        db_name = db_cfg.get('amendbooking', 'DBNAME')
+        self.conn = MySQLdb.connect(host = host, user = user, passwd = passwd, db = db_name, charset="utf8", use_unicode=True)
         self.cur = self.conn.cursor()
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
 
     def spider_closed(self, spider):
         self.cur.close()
@@ -114,12 +124,12 @@ class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
             data = [
                 (req_token_key, req_token_value),
                 ('starterAgentLogin.Username', _cfg.get(self.pcc_name, 'username')),
-                ('starterAgentLogin.Password', _cfg.get(self.pcc_name, 'passwd'))
+                ('starterAgentLogin.Password', _cfg.get(self.pcc_name, 'password'))
             ]
         except:
             self.insert_values_into_db(amend_dict, "Amend Failed", "PCC %s not available"%self.pcc_name)
             logging.debug('PCC not avaialble for scrapper')
-            self.send_mail("Amend Failed", "PCC not avaialble for scrapper", "amend", "GoAir", "goair_common")
+            self.send_mail("Amend Failed", "PCC not avaialble for scrapper, TripId:%s"%amend_dict.get('trip_ref', ''), "amend", "GoAir", "goair_common")
             return
         url = 'https://book.goair.in/Agent/Login'
         yield FormRequest(url, callback=self.prase_login, formdata=data, meta={'amend_dict':amend_dict})
@@ -135,7 +145,7 @@ class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
         login_status = True
         if 'error' in response.url.lower():
             self.insert_values_into_db(amend_dict, "Amend Failed", "Login Failed")
-            self.send_mail("Amend Failed", "Login Failed", "amend", "GoAir", "goair_common")
+            self.send_mail("Amend Failed", "Login Failed, TripId:%s"%amend_dict.get('trip_ref', ''), "amend", "GoAir", "goair_common")
             login_status = False
             return
         url = 'https://www.goair.in/plan-my-trip/manage-booking/'
@@ -180,7 +190,7 @@ class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
             print error
             return
         if not cancel_rebook_button:
-            error = "Change Booking button not presented"
+            error = "Change Booking button not presented, TripId:%s"%amend_dict.get('trip_ref', '')
             self.insert_values_into_db(amend_dict, "Amend Failed", error)
             self.send_mail("Amend Failed", error, "amend", "GoAir", "goair_common")
             print error
@@ -347,12 +357,12 @@ class GoAirAmendBrowse(Spider, GoairAmendUtils, Helpers):
         if self.ow_amendment or self.rt_amendment:
             if not sell_key:
                 self.insert_values_into_db(amend_dict, "Amend Failed", "Flights not found")
-                self.send_mail("Amend Failed", "Flights not found", "amend", "GoAir", "goair_common")
+                self.send_mail("Amend Failed", "Flights not found, TripId:%s"%amend_dict.get('trip_ref', ''), "amend", "GoAir", "goair_common")
                 return
         if self.rt_round_amendment:
             if not rt_sell_key:
                 self.insert_values_into_db(amend_dict, "Amend Failed", "Flights not found")
-                self.send_mail("Amend Failed", "Flights not found", "amend", "GoAir", "goair_common")
+                self.send_mail("Amend Failed", "Flights not found, TripId:%s"%amend_dict.get('trip_ref', ''), "amend", "GoAir", "goair_common")
                 return
         new_flights = []
         if self.ow_amendment:

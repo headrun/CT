@@ -108,3 +108,9 @@ USER_AGENT = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Geck
 
 #HTTP_PROXY = "http://cleartrip:x1WoHub492@cleartrip.shader.io:60000"
 HTTP_PROXY = ''
+
+ROOT_PATH='/root/scrapers/flights/'
+
+BOOK_PCC_PATH = '/root/scrapers/flights/amend_airline_names.cfg'
+
+BOOK_DB_PATH = '/root/scrapers/flights/scrapper_constants.cfg'

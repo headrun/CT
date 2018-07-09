@@ -1,0 +1,216 @@
+[INFO  - 2018-07-02T07:35:01.762Z] GhostDriver - Main - running on port 60873
+[INFO  - 2018-07-02T07:35:02.603Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2018-07-02T07:35:02.603Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.customHeaders:  - {}
+[INFO  - 2018-07-02T07:35:02.603Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2018-07-02T07:35:02.604Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 6e85ac00-7dca-11e8-b91c-7bc6cf1b4067
+[ERROR - 2018-07-02T07:35:05.365Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: ReferenceError: Can't find variable: _satellite
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:05.366Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  global code (https://booking2.airasia.com/AgentHome.aspx:272)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:08.878Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: ReferenceError: Can't find variable: _satellite
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:08.878Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  global code (https://booking2.airasia.com/AgentHome.aspx:303)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.171Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: ReferenceError: Can't find variable: _satellite
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.171Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  global code (https://booking2.airasia.com/Search.aspx:1061)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.437Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: TypeError: undefined is not a function (evaluating 'location.pathname.includes("/home.page")')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.438Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  getLanguage (https://booking2.airasia.com/Search.aspx:8)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.438Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: [object Object]
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:14.439Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  error (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4993)
+  onerror (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  replaceChild (:0)
+  td (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5000)
+  ee (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4999)
+  md (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4997)
+  ub (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4995)
+  write (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4994)
+  c (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  b (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5002)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5112)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:32.434Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: TypeError: undefined is not a function (evaluating 'location.pathname.includes("home.page")')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:32.434Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  A (https://booking2.airasia.com/Select.aspx:9)
+  (anonymous function) (https://booking2.airasia.com/Select.aspx:43)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.098Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: ReferenceError: Can't find variable: _satellite
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.098Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  global code (https://booking2.airasia.com/Select.aspx:1914)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.864Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: TypeError: undefined is not a function (evaluating 'location.pathname.includes("/home.page")')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.865Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  getLanguage (https://booking2.airasia.com/Select.aspx:8)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.865Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: [object Object]
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:35:33.865Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  error (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4993)
+  onerror (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  replaceChild (:0)
+  td (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5000)
+  ee (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4999)
+  md (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4997)
+  ub (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4995)
+  write (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4994)
+  c (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  b (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5002)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5112)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:03.590Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: TypeError: undefined is not a function (evaluating 'location.pathname.includes("home.page")')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:03.590Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  A (https://booking2.airasia.com/Traveler.aspx:9)
+  (anonymous function) (https://booking2.airasia.com/Traveler.aspx:43)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:09.660Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: ReferenceError: Can't find variable: _satellite
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:09.660Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  global code (https://booking2.airasia.com/Traveler.aspx:4368)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:10.451Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: TypeError: undefined is not a function (evaluating 'location.pathname.includes("/home.page")')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:10.451Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  getLanguage (https://booking2.airasia.com/Traveler.aspx:8)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:10.452Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - msg: [object Object]
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:36:10.452Z] Session [6e85ac00-7dca-11e8-b91c-7bc6cf1b4067] - page.onError - stack:
+  error (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4993)
+  onerror (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  replaceChild (:0)
+  td (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5000)
+  ee (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4999)
+  md (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4997)
+  ub (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4995)
+  write (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:4994)
+  c (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  b (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5001)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5002)
+  (anonymous function) (https://www.googletagmanager.com/gtm.js?id=GTM-WTQCST&l=gtmDataLayer:5112)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-07-02T07:38:59.786Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1530517139763
+
+  phantomjs://platform/console++.js:263 in error
+PhantomJS has crashed. Please read the bug reporting guide at
+<http://phantomjs.org/bug-reporting.html> and file a bug report.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [INFO  - 2018-07-02T07:37:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T07:42:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T07:47:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T07:52:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T07:57:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:02:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:07:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:12:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:17:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:22:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:27:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:32:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:37:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:42:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:47:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:52:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T08:57:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:02:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:07:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:12:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:17:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:22:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:27:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:32:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:37:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:42:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:47:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:52:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T09:57:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:02:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:07:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:12:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:17:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:22:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:27:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:32:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:37:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:42:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:47:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:52:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T10:57:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:02:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:07:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:12:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:17:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:22:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:27:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:32:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:37:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:42:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:47:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:52:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T11:57:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:02:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:07:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:12:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:17:22.148Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:22:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:27:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:32:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:37:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:42:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:47:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:52:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T12:57:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:02:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:07:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:12:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:17:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:22:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:27:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:32:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:37:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:42:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:47:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:52:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T13:57:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T14:02:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T14:07:22.151Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-07-02T14:12:22.150Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW

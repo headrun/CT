@@ -1,0 +1,43 @@
+input{
+     width: 80%; 
+     box-sizing: border-box;
+}
+
+select{
+     width: 80%;
+     box-sizing: border-box;
+}
+
+
+
+body {
+        text-align: center;
+}
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    width: 180px; 
+}
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 1px;
+    border-collapse: collapse;
+}
+
+.thick-border {
+	border: 3px solid black;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+

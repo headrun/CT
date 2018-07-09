@@ -1,0 +1,1028 @@
+20180701182101.673: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:65: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701182101.707: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701182101.709: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701182101.873: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701182101.990: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701182101.993: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701182101.993: engine.py: 256: open_spider: INFO: Spider opened
+20180701182102.70: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701182102.75: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701182102.106: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182107.353: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701182107.795: airasia_booking_browse.py: 160: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701182112.813: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182114.5: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701182114.7: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182120.385: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182120.499: airasia_booking_browse.py: 326: parse_next: DEBUG: 180630184940
+20180701182120.508: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182125.964: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182126.83: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182130.122: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Search.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182130.243: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182131.897: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/Select.aspx> from <POST https://booking2.airasia.com/Search.aspx>
+20180701182131.900: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182136.995: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Search.aspx)
+20180701182137.295: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182143.263: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Select.aspx)
+20180701182634.790: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:65: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701182634.794: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701182634.795: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701182634.847: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701182634.851: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701182634.852: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701182634.852: engine.py: 256: open_spider: INFO: Spider opened
+20180701182634.857: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701182634.859: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701182634.866: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182639.384: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701182639.493: airasia_booking_browse.py: 160: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701182644.509: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182645.769: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701182645.770: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182652.467: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182652.580: airasia_booking_browse.py: 326: parse_next: DEBUG: 180630184940
+20180701182652.588: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182658.596: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182658.713: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182703.865: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Search.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701182703.986: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182706.438: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/Select.aspx> from <POST https://booking2.airasia.com/Search.aspx>
+20180701182706.440: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182711.270: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Search.aspx)
+20180701182711.426: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701182716.55: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Select.aspx)
+20180701183401.652: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:65: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701183401.656: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701183401.657: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701183401.711: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701183401.714: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701183401.715: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701183401.715: engine.py: 256: open_spider: INFO: Spider opened
+20180701183401.721: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701183401.723: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701183401.730: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183407.349: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701183407.458: airasia_booking_browse.py: 160: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701183412.476: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183413.953: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701183413.956: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183420.445: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701183420.556: airasia_booking_browse.py: 326: parse_next: DEBUG: 180630184940
+20180701183420.563: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183426.367: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701183426.486: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183429.428: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Search.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701183429.548: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183431.634: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/Select.aspx> from <POST https://booking2.airasia.com/Search.aspx>
+20180701183431.636: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183435.616: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Search.aspx)
+20180701183435.765: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701183441.24: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Select.aspx)
+20180701190941.594: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:65: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701190941.598: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701190941.598: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701190941.654: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701190941.657: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701190941.658: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701190941.658: engine.py: 256: open_spider: INFO: Spider opened
+20180701190941.664: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701190941.667: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701190941.672: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701190947.795: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701190947.903: airasia_booking_browse.py: 160: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701190952.922: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701190953.849: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701190953.851: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191000.579: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701191000.693: airasia_booking_browse.py: 326: parse_next: DEBUG: 180630184940
+20180701191000.700: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191006.666: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701191006.785: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191009.601: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Search.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701191009.720: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191012.625: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/Select.aspx> from <POST https://booking2.airasia.com/Search.aspx>
+20180701191012.628: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191017.704: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Search.aspx)
+20180701191017.852: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701191022.927: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/Select.aspx> (referer: https://booking2.airasia.com/Select.aspx)
+20180701195840.719: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701195840.723: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701195840.724: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701195840.779: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701195840.782: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701195840.783: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701195840.784: engine.py: 256: open_spider: INFO: Spider opened
+20180701195840.789: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701195840.792: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701195840.799: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701195845.857: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701195845.965: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701195850.984: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701195851.955: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701195851.957: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701195859.4: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701195859.116: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701195859.122: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701195903.910: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701195904.17: airasia_booking_browse.py: 239: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701195904.17: airasia_booking_browse.py: 258: go_with_selenium: DEBUG: malformed string
+20180701195904.18: scraper.py: 158: handle_spider_error: ERROR: Spider error processing <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 653, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 735, in parse_search
+    self.go_with_selenium()
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 259, in go_with_selenium
+    self.insert_into_db(book_dict, e.message)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 151, in insert_into_db
+    self.cur.execute(self.air_insert_query, vals)
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701195904.363: engine.py: 295: close_spider: INFO: Closing spider (finished)
+20180701195904.365: signal.py: 57: logerror: ERROR: Error caught on signal handler: <bound method ?.spider_closed of <AirAsiaBookingBrowse 'airasiabooking_browse' at 0x7efbf6ad4350>>
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/headrun/.local/lib/python2.7/site-packages/pydispatch/robustapply.py", line 55, in robustApply
+    return receiver(*arguments, **named)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 101, in spider_closed
+    self.cur.close()
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701195904.742: statscollectors.py: 47: close_spider: INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 4106,
+ 'downloader/request_count': 4,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/request_method_count/POST': 1,
+ 'downloader/response_bytes': 35436,
+ 'downloader/response_count': 4,
+ 'downloader/response_status_count/200': 3,
+ 'downloader/response_status_count/302': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2018, 7, 1, 14, 29, 4, 364606),
+ 'log_count/DEBUG': 9,
+ 'log_count/ERROR': 2,
+ 'log_count/INFO': 7,
+ 'log_count/WARNING': 7,
+ 'memusage/max': 63356928,
+ 'memusage/startup': 63356928,
+ 'request_depth_max': 2,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 4,
+ 'scheduler/dequeued/memory': 4,
+ 'scheduler/enqueued': 4,
+ 'scheduler/enqueued/memory': 4,
+ 'spider_exceptions/AttributeError': 1,
+ 'start_time': datetime.datetime(2018, 7, 1, 14, 28, 40, 790381)}
+20180701195904.742: engine.py: 326: <lambda>: INFO: Spider closed (finished)
+20180701200202.741: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701200202.745: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200202.746: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200202.799: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701200202.803: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701200202.803: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701200202.804: engine.py: 256: open_spider: INFO: Spider opened
+20180701200202.808: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701200202.811: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701200202.816: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200209.446: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701200209.554: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200214.573: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200215.785: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701200215.787: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200223.146: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200223.260: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701200223.267: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200231.311: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200239.275: airasia_booking_browse.py: 239: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200239.278: airasia_booking_browse.py: 258: go_with_selenium: DEBUG: malformed string
+20180701200352.505: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701200352.510: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200352.511: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200352.564: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701200352.567: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701200352.568: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701200352.568: engine.py: 256: open_spider: INFO: Spider opened
+20180701200352.573: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701200352.576: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701200352.581: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200353.673: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701200353.781: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200358.800: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200359.738: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701200359.740: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200403.908: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200404.17: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701200404.25: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200408.188: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200414.632: airasia_booking_browse.py: 239: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200414.636: airasia_booking_browse.py: 258: go_with_selenium: DEBUG: malformed string
+20180701200544.315: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701200544.320: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200544.320: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200544.374: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701200544.377: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701200544.378: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701200544.378: engine.py: 256: open_spider: INFO: Spider opened
+20180701200544.383: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701200544.386: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701200544.392: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200550.882: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701200550.990: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200556.8: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200557.140: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701200557.142: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200602.268: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200602.684: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701200602.691: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200608.382: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200611.544: airasia_booking_browse.py: 239: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200611.545: airasia_booking_browse.py: 258: go_with_selenium: DEBUG: malformed string
+20180701200611.546: scraper.py: 158: handle_spider_error: ERROR: Spider error processing <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 653, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 735, in parse_search
+    if self.queue != 'offline':
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 259, in go_with_selenium
+    self.insert_into_db(book_dict, e.message)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 151, in insert_into_db
+    self.cur.execute(self.air_insert_query, vals)
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701200611.649: engine.py: 295: close_spider: INFO: Closing spider (finished)
+20180701200611.651: signal.py: 57: logerror: ERROR: Error caught on signal handler: <bound method ?.spider_closed of <AirAsiaBookingBrowse 'airasiabooking_browse' at 0x7efbf6ad3310>>
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/headrun/.local/lib/python2.7/site-packages/pydispatch/robustapply.py", line 55, in robustApply
+    return receiver(*arguments, **named)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 101, in spider_closed
+    self.cur.close()
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701200611.654: statscollectors.py: 47: close_spider: INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 4106,
+ 'downloader/request_count': 4,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/request_method_count/POST': 1,
+ 'downloader/response_bytes': 35571,
+ 'downloader/response_count': 4,
+ 'downloader/response_status_count/200': 3,
+ 'downloader/response_status_count/302': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2018, 7, 1, 14, 36, 11, 650702),
+ 'log_count/DEBUG': 9,
+ 'log_count/ERROR': 2,
+ 'log_count/INFO': 7,
+ 'log_count/WARNING': 7,
+ 'memusage/max': 63410176,
+ 'memusage/startup': 63410176,
+ 'request_depth_max': 2,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 4,
+ 'scheduler/dequeued/memory': 4,
+ 'scheduler/enqueued': 4,
+ 'scheduler/enqueued/memory': 4,
+ 'spider_exceptions/AttributeError': 1,
+ 'start_time': datetime.datetime(2018, 7, 1, 14, 35, 44, 384187)}
+20180701200611.655: engine.py: 326: <lambda>: INFO: Spider closed (finished)
+20180701200742.253: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701200742.259: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200742.259: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701200742.316: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701200742.320: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701200742.321: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701200742.321: engine.py: 256: open_spider: INFO: Spider opened
+20180701200742.327: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701200742.329: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701200742.334: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200744.655: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701200744.763: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200749.781: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200750.669: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701200750.671: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200757.120: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200757.234: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701200757.241: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701200803.870: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701200808.586: airasia_booking_browse.py: 239: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701200808.589: airasia_booking_browse.py: 258: go_with_selenium: DEBUG: malformed string
+20180701200830.940: scraper.py: 158: handle_spider_error: ERROR: Spider error processing <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 653, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 736, in parse_search
+    self.go_with_selenium()
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 259, in go_with_selenium
+    self.insert_into_db(book_dict, e.message)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 151, in insert_into_db
+    self.cur.execute(self.air_insert_query, vals)
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701200831.43: engine.py: 295: close_spider: INFO: Closing spider (finished)
+20180701200831.44: signal.py: 57: logerror: ERROR: Error caught on signal handler: <bound method ?.spider_closed of <AirAsiaBookingBrowse 'airasiabooking_browse' at 0x7efbf6ad42d0>>
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/headrun/.local/lib/python2.7/site-packages/pydispatch/robustapply.py", line 55, in robustApply
+    return receiver(*arguments, **named)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 101, in spider_closed
+    self.cur.close()
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701200831.47: statscollectors.py: 47: close_spider: INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 4106,
+ 'downloader/request_count': 4,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/request_method_count/POST': 1,
+ 'downloader/response_bytes': 35637,
+ 'downloader/response_count': 4,
+ 'downloader/response_status_count/200': 3,
+ 'downloader/response_status_count/302': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2018, 7, 1, 14, 38, 31, 44268),
+ 'log_count/DEBUG': 9,
+ 'log_count/ERROR': 2,
+ 'log_count/INFO': 7,
+ 'log_count/WARNING': 7,
+ 'memusage/max': 63418368,
+ 'memusage/startup': 63418368,
+ 'request_depth_max': 2,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 4,
+ 'scheduler/dequeued/memory': 4,
+ 'scheduler/enqueued': 4,
+ 'scheduler/enqueued/memory': 4,
+ 'spider_exceptions/AttributeError': 1,
+ 'start_time': datetime.datetime(2018, 7, 1, 14, 37, 42, 327560)}
+20180701200831.48: engine.py: 326: <lambda>: INFO: Spider closed (finished)
+20180701201034.987: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201034.990: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201034.991: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201035.50: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201035.54: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201035.55: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201035.55: engine.py: 256: open_spider: INFO: Spider opened
+20180701201035.60: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201035.62: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201035.68: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201037.101: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701201037.209: airasia_booking_browse.py: 513: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201042.228: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201042.862: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701201042.864: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201047.992: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201048.103: airasia_booking_browse.py: 695: parse_next: DEBUG: 180630184940
+20180701201048.110: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201050.340: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201055.891: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:46959/session {"capabilities": {"alwaysMatch": {"acceptInsecureCerts": true, "browserName": "firefox"}, "firstMatch": [{}]}, "desiredCapabilities": {"acceptInsecureCerts": true, "browserName": "firefox"}}
+20180701201103.361: remote_connection.py: 561: _request: DEBUG: Finished Request
+20180701201103.363: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:46959/session/5148b4f0-1f0b-471f-b627-2935e91d8016/url {"url": "https://booking2.airasia.com/AgentHome.aspx", "sessionId": "5148b4f0-1f0b-471f-b627-2935e91d8016"}
+20180701201247.9: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201247.13: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201247.14: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201247.73: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201247.77: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201247.77: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201247.78: engine.py: 256: open_spider: INFO: Spider opened
+20180701201247.83: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201247.86: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201247.92: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201248.293: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701201248.401: airasia_booking_browse.py: 511: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201253.416: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201254.681: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701201254.683: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201301.419: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201301.532: airasia_booking_browse.py: 693: parse_next: DEBUG: 180630184940
+20180701201301.539: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201307.624: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201333.185: airasia_booking_browse.py: 240: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201333.185: airasia_booking_browse.py: 259: go_with_selenium: DEBUG: malformed string
+20180701201333.186: scraper.py: 158: handle_spider_error: ERROR: Spider error processing <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 653, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 736, in parse_search
+    if self.queue != 'offline':
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 260, in go_with_selenium
+    self.insert_into_db(book_dict, e.message)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 151, in insert_into_db
+    self.cur.execute(self.air_insert_query, vals)
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701201333.288: engine.py: 295: close_spider: INFO: Closing spider (finished)
+20180701201333.292: signal.py: 57: logerror: ERROR: Error caught on signal handler: <bound method ?.spider_closed of <AirAsiaBookingBrowse 'airasiabooking_browse' at 0x7efbf6ad42d0>>
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/headrun/.local/lib/python2.7/site-packages/pydispatch/robustapply.py", line 55, in robustApply
+    return receiver(*arguments, **named)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 101, in spider_closed
+    self.cur.close()
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701201333.297: statscollectors.py: 47: close_spider: INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 4106,
+ 'downloader/request_count': 4,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/request_method_count/POST': 1,
+ 'downloader/response_bytes': 35701,
+ 'downloader/response_count': 4,
+ 'downloader/response_status_count/200': 3,
+ 'downloader/response_status_count/302': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2018, 7, 1, 14, 43, 33, 291764),
+ 'log_count/DEBUG': 9,
+ 'log_count/ERROR': 2,
+ 'log_count/INFO': 7,
+ 'log_count/WARNING': 7,
+ 'memusage/max': 63414272,
+ 'memusage/startup': 63414272,
+ 'request_depth_max': 2,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 4,
+ 'scheduler/dequeued/memory': 4,
+ 'scheduler/enqueued': 4,
+ 'scheduler/enqueued/memory': 4,
+ 'spider_exceptions/AttributeError': 1,
+ 'start_time': datetime.datetime(2018, 7, 1, 14, 42, 47, 84466)}
+20180701201333.305: engine.py: 326: <lambda>: INFO: Spider closed (finished)
+20180701201420.932: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201420.936: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201420.936: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201420.992: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201420.995: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201420.996: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201420.996: engine.py: 256: open_spider: INFO: Spider opened
+20180701201421.1: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201421.4: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201421.12: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201425.576: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701201425.684: airasia_booking_browse.py: 512: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201430.704: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201431.566: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701201431.568: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201438.363: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201438.476: airasia_booking_browse.py: 694: parse_next: DEBUG: 180630184940
+20180701201438.483: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201444.449: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201457.754: airasia_booking_browse.py: 241: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201533.422: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201533.427: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201533.427: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201533.483: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201533.487: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201533.487: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201533.488: engine.py: 256: open_spider: INFO: Spider opened
+20180701201533.492: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201533.495: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201533.502: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201534.694: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701201534.802: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201539.821: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201540.751: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701201540.754: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201547.490: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201547.604: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701201547.611: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201552.5: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201552.119: airasia_booking_browse.py: 240: go_with_selenium: DEBUG: Booking using: INBOMEZEEN_ADMIN
+20180701201553.134: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:38761/session {"capabilities": {"alwaysMatch": {"acceptInsecureCerts": true, "browserName": "firefox"}, "firstMatch": [{}]}, "desiredCapabilities": {"acceptInsecureCerts": true, "browserName": "firefox"}}
+20180701201559.198: remote_connection.py: 561: _request: DEBUG: Finished Request
+20180701201559.199: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:38761/session/865b5684-5a02-477d-a621-3a6ebac593a6/url {"url": "https://booking2.airasia.com/AgentHome.aspx", "sessionId": "865b5684-5a02-477d-a621-3a6ebac593a6"}
+20180701201648.845: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201648.849: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201648.850: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201648.902: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201648.906: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201648.907: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201648.907: engine.py: 256: open_spider: INFO: Spider opened
+20180701201648.912: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201648.914: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201648.921: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201701.971: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701201701.976: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201701.976: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701201702.37: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701201702.42: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701201702.43: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701201702.44: engine.py: 256: open_spider: INFO: Spider opened
+20180701201702.51: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701201702.54: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701201702.60: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201722.543: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701201722.651: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: OTAINCLEAN_ADMIN
+20180701201727.669: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201802.51: logstats.py: 48: log: INFO: Crawled 1 pages (at 1 pages/min), scraped 0 items (at 0 items/min)
+20180701201802.71: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701201802.73: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201819.482: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201819.596: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701201819.603: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201849.578: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701201902.535: logstats.py: 48: log: INFO: Crawled 3 pages (at 2 pages/min), scraped 0 items (at 0 items/min)
+20180701201902.541: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201902.801: redirect.py: 41: _redirect: DEBUG: Redirecting (301) to <POST https://booking2.airasia.com/BookingList.aspx> from <POST http://booking2.airasia.com/BookingList.aspx>
+20180701201902.803: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701201916.845: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/BookingList.aspx> (referer: None)
+20180701201916.956: scraper.py: 158: handle_spider_error: ERROR: Spider error processing <POST https://booking2.airasia.com/BookingList.aspx> (referer: None)
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 653, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 828, in parse_pnr_deatails
+    return Request(search_flights, callback=self.parse_search_flights,
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'parse_search_flights'
+20180701201917.58: engine.py: 295: close_spider: INFO: Closing spider (finished)
+20180701201917.60: signal.py: 57: logerror: ERROR: Error caught on signal handler: <bound method ?.spider_closed of <AirAsiaBookingBrowse 'airasiabooking_browse' at 0x7efbf6ad2350>>
+Traceback (most recent call last):
+  File "/home/headrun/.local/lib/python2.7/site-packages/twisted/internet/defer.py", line 150, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/headrun/.local/lib/python2.7/site-packages/pydispatch/robustapply.py", line 55, in robustApply
+    return receiver(*arguments, **named)
+  File "/home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py", line 101, in spider_closed
+    self.cur.close()
+AttributeError: 'AirAsiaBookingBrowse' object has no attribute 'cur'
+20180701201917.64: statscollectors.py: 47: close_spider: INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 7833,
+ 'downloader/request_count': 6,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/request_method_count/POST': 3,
+ 'downloader/response_bytes': 59240,
+ 'downloader/response_count': 6,
+ 'downloader/response_status_count/200': 4,
+ 'downloader/response_status_count/301': 1,
+ 'downloader/response_status_count/302': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2018, 7, 1, 14, 49, 17, 60038),
+ 'log_count/DEBUG': 9,
+ 'log_count/ERROR': 2,
+ 'log_count/INFO': 9,
+ 'log_count/WARNING': 9,
+ 'memusage/max': 68636672,
+ 'memusage/startup': 63356928,
+ 'request_depth_max': 3,
+ 'response_received_count': 4,
+ 'scheduler/dequeued': 6,
+ 'scheduler/dequeued/memory': 6,
+ 'scheduler/enqueued': 6,
+ 'scheduler/enqueued/memory': 6,
+ 'spider_exceptions/AttributeError': 1,
+ 'start_time': datetime.datetime(2018, 7, 1, 14, 47, 2, 51755)}
+20180701201917.64: engine.py: 326: <lambda>: INFO: Spider closed (finished)
+20180701202858.225: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701202858.229: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701202858.230: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701202858.284: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701202858.288: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701202858.289: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701202858.289: engine.py: 256: open_spider: INFO: Spider opened
+20180701202858.294: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701202858.297: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701202858.304: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202905.702: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701202905.809: airasia_booking_browse.py: 510: parse: DEBUG: Booking using: OTAINCLEAN_ADMIN
+20180701202910.828: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202911.775: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701202911.777: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202916.620: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701202916.733: airasia_booking_browse.py: 692: parse_next: DEBUG: 180630184940
+20180701202916.740: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202923.901: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701202926.725: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202927.220: redirect.py: 41: _redirect: DEBUG: Redirecting (301) to <POST https://booking2.airasia.com/BookingList.aspx> from <POST http://booking2.airasia.com/BookingList.aspx>
+20180701202927.222: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701202930.694: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/BookingList.aspx> (referer: None)
+20180701202930.806: airasia_booking_browse.py: 240: go_with_selenium: DEBUG: Booking using: OTAINCLEAN_ADMIN
+20180701202931.822: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:41247/session {"capabilities": {"alwaysMatch": {"acceptInsecureCerts": true, "browserName": "firefox"}, "firstMatch": [{}]}, "desiredCapabilities": {"acceptInsecureCerts": true, "browserName": "firefox"}}
+20180701202941.488: remote_connection.py: 561: _request: DEBUG: Finished Request
+20180701202941.489: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:41247/session/0f532231-f7d2-450a-b290-b29038bcff74/url {"url": "https://booking2.airasia.com/AgentHome.aspx", "sessionId": "0f532231-f7d2-450a-b290-b29038bcff74"}
+20180701203415.188: __init__.py: 413: overrides: WARNING: /home/headrun/ct_git/scrapers/flights/booking_scrapers/booking_scrapers/spiders/airasia_booking_browse.py:75: ScrapyDeprecationWarning: `Settings.overrides` attribute is deprecated and won't be supported in Scrapy 0.26, use `Settings.set(name, value, priority='cmdline')` instead
+  settings.overrides['HTTP_PROXY'] = ''
+
+20180701203415.192: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.useragent.UserAgentMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701203415.193: deprecate.py: 156: update_classpath: WARNING: /usr/local/lib/python2.7/dist-packages/scrapy/utils/deprecate.py:156: ScrapyDeprecationWarning: `scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware` class is deprecated, use `scrapy.downloadermiddlewares.cookies.CookiesMiddleware` instead
+  ScrapyDeprecationWarning)
+
+20180701203415.246: middleware.py: 53: from_settings: INFO: Enabled downloader middlewares:
+['booking_scrapers.middlewares.ProxyMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+20180701203415.249: middleware.py: 53: from_settings: INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+20180701203415.250: middleware.py: 53: from_settings: INFO: Enabled item pipelines:
+[]
+20180701203415.250: engine.py: 256: open_spider: INFO: Spider opened
+20180701203415.255: logstats.py: 48: log: INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+20180701203415.258: telnet.py: 60: start_listening: DEBUG: Telnet console listening on 127.0.0.1:6023
+20180701203415.264: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203420.589: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: None)
+20180701203420.697: airasia_booking_browse.py: 511: parse: DEBUG: Booking using: OTAINCLEAN_ADMIN
+20180701203425.716: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203426.745: redirect.py: 41: _redirect: DEBUG: Redirecting (302) to <GET https://booking2.airasia.com/AgentHome.aspx> from <POST https://booking2.airasia.com/LoginAgent.aspx>
+20180701203426.747: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203432.98: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/AgentHome.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701203432.212: airasia_booking_browse.py: 693: parse_next: DEBUG: 180630184940
+20180701203432.219: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203439.287: engine.py: 238: _on_success: DEBUG: Crawled (200) <GET https://booking2.airasia.com/BookingList.aspx> (referer: https://booking2.airasia.com/AgentHome.aspx)
+20180701203442.317: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203442.723: redirect.py: 41: _redirect: DEBUG: Redirecting (301) to <POST https://booking2.airasia.com/BookingList.aspx> from <POST http://booking2.airasia.com/BookingList.aspx>
+20180701203442.725: middlewares.py: 67: process_request: WARNING: Proxy from middlewares 
+20180701203446.315: engine.py: 238: _on_success: DEBUG: Crawled (200) <POST https://booking2.airasia.com/BookingList.aspx> (referer: None)
+20180701203446.426: airasia_booking_browse.py: 240: go_with_selenium: DEBUG: Booking using: OTAINCLEAN_ADMIN
+20180701203447.442: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:37327/session {"capabilities": {"alwaysMatch": {"acceptInsecureCerts": true, "browserName": "firefox"}, "firstMatch": [{}]}, "desiredCapabilities": {"acceptInsecureCerts": true, "browserName": "firefox"}}
+20180701203453.605: remote_connection.py: 561: _request: DEBUG: Finished Request
+20180701203453.606: remote_connection.py: 474: _request: DEBUG: POST http://127.0.0.1:37327/session/6d55d4a4-13e2-4b74-b4c0-62b329ee6c6c/url {"url": "https://booking2.airasia.com/AgentHome.aspx", "sessionId": "6d55d4a4-13e2-4b74-b4c0-62b329ee6c6c"}

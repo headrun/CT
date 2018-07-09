@@ -6,6 +6,7 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import logging
 
 '''
 class BookingScrapersSpiderMiddleware(object):
@@ -63,5 +64,6 @@ class ProxyMiddleware(object):
        request.meta['proxy'] = settings.get('HTTP_PROXY')
        #request.meta['proxy'] = settings.get('HTTPS_PROXY')
        #print "Proxy from middlewares", request.meta['proxy']
+       logging.warning('Proxy from middlewares %s' % request.meta['proxy'])
 
 

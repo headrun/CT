@@ -13,7 +13,7 @@ from operator import itemgetter
 
 
 _cfg = SafeConfigParser()
-_cfg.read('airline_names.cfg')
+_cfg.read('/root/scrapers/flights/amend_airline_names.cfg')
 
 
 class GoairAmendUtils(object):
@@ -30,8 +30,8 @@ class GoairAmendUtils(object):
         cabin_class = data_.get('cabin_class', 'Economy')
         tolerance_amount = data_.get('tolerance_amount', 0)
         pax_paid_amount = data_.get('cleartrip_price', 0)
-        origin = data_.get('origin', '')
-        destination = data_.get('destination', '')
+        origin = data_.get('origin_code', '')
+        destination = data_.get('destination_code', '')
         data_ = data_.get('details', [])
         if len(data_) > 1:
             self.multiple_pnr = True

@@ -21,38 +21,8 @@ from operator import itemgetter
 
 
 _cfg = SafeConfigParser()
-_cfg.read('airline_names.cfg')
-'''
-def send_mail(source, sub, error_msg=''):
-        recievers_list = []
-        if 'Login' in sub:
-            recievers_list = ast.literal_eval(_cfg.get('amend_common', 'login_recievers_list'))
-            import way2sms
-            obj = way2sms.sms('9442843049', 'bhava')
-            phones = ast.literal_eval(_cfg.get('amend_common', 'phones'))
-            for i in phones:
-                sent = obj.send(i, 'Unable to login to %s,Please check'%source)
-                if sent:
-                    print 'Sent sms successfully'
-        recievers_list = ast.literal_eval(_cfg.get('amend_common', 'recievers_list'))
-        sender, receivers = 'prasadk@notemonk.com', ','.join(recievers_list)
-        ccing = []
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = 'Amend QA TEST %s : %s On %s'%(source, sub, str(datetime.datetime.now().date()))
-        mas = '<p>%s</p>' % error_msg
-        msg['From'] = sender
-        msg['To'] = receivers
-        msg['Cc'] = ','.join(ccing)
-        tem = MIMEText(''.join(mas), 'html')
-        msg.attach(tem)
-        s = smtplib.SMTP('smtp.gmail.com:587')
-        s.ehlo()
-        s.starttls()
-        s.ehlo()
-        s.login(sender, 'amma@nanna')
-        s.sendmail(sender, (recievers_list + ccing), msg.as_string())
-        s.quit()
-'''
+_cfg.read('/root/scrapers/flights/amend_airline_names.cfg')
+
 def textify(nodes, sep=' '):
     if not isinstance(nodes, (list, tuple)):
         nodes = [nodes]
